@@ -6,6 +6,9 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
+    <modules>
+        <module>vezh_bank</module>
+    </modules>
 
     <build>
         <finalName>Vezh Lab</finalName>

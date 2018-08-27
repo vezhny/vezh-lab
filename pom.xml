@@ -8,6 +8,7 @@
 
     <modules>
         <module>run</module>
+        <module>jpa</module>
     </modules>
 
     <build>

@@ -11,5 +11,13 @@
     <packaging>jar</packaging>
     <artifactId>jpa</artifactId>
 
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.3.5.Final</version>
+        </dependency>
+    </dependencies>
 
 </project>

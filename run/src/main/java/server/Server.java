@@ -1,12 +1,13 @@
-package vezhbank;
+package server;
+
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Application {
+public class Server {
 
     public static void main(String args[]) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(Server.class, args);
     }
 }

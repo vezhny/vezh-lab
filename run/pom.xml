@@ -18,6 +18,13 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>2.0.4.RELEASE</version>
         </dependency>
+
+        <!-- Vezh Bank -->
+        <dependency>
+            <groupId>vezh_lab</groupId>
+            <artifactId>vezh_bank</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

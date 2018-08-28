@@ -25,4 +25,8 @@ public interface TransactionDao extends GlobalDao<Transaction> {
     @Transactional
     @Override
     void update(Transaction transaction);
+
+    @Transactional
+    @Override
+    void insert(Transaction transaction);
 }

@@ -8,4 +8,5 @@ public interface GlobalDao<T> {
     void delete(T t);
     T getById(int id);
     void update(T t);
+    void insert(T t);
 }

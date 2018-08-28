@@ -8,6 +8,10 @@ import java.util.List;
 public interface CardBrandDao extends GlobalDao<CardBrand> {
     @Transactional
     @Override
+    void insert(CardBrand cardBrand);
+
+    @Transactional
+    @Override
     List<CardBrand> selectAll();
 
     @Transactional

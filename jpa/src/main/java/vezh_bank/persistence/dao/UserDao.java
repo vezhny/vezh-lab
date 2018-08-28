@@ -25,4 +25,8 @@ public interface UserDao extends GlobalDao<User> {
     @Transactional
     @Override
     void update(User user);
+
+    @Transactional
+    @Override
+    void insert(User user);
 }

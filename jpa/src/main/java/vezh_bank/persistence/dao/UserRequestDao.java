@@ -25,4 +25,8 @@ public interface UserRequestDao extends GlobalDao<UserRequest> {
     @Transactional
     @Override
     void update(UserRequest userRequest);
+
+    @Transactional
+    @Override
+    void insert(UserRequest userRequest);
 }

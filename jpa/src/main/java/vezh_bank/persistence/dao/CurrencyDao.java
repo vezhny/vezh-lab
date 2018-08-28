@@ -8,6 +8,10 @@ import java.util.List;
 public interface CurrencyDao extends GlobalDao<Currency> {
     @Transactional
     @Override
+    void insert(Currency currency);
+
+    @Transactional
+    @Override
     List<Currency> selectAll();
 
     @Transactional

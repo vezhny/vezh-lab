@@ -17,12 +17,18 @@ public class CardBrandDaoImpl implements CardBrandDao {
     private EntityManager entityManager;
 
     @Override
+    public void insert(CardBrand cardBrand) {
+        logger.info("Insert card brand: " + cardBrand);
+        entityManager.persist(cardBrand);
+    }
+
+    @Override
     public List<CardBrand> selectAll() {
         logger.info("Select all card brands");
         List<CardBrand> cardBrands;
         try {
             cardBrands = entityManager.createQuery(
-                    "SELECT cb FROM CardBrand cb ORDER BY cb.pan", CardBrand.class).getResultList();
+                    "SELECT cb FROM CardBrand cb ORDER BY cb.name", CardBrand.class).getResultList();
         } catch (NoResultException e) {
             cardBrands = new ArrayList<>();
         }

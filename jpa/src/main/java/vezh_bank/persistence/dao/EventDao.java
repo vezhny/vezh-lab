@@ -25,4 +25,8 @@ public interface EventDao extends GlobalDao<Event> {
     @Transactional
     @Override
     void update(Event event);
+
+    @Transactional
+    @Override
+    void insert(Event event);
 }

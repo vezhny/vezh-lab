@@ -1,7 +1,10 @@
 package vezh_bank.persistence.entity;
 
+import core.enums.Role;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "USERS")
@@ -17,8 +20,10 @@ public class User {
     @Column(name = "USER_PASSWORD")
     private String password;
 
-    @Column(name = "ROLE_ID") // TODO: from role entity
-    private int roleId;
+    @ManyToOne
+    @JoinTable(name = "USER_ROLES")
+    @Column(name = "ROLE_ID")
+    private UserRole role;
 
     @Column(name = "CONFIG")
     private String config;
@@ -35,13 +40,19 @@ public class User {
     @Column(name = "USER_DATA")
     private String data;
 
+    @OneToMany(mappedBy = "holder")
+    private List<Card> cards;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserRequest> userRequests;
+
     public User() {
     }
 
-    public User(String login, String password, int roleId, String data) {
+    public User(String login, String password, UserRole role, String data) {
         this.login = login;
         this.password = password;
-        this.roleId = roleId;
+        this.role = role;
         this.data = data;
         // TODO: generate default config
         this.attemptsToSignIn = 3;
@@ -60,8 +71,8 @@ public class User {
         return password;
     }
 
-    public int getRoleId() {
-        return roleId;
+    public String getRole() {
+        return role.getName();
     }
 
     public String getConfig() {
@@ -108,18 +119,35 @@ public class User {
         this.data = data;
     }
 
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void addCard(Card card) {
+        cards.add(card);
+    }
+
+    public void removeCard(Card card) {
+        cards.remove(card);
+    }
+
+    public List<UserRequest> getUserRequests() {
+        return userRequests;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
-                ", roleId=" + roleId +
+                ", role=" + role.getName() +
                 ", config='" + config + '\'' +
                 ", attemptsToSignIn=" + attemptsToSignIn +
                 ", blocked=" + blocked +
                 ", lastSignIn=" + lastSignIn +
                 ", data='" + data + '\'' +
+                ", cards=" + cards +
                 '}';
     }
 }

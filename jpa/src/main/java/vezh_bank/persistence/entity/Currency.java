@@ -1,6 +1,7 @@
 package vezh_bank.persistence.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "CURRENCIES")
@@ -11,6 +12,9 @@ public class Currency {
 
     @Column(name = "CURRENCY_VALUE")
     private String value;
+
+    @OneToMany(mappedBy = "currency")
+    private List<Card> cards;
 
     public Currency() {
     }

@@ -40,6 +40,7 @@ public class Transaction {
         return id;
     }
 
+    // TODO: return TransactionType
     public String getType() {
         return type;
     }
@@ -52,6 +53,7 @@ public class Transaction {
         return data;
     }
 
+    // TODO: return TransactionStatus
     public String getStatus() {
         return status;
     }

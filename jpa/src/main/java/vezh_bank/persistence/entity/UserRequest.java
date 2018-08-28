@@ -13,8 +13,10 @@ public class UserRequest {
     @Column(name = "REQUEST_ID")
     private int id;
 
-    @Column(name = "USER_ID") // TODO: from user entity
-    private int userId;
+    @ManyToOne
+    @JoinTable(name = "USERS")
+    @Column(name = "USER_ID")
+    private User user;
 
     @Column(name = "CREATION_DATE")
     private Date date;
@@ -28,8 +30,8 @@ public class UserRequest {
     public UserRequest() {
     }
 
-    public UserRequest(int userId, String data) {
-        this.userId = userId;
+    public UserRequest(User user, String data) {
+        this.user = user;
         this.data = data;
 
         this.date = new Date();
@@ -40,14 +42,15 @@ public class UserRequest {
         return id;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
     public Date getDate() {
         return date;
     }
 
+    // TODO: return RequestStatus
     public String getStatus() {
         return status;
     }
@@ -64,7 +67,7 @@ public class UserRequest {
     public String toString() {
         return "UserRequest{" +
                 "id=" + id +
-                ", userId=" + userId +
+                ", user=" + user +
                 ", date=" + date +
                 ", status='" + status + '\'' +
                 ", data='" + data + '\'' +

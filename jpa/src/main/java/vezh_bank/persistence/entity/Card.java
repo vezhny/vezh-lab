@@ -1,5 +1,6 @@
 package vezh_bank.persistence.entity;
 
+import core.enums.CardBrands;
 import core.enums.CardStatus;
 
 import javax.persistence.*;
@@ -19,8 +20,10 @@ public class Card {
     @Column(name = "AMOUNT")
     private Long amount;
 
-    @Column(name = "HOLDER_ID") // TODO: from user entity
-    private int holderId;
+    @ManyToOne
+    @JoinTable(name = "USERS")
+    @Column(name = "HOLDER_ID")
+    private User holder;
 
     @Column(name = "CREATION_DATE")
     private Date creationDate;
@@ -31,18 +34,25 @@ public class Card {
     @Column(name = "EXPIRY")
     private int expiry;
 
-    @Column(name = "CURRENCY")  // TODO: from currency entity
-    private int currency;
+    @ManyToOne
+    @JoinTable(name = "CURRENCIES")
+    @Column(name = "CURRENCY")
+    private Currency currency;
 
-    @Column(name = "STATUS")
+    @Column(name = "CARD_STATUS")
     private String status;
+
+    @ManyToOne
+    @JoinTable(name = "CARD_BRANDS")
+    @Column(name = "BRAND_ID")
+    private CardBrand brand;
 
     public Card() {
     }
 
-    public Card(String pan, int holderId, int expiry, int currency) {
+    public Card(String pan, User holder, int expiry, Currency currency, CardBrand brand) {
         this.pan = pan;
-        this.holderId = holderId;
+        this.holder = holder;
         this.expiry = expiry;
         this.currency = currency;
 
@@ -50,6 +60,7 @@ public class Card {
         this.creationDate = new Date();
         // TODO: generate cvc
         this.status = CardStatus.ACTIVE.toString();
+        this.brand = brand;
     }
 
     public int getId() {
@@ -64,8 +75,8 @@ public class Card {
         return amount;
     }
 
-    public int getHolderId() {
-        return holderId;
+    public User getHolder() {
+        return holder;
     }
 
     public Date getCreationDate() {
@@ -80,16 +91,21 @@ public class Card {
         return expiry;
     }
 
-    public int getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
+    // TODO: return CardStatus
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(CardStatus status) {
+        this.status = status.toString();
+    }
+
+    public String getBrand() {
+        return brand.getName();
     }
 
     @Override
@@ -98,12 +114,13 @@ public class Card {
                 "id=" + id +
                 ", pan='" + pan + '\'' +
                 ", amount=" + amount +
-                ", holderId=" + holderId +
+                ", holder=" + holder +
                 ", creationDate=" + creationDate +
                 ", cvc=" + cvc +
                 ", expiry=" + expiry +
                 ", currency=" + currency +
                 ", status='" + status + '\'' +
+                ", brand=" + brand.getName() +
                 '}';
     }
 }

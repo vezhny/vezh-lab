@@ -3,6 +3,7 @@ package vezh_bank.persistence.entity;
 import core.enums.Role;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "USER_ROLES")
@@ -15,6 +16,9 @@ public class UserRole {
     @Column(name = "ROLE_NAME")
     private String name;
 
+    @OneToMany(mappedBy = "role")
+    private List<User> users;
+
     public UserRole() {
     }
 
@@ -26,6 +30,7 @@ public class UserRole {
         return id;
     }
 
+    // TODO: return Role
     public String getName() {
         return name;
     }

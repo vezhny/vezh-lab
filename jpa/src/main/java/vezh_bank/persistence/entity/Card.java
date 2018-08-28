@@ -1,5 +1,7 @@
 package vezh_bank.persistence.entity;
 
+import core.enums.CardStatus;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -32,8 +34,8 @@ public class Card {
     @Column(name = "CURRENCY")  // TODO: from currency entity
     private int currency;
 
-    @Column(name = "BLOCKED")
-    private boolean blocked;
+    @Column(name = "STATUS")
+    private String status;
 
     public Card() {
     }
@@ -47,7 +49,7 @@ public class Card {
         this.amount = 0L;
         this.creationDate = new Date();
         // TODO: generate cvc
-        this.blocked = false;
+        this.status = CardStatus.ACTIVE.toString();
     }
 
     public int getId() {
@@ -55,68 +57,39 @@ public class Card {
     }
 
     public String getPan() {
-
         return pan;
-    }
-
-    public void setPan(String pan) {
-        this.pan = pan;
     }
 
     public Long getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
-    }
-
     public int getHolderId() {
         return holderId;
-    }
-
-    public void setHolderId(int holderId) {
-        this.holderId = holderId;
     }
 
     public Date getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-
     public int getCvc() {
         return cvc;
-    }
-
-    public void setCvc(int cvc) {
-        this.cvc = cvc;
     }
 
     public int getExpiry() {
         return expiry;
     }
 
-    public void setExpiry(int expiry) {
-        this.expiry = expiry;
-    }
-
     public int getCurrency() {
         return currency;
     }
 
-    public void setCurrency(int currency) {
-        this.currency = currency;
+    public String getStatus() {
+        return status;
     }
 
-    public boolean isBlocked() {
-        return blocked;
-    }
-
-    public void setBlocked(boolean blocked) {
-        this.blocked = blocked;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
@@ -130,7 +103,7 @@ public class Card {
                 ", cvc=" + cvc +
                 ", expiry=" + expiry +
                 ", currency=" + currency +
-                ", blocked=" + blocked +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

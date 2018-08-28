@@ -22,7 +22,7 @@ public class CardBrandDaoImpl implements CardBrandDao {
         List<CardBrand> cardBrands;
         try {
             cardBrands = entityManager.createQuery(
-                    "SELECT cb FROM CardBrand cb", CardBrand.class).getResultList();
+                    "SELECT cb FROM CardBrand cb ORDER BY cb.pan", CardBrand.class).getResultList();
         } catch (NoResultException e) {
             cardBrands = new ArrayList<>();
         }

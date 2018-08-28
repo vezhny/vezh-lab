@@ -17,7 +17,7 @@ public class Card {
     @Column(name = "AMOUNT")
     private Long amount;
 
-    @Column(name = "HOLDER_ID")
+    @Column(name = "HOLDER_ID") // TODO: from user entity
     private int holderId;
 
     @Column(name = "CREATION_DATE")
@@ -29,7 +29,7 @@ public class Card {
     @Column(name = "EXPIRY")
     private int expiry;
 
-    @Column(name = "CURRENCY")
+    @Column(name = "CURRENCY")  // TODO: from currency entity
     private int currency;
 
     @Column(name = "BLOCKED")

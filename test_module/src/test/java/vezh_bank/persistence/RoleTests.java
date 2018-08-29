@@ -4,6 +4,8 @@ import core.config.VezhBankConfiguration;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,8 +16,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import vezh_bank.TestUtils;
 import vezh_bank.constants.MavenProfiles;
+import vezh_bank.enums.Role;
 import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.UserRole;
+import vezh_bank.persistence.providers.RoleArgumentsProvider;
 
 import java.util.List;
 
@@ -51,5 +55,15 @@ public class RoleTests {
         testUtils.logTestStart("Select all roles");
         List<UserRole> roles = dataBaseService.getRoleDao().selectAll();
         Assertions.assertEquals(3, roles.size(), "Roles count");
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(RoleArgumentsProvider.class)
+    public void selectRoleById(int id, Role role) {
+        testUtils.logTestStart("Select " + role.toString() + " role by id");
+        int clientRoleId = id;
+        UserRole userRole = dataBaseService.getRoleDao().getById(clientRoleId);
+        Assertions.assertEquals(clientRoleId, userRole.getId(), "Role ID");
+        Assertions.assertEquals(role.toString(), userRole.getName(), "Role name");
     }
 }

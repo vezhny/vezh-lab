@@ -20,6 +20,32 @@
         <!--<build>0</build>-->
     </properties>
 
+    <profiles>
+        <profile>
+            <id>production</id>
+            <properties>
+                <profileName>production</profileName>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <!--<dependencies>-->
+                <!--&lt;!&ndash; https://mvnrepository.com/artifact/mysql/mysql-connector-java &ndash;&gt;-->
+                <!--<dependency>-->
+                    <!--<groupId>mysql</groupId>-->
+                    <!--<artifactId>mysql-connector-java</artifactId>-->
+                    <!--<version>8.0.12</version>-->
+                <!--</dependency>-->
+            <!--</dependencies>-->
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <profileName>test</profileName>
+            </properties>
+        </profile>
+    </profiles>
+
     <modules>
         <module>run</module>
         <module>jpa</module>

@@ -1,6 +1,7 @@
 package core.enums;
 
 public enum CardBrands {
+    // TODO: pan ranges and image urls
     MAESTRO("MAESTRO"),
     MASTERCARD("MASTERCARD"),
     AMERICAN_EXPRESS("AMERICAN EXPRESS"),

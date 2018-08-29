@@ -1,6 +1,5 @@
 package vezh_bank.persistence.entity;
 
-import core.enums.CardBrands;
 import core.enums.CardStatus;
 
 import javax.persistence.*;
@@ -42,15 +41,10 @@ public class Card {
     @Column(name = "CARD_STATUS")
     private String status;
 
-    @ManyToOne
-    @JoinTable(name = "CARD_BRANDS")
-    @Column(name = "BRAND_ID")
-    private CardBrand brand;
-
     public Card() {
     }
 
-    public Card(String pan, User holder, int expiry, Currency currency, CardBrand brand) {
+    public Card(String pan, User holder, int expiry, Currency currency) {
         this.pan = pan;
         this.holder = holder;
         this.expiry = expiry;
@@ -60,7 +54,6 @@ public class Card {
         this.creationDate = new Date();
         // TODO: generate cvc
         this.status = CardStatus.ACTIVE.toString();
-        this.brand = brand;
     }
 
     public int getId() {
@@ -104,9 +97,6 @@ public class Card {
         this.status = status.toString();
     }
 
-    public String getBrand() {
-        return brand.getName();
-    }
 
     @Override
     public String toString() {
@@ -120,7 +110,6 @@ public class Card {
                 ", expiry=" + expiry +
                 ", currency=" + currency +
                 ", status='" + status + '\'' +
-                ", brand=" + brand.getName() +
                 '}';
     }
 }

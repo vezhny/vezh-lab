@@ -51,7 +51,7 @@ public class TestJpaConfig {
 
                 // ------------- SCHEMA -------------
 
-                .addScript("vezh_bank_model.sql")
+                .addScript("sql/vezh_bank_model.sql")
 
                 // -------------- DATA --------------
 

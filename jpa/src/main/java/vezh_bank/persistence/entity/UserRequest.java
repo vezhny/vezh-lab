@@ -1,6 +1,6 @@
 package vezh_bank.persistence.entity;
 
-import core.enums.UserRequestStatus;
+import vezh_bank.enums.UserRequestStatus;
 
 import javax.persistence.*;
 import java.util.Date;

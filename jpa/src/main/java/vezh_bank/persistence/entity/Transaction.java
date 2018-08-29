@@ -1,7 +1,7 @@
 package vezh_bank.persistence.entity;
 
-import core.enums.TransactionStatus;
-import core.enums.TransactionType;
+import vezh_bank.enums.TransactionStatus;
+import vezh_bank.enums.TransactionType;
 
 import javax.persistence.*;
 import java.util.Date;

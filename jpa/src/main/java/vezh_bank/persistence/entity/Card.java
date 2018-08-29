@@ -1,6 +1,6 @@
 package vezh_bank.persistence.entity;
 
-import core.enums.CardStatus;
+import vezh_bank.enums.CardStatus;
 
 import javax.persistence.*;
 import java.util.Date;

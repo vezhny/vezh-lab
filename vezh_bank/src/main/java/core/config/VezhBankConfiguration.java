@@ -8,10 +8,11 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import vezh_bank.config.JpaConfig;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({"vezh_lab.jpa.vezh_bank"})
+@ComponentScan(basePackageClasses = JpaConfig.class)
 public class VezhBankConfiguration implements WebMvcConfigurer {
 
     @Override

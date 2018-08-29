@@ -1,6 +1,6 @@
 package vezh_bank.persistence.entity;
 
-import core.enums.EventType;
+import vezh_bank.enums.EventType;
 
 import javax.persistence.*;
 import java.util.Date;

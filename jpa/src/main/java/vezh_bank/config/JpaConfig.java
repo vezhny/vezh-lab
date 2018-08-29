@@ -6,6 +6,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.dao.*;
 import vezh_bank.persistence.dao.impl.*;
 
@@ -13,7 +14,7 @@ import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan("vezh_bank.persistence")
+@ComponentScan(basePackageClasses = DataBaseService.class)
 public class JpaConfig {
 
     @Bean

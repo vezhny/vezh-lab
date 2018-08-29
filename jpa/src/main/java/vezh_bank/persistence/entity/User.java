@@ -1,6 +1,5 @@
 package vezh_bank.persistence.entity;
 
-import core.enums.Role;
 
 import javax.persistence.*;
 import java.util.Date;

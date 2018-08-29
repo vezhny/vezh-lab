@@ -51,6 +51,7 @@
         <module>jpa</module>
         <module>vezh_bank</module>
         <module>common</module>
+        <module>test_module</module>
     </modules>
 
     <dependencies>

@@ -29,6 +29,7 @@ public class TestJpaConfig {
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(dataSource);
         factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        factory.setPersistenceUnitName("vezh_bank");
         factory.afterPropertiesSet();
         return factory.getObject();
     }
@@ -51,11 +52,11 @@ public class TestJpaConfig {
 
                 // ------------- SCHEMA -------------
 
-                .addScript("sql/vezh_bank_model.sql")
+                .addScript("sql/vezh_bank/model.sql")
 
                 // -------------- DATA --------------
 
-//                .addScript("sql/data/roles.sql")
+                .addScript("sql/vezh_bank/data.sql")
                 .build();
     }
 }

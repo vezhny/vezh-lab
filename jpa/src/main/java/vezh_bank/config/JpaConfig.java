@@ -1,18 +1,19 @@
 package vezh_bank.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import vezh_bank.persistence.dao.*;
+import vezh_bank.persistence.dao.impl.*;
 
 import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableTransactionManagement
+@ComponentScan("vezh_bank.persistence")
 public class JpaConfig {
 
     @Bean
@@ -28,5 +29,47 @@ public class JpaConfig {
     @Bean
     public PlatformTransactionManager txMgr(EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
+    }
+
+    @Bean
+    @Lazy
+    public CardDao cardDao() {
+        return new CardDaoImpl(){};
+    }
+
+    @Bean
+    @Lazy
+    public CurrencyDao currencyDao() {
+        return new CurrencyDaoImpl(){};
+    }
+
+    @Bean
+    @Lazy
+    public EventDao eventDao() {
+        return new EventDaoImpl(){};
+    }
+
+    @Bean
+    @Lazy
+    public RoleDao roleDao() {
+        return new RoleDaoImpl(){};
+    }
+
+    @Bean
+    @Lazy
+    public TransactionDao transactionDao() {
+        return new TransactionDaoImpl(){};
+    }
+
+    @Bean
+    @Lazy
+    public UserDao userDao() {
+        return new UserDaoImpl(){};
+    }
+
+    @Bean
+    @Lazy
+    public UserRequestDao userRequestDao() {
+        return new UserRequestDaoImpl(){};
     }
 }

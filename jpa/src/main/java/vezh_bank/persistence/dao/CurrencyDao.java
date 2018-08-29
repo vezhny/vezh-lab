@@ -23,8 +23,17 @@ public interface CurrencyDao extends GlobalDao<Currency> {
     void delete(Currency currency);
 
     @Transactional
+    void delete(int code);
+
+    @Transactional
+    void delete(String value);
+
+    @Transactional
     @Override
     Currency getById(int id);
+
+    @Transactional
+    Currency getByValue(String value);
 
     @Transactional
     @Override

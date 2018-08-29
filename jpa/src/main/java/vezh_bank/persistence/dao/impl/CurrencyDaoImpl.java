@@ -39,13 +39,27 @@ public class CurrencyDaoImpl implements CurrencyDao {
     @Override
     public void deleteAll() {
         logger.info("Delete all currencies");
-        entityManager.clear();
+        entityManager.createNativeQuery("DELETE FROM CURRENCIES").executeUpdate();
     }
 
     @Override
     public void delete(Currency currency) {
         logger.info("Delete currency: " + currency);
-        entityManager.remove(currency);
+        delete(currency.getCode());
+    }
+
+    @Override
+    public void delete(int code) {
+        logger.info("Delete currency with code: " + code);
+        entityManager.createNativeQuery("DELETE FROM CURRENCIES WHERE CODE = ?")
+                .setParameter(1, code).executeUpdate();
+    }
+
+    @Override
+    public void delete(String value) {
+        logger.info("Delete currency with value: " + value);
+        entityManager.createNativeQuery("DELETE FROM CURRENCIES WHERE CURRENCY_VALUE = ?")
+                .setParameter(1, value).executeUpdate();
     }
 
     @Override
@@ -59,6 +73,21 @@ public class CurrencyDaoImpl implements CurrencyDao {
             return currency;
         } catch (NoResultException e) {
             logger.info("Currency with code " + id + "not found");
+            return null;
+        }
+    }
+
+    @Override
+    public Currency getByValue(String value) {
+        logger.info("Select currency with value: " + value);
+        try {
+            Currency currency = entityManager.createQuery("SELECT c FROM Currency c " +
+                    "WHERE c.value = :value", Currency.class)
+                    .setParameter("value", value).getSingleResult();
+            logger.info(currency);
+            return currency;
+        } catch (NoResultException e) {
+            logger.info("Currency with value " + value + " not found");
             return null;
         }
     }

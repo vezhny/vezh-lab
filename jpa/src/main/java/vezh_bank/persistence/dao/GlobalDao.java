@@ -2,11 +2,15 @@ package vezh_bank.persistence.dao;
 
 import java.util.List;
 
-public interface GlobalDao<T> {
-    List<T> selectAll();
+public interface GlobalDao<T> extends GlobalSelectDao<T> {
     void deleteAll();
     void delete(T t);
-    T getById(int id);
     void update(T t);
     void insert(T t);
+
+    @Override
+    List<T> selectAll();
+
+    @Override
+    T getById(int id);
 }

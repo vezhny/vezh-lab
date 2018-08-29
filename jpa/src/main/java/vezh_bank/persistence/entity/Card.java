@@ -21,7 +21,7 @@ public class Card {
 
     @ManyToOne
     @JoinTable(name = "USERS")
-    @Column(name = "HOLDER_ID")
+//    @Column(name = "HOLDER_ID")
     private User holder;
 
     @Column(name = "CREATION_DATE")
@@ -35,7 +35,7 @@ public class Card {
 
     @ManyToOne
     @JoinTable(name = "CURRENCIES")
-    @Column(name = "CURRENCY")
+//    @Column(name = "CURRENCY")
     private Currency currency;
 
     @Column(name = "CARD_STATUS")

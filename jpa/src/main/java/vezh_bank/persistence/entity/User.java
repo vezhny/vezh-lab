@@ -21,7 +21,7 @@ public class User {
 
     @ManyToOne
     @JoinTable(name = "USER_ROLES")
-    @Column(name = "ROLE_ID")
+//    @Column(name = "ROLE_ID")
     private UserRole role;
 
     @Column(name = "CONFIG")
@@ -42,8 +42,8 @@ public class User {
     @OneToMany(mappedBy = "holder")
     private List<Card> cards;
 
-    @OneToMany(mappedBy = "user")
-    private List<UserRequest> userRequests;
+//    @OneToMany(mappedBy = "user")
+//    private List<UserRequest> userRequests;
 
     public User() {
     }
@@ -130,9 +130,9 @@ public class User {
         cards.remove(card);
     }
 
-    public List<UserRequest> getUserRequests() {
-        return userRequests;
-    }
+//    public List<UserRequest> getUserRequests() {
+//        return userRequests;
+//    }
 
     @Override
     public String toString() {

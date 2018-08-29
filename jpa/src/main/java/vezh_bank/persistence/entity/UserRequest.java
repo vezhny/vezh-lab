@@ -15,7 +15,7 @@ public class UserRequest {
 
     @ManyToOne
     @JoinTable(name = "USERS")
-    @Column(name = "USER_ID")
+//    @Column(name = "USER_ID")
     private User user;
 
     @Column(name = "CREATION_DATE")

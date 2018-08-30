@@ -25,32 +25,7 @@ import vezh_bank.util.Logger;
 
 import java.util.List;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = VezhBankConfiguration.class)
-@WebAppConfiguration
-@ActiveProfiles(MavenProfiles.TEST)
-public class RoleTests {
-    private static Logger logger = Logger.getLogger(RoleTests.class);
-
-    private TestUtils testUtils;
-    private MockMvc mockMvc;
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @Autowired
-    private DataBaseService dataBaseService;
-
-    @BeforeEach
-    public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        testUtils = new TestUtils(logger);
-    }
-
-    @AfterEach
-    public void tearDown() {
-        testUtils.logTestEnd();
-    }
+public class RoleTests extends PersistenceTest {
 
     @Test
     public void selectAllRoles() {

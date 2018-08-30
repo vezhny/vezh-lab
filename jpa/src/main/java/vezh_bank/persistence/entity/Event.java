@@ -1,9 +1,13 @@
 package vezh_bank.persistence.entity;
 
+import vezh_bank.constants.DatePatterns;
 import vezh_bank.enums.EventType;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static vezh_bank.constants.DatePatterns.DEFAULT_DATE_PATTERN;
 
 @Entity
 @Table(name = "EVENTS")
@@ -20,7 +24,7 @@ public class Event {
     private String data;
 
     @Column(name = "EVENT_DATE")
-    private Date date;
+    private String date;
 
     public Event() {
     }
@@ -28,14 +32,13 @@ public class Event {
     public Event(EventType type, String data) {
         this.type = type.toString();
         this.data = data;
-        this.date = new Date(); // TODO: date format
+        this.date = new SimpleDateFormat(DEFAULT_DATE_PATTERN).format(new Date());
     }
 
     public int getId() {
         return id;
     }
 
-    // TODO: return EventType
     public String getType() {
         return type;
     }
@@ -44,7 +47,7 @@ public class Event {
         return data;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 

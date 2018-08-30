@@ -26,33 +26,7 @@ import vezh_bank.util.Logger;
 
 import java.util.List;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = VezhBankConfiguration.class)
-@WebAppConfiguration
-@ActiveProfiles(MavenProfiles.TEST)
-public class EventTests {
-    private Logger logger = Logger.getLogger(this.getClass());
-
-    private TestUtils testUtils;
-    private MockMvc mockMvc;
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @Autowired
-    private DataBaseService dataBaseService;
-
-    @BeforeEach
-    public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        testUtils = new TestUtils(logger);
-    }
-
-    @AfterEach
-    public void tearDown() {
-        testUtils.logTestEnd();
-        dataBaseService.getEventDao().deleteAll();
-    }
+public class EventTests extends PersistenceTest {
 
     @Test
     public void insertEventTest() {
@@ -134,19 +108,5 @@ public class EventTests {
         List<Event> events = dataBaseService.getEventDao().select(requiredPage, rowsOnPage,
                 type, date, data);
         checkEventsCount(expectedEventCount, events);
-    }
-
-    private void createEvent(Event event) {
-        dataBaseService.getEventDao().insert(event);
-    }
-
-    private void checkEvent(EventType expectedEventType, String containingData, Event actualEvent) {
-        Assertions.assertEquals(expectedEventType.toString(), actualEvent.getType(), "Event type");
-        Assertions.assertTrue(actualEvent.getData().contains(containingData), "Event data");
-        Assertions.assertNotNull(actualEvent.getDate(), "Event date");
-    }
-
-    private void checkEventsCount(int expectedEventCount, List<Event> events) {
-        Assertions.assertEquals(expectedEventCount, events.size(), "Number of events");
     }
 }

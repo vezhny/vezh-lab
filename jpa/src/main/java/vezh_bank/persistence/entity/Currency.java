@@ -15,9 +15,6 @@ public class Currency {
     @Column(name = "CURRENCY_VALUE")
     private String value;
 
-//    @OneToMany(mappedBy = "currency")
-//    private List<Card> cards;
-
     public Currency() {
     }
 

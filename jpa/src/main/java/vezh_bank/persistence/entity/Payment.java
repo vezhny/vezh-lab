@@ -1,6 +1,7 @@
 package vezh_bank.persistence.entity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "PAYMENTS")
@@ -16,15 +17,14 @@ public class Payment {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    // TODO: use something else for money
     @Column(name = "MIN_AMOUNT")
-    private int minAmount;
+    private String minAmount;
 
     @Column(name = "MAX_AMOUNT")
-    private int maxAmount;
+    private String maxAmount;
 
     @Column(name = "COMMISSION")
-    private int commission;
+    private String commission;
 
     @ManyToOne
 //    @Column(name = "CURRENCY")
@@ -34,7 +34,8 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(String name, String description, int minAmount, int maxAmount, int commission, Currency currency) {
+    public Payment(String name, String description, String minAmount,
+                   String maxAmount, String commission, Currency currency) {
         this.name = name;
         this.description = description;
         this.minAmount = minAmount;
@@ -63,28 +64,28 @@ public class Payment {
         this.description = description;
     }
 
-    public int getMinAmount() {
-        return minAmount;
+    public BigDecimal getMinAmount() {
+        return new BigDecimal(minAmount);
     }
 
-    public void setMinAmount(int minAmount) {
-        this.minAmount = minAmount;
+    public void setMinAmount(BigDecimal minAmount) {
+        this.minAmount = String.valueOf(minAmount);
     }
 
-    public int getMaxAmount() {
-        return maxAmount;
+    public BigDecimal getMaxAmount() {
+        return new BigDecimal(maxAmount);
     }
 
-    public void setMaxAmount(int maxAmount) {
-        this.maxAmount = maxAmount;
+    public void setMaxAmount(BigDecimal maxAmount) {
+        this.maxAmount = String.valueOf(maxAmount);
     }
 
-    public int getCommission() {
-        return commission;
+    public BigDecimal getCommission() {
+        return new BigDecimal(commission);
     }
 
-    public void setCommission(int commission) {
-        this.commission = commission;
+    public void setCommission(BigDecimal commission) {
+        this.commission = String.valueOf(commission);
     }
 
     public Currency getCurrency() {

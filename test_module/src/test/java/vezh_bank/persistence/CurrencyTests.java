@@ -24,33 +24,7 @@ import vezh_bank.util.Logger;
 
 import java.util.List;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = VezhBankConfiguration.class)
-@WebAppConfiguration
-@ActiveProfiles(MavenProfiles.TEST)
-public class CurrencyTests {
-    private Logger logger = Logger.getLogger(this.getClass());
-
-    private TestUtils testUtils;
-    private MockMvc mockMvc;
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @Autowired
-    private DataBaseService dataBaseService;
-
-    @BeforeEach
-    public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        testUtils = new TestUtils(logger);
-    }
-
-    @AfterEach
-    public void tearDown() {
-        testUtils.logTestEnd();
-        dataBaseService.getCurrencyDao().deleteAll();
-    }
+public class CurrencyTests extends PersistenceTest {
 
     @Test
     public void insertCurrencyTest() {
@@ -188,22 +162,5 @@ public class CurrencyTests {
 
         List<Currency> currencies = dataBaseService.getCurrencyDao().select(requiredPage, rowsOfPage, code, value);
         checkCurrenciesCount(expectedCurrenciesCount, currencies);
-    }
-
-    private void createCurrency(int code, String value) {
-        dataBaseService.getCurrencyDao().insert(new Currency(code, value));
-    }
-
-    private void checkCurrency(int expectedCode, String expectedValue,
-                               Currency actualCurrency) {
-        Assertions.assertEquals(expectedCode, actualCurrency.getCode(),
-                "Currency code");
-        Assertions.assertEquals(expectedValue, actualCurrency.getValue(),
-                "Currency value");
-    }
-
-    private void checkCurrenciesCount(int expectedCount, List<Currency> actualCurrencyList) {
-        Assertions.assertEquals(expectedCount, actualCurrencyList.size(),
-                "Currencies count");
     }
 }

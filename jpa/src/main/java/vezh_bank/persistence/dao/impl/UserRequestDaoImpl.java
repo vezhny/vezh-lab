@@ -57,6 +57,14 @@ public class UserRequestDaoImpl implements UserRequestDao {
     }
 
     @Override
+    public int selectCount() {
+        logger.info("Select number of user requests");
+        int numberOfRequests = entityManager.createQuery("SELECT COUNT(*) FROM UserRequest ur", Long.class).getSingleResult().intValue();
+        logger.info("Number of user requests: " + numberOfRequests);
+        return numberOfRequests;
+    }
+
+    @Override
     public void update(UserRequest userRequest) {
         logger.info("Update user request: " + userRequest);
         entityManager.merge(userRequest);

@@ -33,9 +33,19 @@ public interface CurrencyDao extends GlobalDao<Currency> {
     Currency getById(int id);
 
     @Transactional
-    Currency getByValue(String value);
+    @Override
+    int selectCount();
+
+    @Transactional
+    List<Currency> getByValue(String value);
+
+    @Transactional
+    List<Currency> get(String code, String value);
 
     @Transactional
     @Override
     void update(Currency currency);
+
+    @Transactional
+    List<Currency> select(int requiredPage, int rowsOnPage, String code, String value);
 }

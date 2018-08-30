@@ -23,6 +23,14 @@ public class CardDaoImpl implements CardDao {
     }
 
     @Override
+    public int selectCount() {
+        logger.info("Select number of cards");
+        int numberOfCards = entityManager.createQuery("SELECT COUNT(*) FROM Card c", Long.class).getSingleResult().intValue();
+        logger.info("Number of cards: " + numberOfCards);
+        return numberOfCards;
+    }
+
+    @Override
     public List<Card> selectAll() {
         logger.info("Select all cards");
         List<Card> cards;

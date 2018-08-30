@@ -7,6 +7,7 @@ public interface GlobalDao<T> extends GlobalSelectDao<T> {
     void delete(T t);
     void update(T t);
     void insert(T t);
+    int selectCount();
 
     @Override
     List<T> selectAll();

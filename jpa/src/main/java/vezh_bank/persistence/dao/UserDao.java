@@ -24,6 +24,10 @@ public interface UserDao extends GlobalDao<User> {
 
     @Transactional
     @Override
+    int selectCount();
+
+    @Transactional
+    @Override
     void update(User user);
 
     @Transactional

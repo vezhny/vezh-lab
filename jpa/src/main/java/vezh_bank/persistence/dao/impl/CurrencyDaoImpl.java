@@ -78,17 +78,44 @@ public class CurrencyDaoImpl implements CurrencyDao {
     }
 
     @Override
-    public Currency getByValue(String value) {
+    public int selectCount() {
+        logger.info("Select number of currencies");
+        int numberOFCurrencies = entityManager.createQuery("SELECT COUNT(*) FROM Currency c", Long.class).getSingleResult().intValue();
+        logger.info("Number of currencies: " + numberOFCurrencies);
+        return numberOFCurrencies;
+    }
+
+    @Override
+    public List<Currency> getByValue(String value) {
         logger.info("Select currency with value: " + value);
+        List<Currency> currencies;
         try {
-            Currency currency = entityManager.createQuery("SELECT c FROM Currency c " +
-                    "WHERE c.value = :value", Currency.class)
-                    .setParameter("value", value).getSingleResult();
-            logger.info(currency);
-            return currency;
+            currencies = entityManager.createQuery("SELECT c FROM Currency c " +
+                    "WHERE c.value LIKE :currencyValue ORDER BY c.value", Currency.class)
+                    .setParameter("currencyValue", getLikeParam(value)).getResultList();
+            logger.info("Found " + currencies.size() + " of currencies");
+            return currencies;
         } catch (NoResultException e) {
             logger.info("Currency with value " + value + " not found");
-            return null;
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Currency> get(String code, String value) {
+        logger.info("Select currency");
+        logger.info("Code: " + code);
+        logger.info("Value: " + value);
+        List<Currency> currencies;
+        try {
+            currencies = entityManager.createQuery("SELECT c FROM Currency c WHERE CAST(c.code AS string) LIKE :code " +
+                    "AND c.value LIKE :currencyValue ORDER BY c.value", Currency.class)
+                    .setParameter("code", getLikeParam(code)).setParameter("currencyValue", getLikeParam(value)).getResultList();
+            logger.info("Found " + currencies.size() + " of currencies");
+            return currencies;
+        } catch (NoResultException e) {
+            logger.info("Required currencies not found");
+            return new ArrayList<>();
         }
     }
 
@@ -96,5 +123,26 @@ public class CurrencyDaoImpl implements CurrencyDao {
     public void update(Currency currency) {
         logger.info("Update currency: " + currency);
         entityManager.merge(currency);
+    }
+
+    @Override
+    public List<Currency> select(int requiredPage, int rowsOnPage, String code, String value) {
+        logger.info("Select currencies");
+        logger.info("Required page: " + requiredPage);
+        logger.info("Row on page: " + rowsOnPage);
+        logger.info("Code: " + code);
+        logger.info("Value: " + value);
+        List<Currency> currencies;
+        try {
+            currencies = entityManager.createQuery("SELECT c FROM Currency c WHERE CAST(c.code AS string) " +
+                    "LIKE :code AND c.value LIKE :currencyValue ORDER BY c.value", Currency.class)
+                    .setParameter("code", getLikeParam(code)).setParameter("currencyValue", getLikeParam(value))
+                    .setFirstResult(getFirstResultIndex(requiredPage, rowsOnPage))
+                    .setMaxResults(rowsOnPage).getResultList();
+            logger.info("Found " + currencies.size() + " of currencies");
+            return currencies;
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        }
     }
 }

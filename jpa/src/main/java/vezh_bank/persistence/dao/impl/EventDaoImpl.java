@@ -56,6 +56,14 @@ public class EventDaoImpl implements EventDao {
     }
 
     @Override
+    public int selectCount() {
+        logger.info("Select number of events");
+        int numberOfEvents = entityManager.createQuery("SELECT COUNT(*) FROM Event e", Long.class).getSingleResult().intValue();
+        logger.info("Number of events: " + numberOfEvents);
+        return numberOfEvents;
+    }
+
+    @Override
     public void update(Event event) {
         logger.info("Update event: " + event);
         entityManager.merge(event);

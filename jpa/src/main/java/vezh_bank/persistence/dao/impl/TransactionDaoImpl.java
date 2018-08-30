@@ -56,6 +56,14 @@ public class TransactionDaoImpl implements TransactionDao {
     }
 
     @Override
+    public int selectCount() {
+        logger.info("Select number of transactions");
+        int numberOfTransactions = entityManager.createQuery("SELECT COUNT(*) FROM Transaction t", Long.class).getSingleResult().intValue();
+        logger.info("Number of transactions: " + numberOfTransactions);
+        return numberOfTransactions;
+    }
+
+    @Override
     public void update(Transaction transaction) {
         logger.info("Update transaction: " + transaction);
         entityManager.merge(transaction);

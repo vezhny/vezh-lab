@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,6 +20,8 @@ import org.springframework.web.context.WebApplicationContext;
 import vezh_bank.TestUtils;
 import vezh_bank.constants.MavenProfiles;
 import vezh_bank.persistence.entity.Currency;
+import vezh_bank.persistence.providers.CurrencyPageArgumentsProvider;
+import vezh_bank.persistence.providers.CurrencySearchArgumentsProvider;
 
 import java.util.List;
 
@@ -92,7 +96,7 @@ public class CurrencyTests {
         String currencyValue = "RUB";
         createCurrency(currencyCode, currencyValue);
 
-        Currency currency = dataBaseService.getCurrencyDao().getByValue(currencyValue);
+        Currency currency = dataBaseService.getCurrencyDao().getByValue(currencyValue).get(0);
         checkCurrency(currencyCode, currencyValue, currency);
     }
 
@@ -116,6 +120,75 @@ public class CurrencyTests {
 
         dataBaseService.getCurrencyDao().delete(currencyValue);
         checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
+    }
+
+    @Test
+    public void currencySortingTest() {
+        testUtils.logTestStart("Currency sorting test");
+        int currencyCode1 = 643;
+        int currencyCode2 = 666;
+        String currencyValue1 = "RUB";
+        String currencyValue2 = "HEL";
+        createCurrency(currencyCode1, currencyValue1);
+        createCurrency(currencyCode2, currencyValue2);
+
+        List<Currency> currencies = dataBaseService.getCurrencyDao().selectAll();
+        checkCurrenciesCount(2, currencies);
+        checkCurrency(currencyCode2, currencyValue2, currencies.get(0));
+        checkCurrency(currencyCode1, currencyValue1, currencies.get(1));
+    }
+
+    @Test
+    public void searchCurrencyByValueTest() {
+        testUtils.logTestStart("Search currency by value test");
+        int currencyCode1 = 643;
+        int currencyCode2 = 642;
+        String currencyValue1 = "RUB";
+        String currencyValue2 = "RUR";
+        createCurrency(currencyCode1, currencyValue1);
+        createCurrency(currencyCode2, currencyValue2);
+
+        List<Currency> currencies = dataBaseService.getCurrencyDao().getByValue("RU");
+        checkCurrenciesCount(2, currencies);
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(CurrencySearchArgumentsProvider.class)
+    public void searchCurrencyTest(String code, String value, int expectedCurrenciesCount) {
+        testUtils.logTestStart("Search currency test");
+        int currencyCode1 = 643;
+        int currencyCode2 = 578;
+        String currencyValue1 = "RUB";
+        String currencyValue2 = "RUR";
+        createCurrency(currencyCode1, currencyValue1);
+        createCurrency(currencyCode2, currencyValue2);
+
+        List<Currency> currencies = dataBaseService.getCurrencyDao().get(code, value);
+        checkCurrenciesCount(expectedCurrenciesCount, currencies);
+    }
+
+    @Test
+    public void currencyCountTest() {
+        testUtils.logTestStart("Currency count test");
+        createCurrency(643, "RUB");
+
+        int numberOfCurrencies = dataBaseService.getCurrencyDao().selectCount();
+        Assertions.assertEquals(1, numberOfCurrencies, "Number of currencies");
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(CurrencyPageArgumentsProvider.class)
+    public void currencyPageTest(int requiredPage, int rowsOfPage, String code, String value, int expectedCurrenciesCount) {
+        testUtils.logTestStart("Currency page test");
+        createCurrency(643, "RUB");
+        createCurrency(981, "USD");
+        createCurrency(435, "EUR");
+        createCurrency(193, "UAN");
+        createCurrency(457, "FUN");
+        createCurrency(853, "BYN");
+
+        List<Currency> currencies = dataBaseService.getCurrencyDao().select(requiredPage, rowsOfPage, code, value);
+        checkCurrenciesCount(expectedCurrenciesCount, currencies);
     }
 
     private void createCurrency(int code, String value) {

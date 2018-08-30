@@ -12,6 +12,10 @@ public interface CardDao extends GlobalDao<Card> {
 
     @Transactional
     @Override
+    int selectCount();
+
+    @Transactional
+    @Override
     List<Card> selectAll();
 
     @Transactional

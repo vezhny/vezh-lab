@@ -56,6 +56,14 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public int selectCount() {
+        logger.info("Select number of users");
+        int numberOfUsers = entityManager.createQuery("SELECT COUNT(*) FROM User u", Long.class).getSingleResult().intValue();
+        logger.info("Number of users: " + numberOfUsers);
+        return numberOfUsers;
+    }
+
+    @Override
     public void update(User user) {
         logger.info("Update user: " + user);
         entityManager.merge(user);

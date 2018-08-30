@@ -27,7 +27,7 @@ public class Payment {
     private int commission;
 
     @ManyToOne
-    @Column(name = "CURRENCY")
+//    @Column(name = "CURRENCY")
     @JoinTable(name = "CURRENCIES")
     private Currency currency;
 

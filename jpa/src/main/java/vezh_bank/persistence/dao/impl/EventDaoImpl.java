@@ -1,8 +1,8 @@
 package vezh_bank.persistence.dao.impl;
 
-import org.apache.log4j.Logger;
 import vezh_bank.persistence.dao.EventDao;
 import vezh_bank.persistence.entity.Event;
+import vezh_bank.util.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

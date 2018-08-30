@@ -1,9 +1,9 @@
 package vezh_bank.persistence;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vezh_bank.persistence.dao.*;
+import vezh_bank.util.Logger;
 
 @Service
 public class DataBaseService {

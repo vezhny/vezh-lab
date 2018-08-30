@@ -25,4 +25,8 @@ public interface EventDao extends GlobalSelectDao<Event> {
 
     @Transactional
     void insert(Event event);
+
+    @Transactional
+    List<Event> select(int requiredPage, int rowsOnPage,
+                       String type, String date, String data);
 }

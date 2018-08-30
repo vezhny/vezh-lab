@@ -20,6 +20,7 @@ import vezh_bank.TestUtils;
 import vezh_bank.constants.MavenProfiles;
 import vezh_bank.enums.EventType;
 import vezh_bank.persistence.entity.Event;
+import vezh_bank.persistence.providers.event.EventPagesArgumentsProvider;
 import vezh_bank.persistence.providers.event.SelectEventArgumentsProvider;
 import vezh_bank.util.Logger;
 
@@ -114,6 +115,25 @@ public class EventTests {
         createEvent(new Event(EventType.USER_SIGN_IN, "User ID: 1"));
 
         Assertions.assertEquals(2, dataBaseService.getEventDao().selectCount(), "Events count");
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(EventPagesArgumentsProvider.class)
+    public void selectPagesTest(int requiredPage, int rowsOnPage,
+                                String type, String date, String data,
+                                int expectedEventCount) {
+        testUtils.logTestStart("Select pages test");
+        createEvent(new Event(EventType.USER_SIGN_IN, "User ID: 1"));
+        createEvent(new Event(EventType.USER_SIGN_OUT, "User ID: 1"));
+        createEvent(new Event(EventType.USER_SIGN_IN, "User ID: 2"));
+        createEvent(new Event(EventType.USER_SIGN_OUT, "User ID: 2"));
+        createEvent(new Event(EventType.USER_SIGN_IN, "User ID: 3"));
+        createEvent(new Event(EventType.USER_SIGN_OUT, "User ID: 3"));
+        createEvent(new Event(EventType.USER_SIGN_UP, "User ID: 3"));
+
+        List<Event> events = dataBaseService.getEventDao().select(requiredPage, rowsOnPage,
+                type, date, data);
+        checkEventsCount(expectedEventCount, events);
     }
 
     private void createEvent(Event event) {

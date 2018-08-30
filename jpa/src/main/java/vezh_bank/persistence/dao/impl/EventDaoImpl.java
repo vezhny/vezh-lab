@@ -85,4 +85,31 @@ public class EventDaoImpl implements EventDao {
         logger.info("Insert event: " + event);
         entityManager.persist(event);
     }
+
+    @Override
+    public List<Event> select(int requiredPage, int rowsOnPage,
+                              String type, String date, String data) {
+        logger.info("Select events");
+        logger.info("Required page: " + requiredPage);
+        logger.info("Row on page: " + rowsOnPage);
+        logger.info("Type: " + type);
+        logger.info("Date: " + date);
+        logger.info("Data: " + data);
+        List<Event> events;
+        try {
+            events = entityManager.createQuery("SELECT e FROM Event e " +
+                    "WHERE e.type LIKE :eventType AND CAST(e.date AS string) LIKE " +
+                    ":date AND e.data LIKE :data ORDER BY e.date DESC", Event.class)
+                    .setParameter("eventType", getLikeParam(type))
+                    .setParameter("date", getLikeParam(date))
+                    .setParameter("data", getLikeParam(data))
+                    .setFirstResult(getFirstResultIndex(requiredPage, rowsOnPage))
+                    .setMaxResults(rowsOnPage)
+                    .getResultList();
+        } catch (NoResultException e) {
+            events = new ArrayList<>();
+        }
+        logger.info("Found " + events.size() + " of events");
+        return events;
+    }
 }

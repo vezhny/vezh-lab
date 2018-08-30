@@ -5,32 +5,24 @@ import vezh_bank.persistence.entity.Event;
 import javax.transaction.Transactional;
 import java.util.List;
 
-public interface EventDao extends GlobalDao<Event> {
+public interface EventDao extends GlobalSelectDao<Event> {
     @Transactional
     @Override
     List<Event> selectAll();
 
     @Transactional
-    @Override
     void deleteAll();
-
-    @Transactional
-    @Override
-    void delete(Event event);
 
     @Transactional
     @Override
     Event getById(int id);
 
     @Transactional
-    @Override
+    List<Event> select(String type, String date, String data);
+
+    @Transactional
     int selectCount();
 
     @Transactional
-    @Override
-    void update(Event event);
-
-    @Transactional
-    @Override
     void insert(Event event);
 }

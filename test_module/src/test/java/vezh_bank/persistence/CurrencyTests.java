@@ -1,7 +1,6 @@
 package vezh_bank.persistence;
 
 import core.config.VezhBankConfiguration;
-import org.apache.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,8 +19,8 @@ import org.springframework.web.context.WebApplicationContext;
 import vezh_bank.TestUtils;
 import vezh_bank.constants.MavenProfiles;
 import vezh_bank.persistence.entity.Currency;
-import vezh_bank.persistence.providers.CurrencyPageArgumentsProvider;
-import vezh_bank.persistence.providers.CurrencySearchArgumentsProvider;
+import vezh_bank.persistence.providers.currency.CurrencySearchArgumentsProvider;
+import vezh_bank.util.Logger;
 
 import java.util.List;
 
@@ -177,7 +176,7 @@ public class CurrencyTests {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(CurrencyPageArgumentsProvider.class)
+    @ArgumentsSource(CurrencySearchArgumentsProvider.CurrencyPageArgumentsProvider.class)
     public void currencyPageTest(int requiredPage, int rowsOfPage, String code, String value, int expectedCurrenciesCount) {
         testUtils.logTestStart("Currency page test");
         createCurrency(643, "RUB");

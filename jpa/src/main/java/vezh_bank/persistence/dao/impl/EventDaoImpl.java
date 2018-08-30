@@ -21,7 +21,7 @@ public class EventDaoImpl implements EventDao {
         logger.info("Select all events");
         List<Event> events;
         try {
-            events = entityManager.createQuery("SELECT e FROM Event e ORDER BY e.date", Event.class).getResultList();
+            events = entityManager.createQuery("SELECT e FROM Event e ORDER BY e.date DESC", Event.class).getResultList();
         } catch (NoResultException e) {
             events = new ArrayList<>();
         }
@@ -32,13 +32,8 @@ public class EventDaoImpl implements EventDao {
     @Override
     public void deleteAll() {
         logger.info("Delete all events");
-        entityManager.clear();
-    }
-
-    @Override
-    public void delete(Event event) {
-        logger.info("Delete event: " + event);
-        entityManager.remove(event);
+        entityManager.createNativeQuery("DELETE FROM EVENTS")
+                .executeUpdate();
     }
 
     @Override
@@ -56,17 +51,33 @@ public class EventDaoImpl implements EventDao {
     }
 
     @Override
+    public List<Event> select(String type, String date, String data) {
+        logger.info("Select event");
+        logger.info("Event type: " + type);
+        logger.info("Event date: " + date);
+        logger.info("Event data containing: " + data);
+        try {
+            List<Event> events = entityManager.createQuery("SELECT e FROM Event e WHERE e.type LIKE :eventType " +
+                    " AND CAST(e.date AS string) LIKE :date " +
+                    " AND e.data LIKE :data ORDER BY e.date DESC", Event.class)
+                    .setParameter("eventType", getLikeParam(type))
+                    .setParameter("date", getLikeParam(date))
+                    .setParameter("data", getLikeParam(data))
+                    .getResultList();
+            logger.info("Found " + events.size() + " of events");
+            return events;
+        } catch (NoResultException e) {
+            logger.info("No events found");
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
     public int selectCount() {
         logger.info("Select number of events");
         int numberOfEvents = entityManager.createQuery("SELECT COUNT(*) FROM Event e", Long.class).getSingleResult().intValue();
         logger.info("Number of events: " + numberOfEvents);
         return numberOfEvents;
-    }
-
-    @Override
-    public void update(Event event) {
-        logger.info("Update event: " + event);
-        entityManager.merge(event);
     }
 
     @Override

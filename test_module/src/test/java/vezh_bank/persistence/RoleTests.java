@@ -1,8 +1,10 @@
 package vezh_bank.persistence;
 
 import core.config.VezhBankConfiguration;
-import org.apache.log4j.Logger;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -17,9 +19,9 @@ import org.springframework.web.context.WebApplicationContext;
 import vezh_bank.TestUtils;
 import vezh_bank.constants.MavenProfiles;
 import vezh_bank.enums.Role;
-import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.UserRole;
-import vezh_bank.persistence.providers.RoleArgumentsProvider;
+import vezh_bank.persistence.providers.role.RoleArgumentsProvider;
+import vezh_bank.util.Logger;
 
 import java.util.List;
 

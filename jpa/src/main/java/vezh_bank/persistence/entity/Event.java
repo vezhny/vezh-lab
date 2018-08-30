@@ -25,10 +25,10 @@ public class Event {
     public Event() {
     }
 
-    public Event(EventType type, String data, Date date) {
+    public Event(EventType type, String data) {
         this.type = type.toString();
         this.data = data;
-        this.date = date;
+        this.date = new Date(); // TODO: date format
     }
 
     public int getId() {

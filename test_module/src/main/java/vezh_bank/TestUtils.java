@@ -1,6 +1,7 @@
 package vezh_bank;
 
-import org.apache.log4j.Logger;
+
+import vezh_bank.util.Logger;
 
 public class TestUtils {
     private Logger logger;

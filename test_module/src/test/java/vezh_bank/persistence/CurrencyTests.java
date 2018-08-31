@@ -149,4 +149,19 @@ public class CurrencyTests extends PersistenceTest {
         List<Currency> currencies = dataBaseService.getCurrencyDao().select(requiredPage, rowsOfPage, code, value);
         checkCurrenciesCount(expectedCurrenciesCount, currencies);
     }
+
+    @ParameterizedTest
+    @ArgumentsSource(CurrencySearchArgumentsProvider.class)
+    public void selectCount(String code, String value, int expectedCurrenciesCount) {
+        testUtils.logTestStart("Search currencies count test");
+        int currencyCode1 = 643;
+        int currencyCode2 = 578;
+        String currencyValue1 = "RUB";
+        String currencyValue2 = "RUR";
+        createCurrency(currencyCode1, currencyValue1);
+        createCurrency(currencyCode2, currencyValue2);
+
+        int currencies = dataBaseService.getCurrencyDao().selectCount(code, value);
+        Assertions.assertEquals(expectedCurrenciesCount, currencies, "Number of currencies");
+    }
 }

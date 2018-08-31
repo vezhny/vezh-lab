@@ -115,4 +115,27 @@ public class TransactionDaoImpl implements TransactionDao {
         logger.info("Found " + transactions.size() + " of transactions");
         return transactions;
     }
+
+    @Override
+    public int selectCount(String trxType, String dateTime, String data, String status) {
+        logger.info("Select number of transactions");
+        logger.info("Type: " + trxType);
+        logger.info("Date&Time: " + dateTime);
+        logger.info("Data: " + data);
+        logger.info("Status: " + status);
+        int transactions = 0;
+        try {
+            transactions = entityManager.createQuery("SELECT COUNT(*) FROM Transaction t WHERE " +
+                    "t.type LIKE :trxType AND t.dateTime LIKE :dateTime AND t.data LIKE :data " +
+                    "AND t.status LIKE :status", Long.class)
+                    .setParameter("trxType", getLikeParam(trxType))
+                    .setParameter("dateTime", getLikeParam(dateTime))
+                    .setParameter("data", getLikeParam(data))
+                    .setParameter("status", getLikeParam(status))
+                    .getSingleResult().intValue();
+        } catch (NoResultException e) {
+        }
+        logger.info("Found " + transactions + " of transactions");
+        return transactions;
+    }
 }

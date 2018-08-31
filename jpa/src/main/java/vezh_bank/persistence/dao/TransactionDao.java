@@ -29,4 +29,7 @@ public interface TransactionDao extends GlobalSelectDao<Transaction> {
     @Transactional
     List<Transaction> select(int requiredPage, int rowsOnPage, String trxType,
                              String dateTime, String data, String status);
+
+    @Transactional
+    int selectCount(String trxType, String dateTime, String data, String status);
 }

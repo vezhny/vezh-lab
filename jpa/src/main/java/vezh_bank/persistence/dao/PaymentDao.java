@@ -44,5 +44,8 @@ public interface PaymentDao extends GlobalDao<Payment> {
     List<Payment> select(String name, String currency);
 
     @Transactional
+    int selectCount(String name, String currency);
+
+    @Transactional
     List<Payment> select(int requiredPage, int rowsOnPage, String name, String currency);
 }

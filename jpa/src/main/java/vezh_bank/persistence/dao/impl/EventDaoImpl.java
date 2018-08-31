@@ -112,4 +112,25 @@ public class EventDaoImpl implements EventDao {
         logger.info("Found " + events.size() + " of events");
         return events;
     }
+
+    @Override
+    public int selectCount(String type, String date, String data) {
+        logger.info("Select number of events");
+        logger.info("Event type: " + type);
+        logger.info("Event date: " + date);
+        logger.info("Event data containing: " + data);
+        int events = 0;
+        try {
+            events = entityManager.createQuery("SELECT COUNT(*) FROM Event e WHERE e.type LIKE :eventType " +
+                    " AND CAST(e.date AS string) LIKE :date " +
+                    " AND e.data LIKE :data", Long.class)
+                    .setParameter("eventType", getLikeParam(type))
+                    .setParameter("date", getLikeParam(date))
+                    .setParameter("data", getLikeParam(data))
+                    .getSingleResult().intValue();
+        } catch (NoResultException e) {
+        }
+        logger.info("Found " + events + " of events");
+        return events;
+    }
 }

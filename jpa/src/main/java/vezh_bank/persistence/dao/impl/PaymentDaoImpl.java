@@ -121,6 +121,24 @@ public class PaymentDaoImpl implements PaymentDao {
     }
 
     @Override
+    public int selectCount(String name, String currency) {
+        logger.info("Select number of payments");
+        logger.info("Name: " + name);
+        logger.info("Currency code: " + currency);
+        int payments = 0;
+        try {
+            payments = entityManager.createQuery("SELECT COUNT(*) FROM Payment p WHERE " +
+                    "CAST(p.currency.code AS string) LIKE :currency AND p.name LIKE :paymentName", Long.class)
+                    .setParameter("currency", getLikeParam(currency))
+                    .setParameter("paymentName", getLikeParam(name))
+                    .getSingleResult().intValue();
+        } catch (NoResultException e) {
+        }
+        logger.info("Found " + payments + " of payments");
+        return payments;
+    }
+
+    @Override
     public List<Payment> select(int requiredPage, int rowsOnPage, String name, String currency) {
         logger.info("Select payments");
         logger.info("Required page: " + requiredPage);

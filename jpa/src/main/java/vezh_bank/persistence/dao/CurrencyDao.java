@@ -48,4 +48,7 @@ public interface CurrencyDao extends GlobalDao<Currency> {
 
     @Transactional
     List<Currency> select(int requiredPage, int rowsOnPage, String code, String value);
+
+    @Transactional
+    int selectCount(String code, String value);
 }

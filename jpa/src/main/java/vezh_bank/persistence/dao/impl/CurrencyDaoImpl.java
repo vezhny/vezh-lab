@@ -145,4 +145,22 @@ public class CurrencyDaoImpl implements CurrencyDao {
             return new ArrayList<>();
         }
     }
+
+    @Override
+    public int selectCount(String code, String value) {
+        logger.info("Select number of currencies");
+        logger.info("Code: " + code);
+        logger.info("Value: " + value);
+        int currencies = 0;
+        try {
+            currencies = entityManager.createQuery("SELECT COUNT(*) FROM Currency c WHERE CAST(c.code AS string) LIKE :code " +
+                    "AND c.value LIKE :currencyValue", Long.class)
+                    .setParameter("code", getLikeParam(code))
+                    .setParameter("currencyValue", getLikeParam(value))
+                    .getSingleResult().intValue();
+        } catch (NoResultException e) {
+        }
+        logger.info("Found " + currencies + " of currencies");
+        return currencies;
+    }
 }

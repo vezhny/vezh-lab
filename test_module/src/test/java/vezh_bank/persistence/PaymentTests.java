@@ -276,4 +276,31 @@ public class PaymentTests extends PersistenceTest {
         List<Payment> payments = dataBaseService.getPaymentDao().select(name, currency);
         checkPaymentCount(expectedPaymentCount, payments);
     }
+    @ParameterizedTest
+    @ArgumentsSource(SelectPaymentNameAndCurrencyArgumentsProvider.class)
+    public void selectPaymentsCountWithNameAndCurrencyTest(String name, String currency, int expectedPaymentCount) {
+        testUtils.logTestStart("Select payments count with name and currency test");
+        Currency currency1 = new Currency(643, "RUB");
+        Currency currency2 = new Currency(891, "BYN");
+        createCurrency(currency1);
+        createCurrency(currency2);
+
+        Payment payment1 = new Payment("Payment1", "Test description",
+                "100.05", "999.99", "1.5", currency1);
+        Payment payment2 = new Payment("Payment2", "Test description",
+                "100.05", "999.99", "1.5", currency2);
+        Payment payment3 = new Payment("Payment3", "Test description",
+                "100.05", "999.99", "1.5", currency1);
+        Payment payment4 = new Payment("Payment4", "Test description",
+                "100.05", "999.99", "1.5", currency2);
+
+        createPayment(payment1);
+        createPayment(payment2);
+        createPayment(payment3);
+        createPayment(payment4);
+
+        int payments = dataBaseService.getPaymentDao().selectCount(name, currency);
+        Assertions.assertEquals(expectedPaymentCount, payments, "Number of payments");
+    }
+
 }

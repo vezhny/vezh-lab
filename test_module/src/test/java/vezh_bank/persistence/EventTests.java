@@ -95,4 +95,20 @@ public class EventTests extends PersistenceTest {
                 type, date, data);
         checkEventsCount(expectedEventCount, events);
     }
+    @ParameterizedTest
+    @ArgumentsSource(SelectEventArgumentsProvider.class)
+    public void selectEventCountTest(String eventType, String date, String data, int expectedEventCount) {
+        testUtils.logTestStart("Select event count test");
+        createEvent(new Event(EventType.USER_SIGN_IN, "User ID: 1"));
+        createEvent(new Event(EventType.USER_SIGN_OUT, "User ID: 1"));
+        createEvent(new Event(EventType.USER_SIGN_IN, "User ID: 2"));
+        createEvent(new Event(EventType.USER_SIGN_OUT, "User ID: 2"));
+        createEvent(new Event(EventType.USER_SIGN_IN, "User ID: 3"));
+        createEvent(new Event(EventType.USER_SIGN_OUT, "User ID: 3"));
+        createEvent(new Event(EventType.USER_SIGN_UP, "User ID: 3"));
+
+        int events = dataBaseService.getEventDao().selectCount(eventType, date, data);
+        Assertions.assertEquals(expectedEventCount, events, "Number of events");
+    }
+
 }

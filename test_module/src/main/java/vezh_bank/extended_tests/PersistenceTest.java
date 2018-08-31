@@ -19,10 +19,7 @@ import vezh_bank.enums.EventType;
 import vezh_bank.enums.TransactionStatus;
 import vezh_bank.enums.TransactionType;
 import vezh_bank.persistence.DataBaseService;
-import vezh_bank.persistence.entity.Currency;
-import vezh_bank.persistence.entity.Event;
-import vezh_bank.persistence.entity.Payment;
-import vezh_bank.persistence.entity.Transaction;
+import vezh_bank.persistence.entity.*;
 import vezh_bank.util.Logger;
 
 import java.math.BigDecimal;
@@ -58,6 +55,7 @@ public class PersistenceTest {
         dataBaseService.getEventDao().deleteAll();
         dataBaseService.getPaymentDao().deleteAll();
         dataBaseService.getTransactionDao().deleteAll();
+        dataBaseService.getUserDao().deleteAll();
     }
 
     protected void createCurrency(int code, String value) {
@@ -77,8 +75,6 @@ public class PersistenceTest {
     }
 
     protected void checkCurrenciesCount(int expectedCount, List<Currency> actualCurrencyList) {
-//        Assertions.assertEquals(expectedCount, actualCurrencyList.size(),
-//                "Currencies count");
         checkItemsCount(expectedCount, actualCurrencyList, "Currencies count");
     }
 
@@ -129,6 +125,28 @@ public class PersistenceTest {
 
     protected void checkTransactionCount(int expectedTransactionsCount, List<Transaction> transactions) {
         checkItemsCount(expectedTransactionsCount, transactions, "Number of transactions");
+    }
+
+    protected void createUser(User user) {
+        dataBaseService.getUserDao().insert(user);
+    }
+
+    protected void checkUser(String expectedLogin, String expectedPassword, UserRole expectedRole,
+                             String expectedConfig, int expectedAttemptsToSignInLeft, boolean expectedBlocked,
+                             String expectedLastSignInDate, String expectedData, User actualUser) {
+        Assertions.assertEquals(expectedLogin, actualUser.getLogin(), "User login");
+        Assertions.assertEquals(expectedPassword, actualUser.getPassword(), "User password");
+        Assertions.assertEquals(expectedRole.getName(), actualUser.getRole(), "User role");
+        Assertions.assertEquals(expectedConfig, actualUser.getConfig(), "User config");
+        Assertions.assertEquals(expectedAttemptsToSignInLeft, actualUser.getAttemptsToSignIn(),
+                "User attempts to sign in");
+        Assertions.assertEquals(expectedBlocked, actualUser.isBlocked(), "User blocking");
+        Assertions.assertEquals(expectedLastSignInDate, actualUser.getLastSignIn(), "User last sign in date");
+        Assertions.assertEquals(expectedData, actualUser.getData(), "User data");
+    }
+
+    protected void checkUsersCount(int expectedCount, List<User> users) {
+        checkItemsCount(expectedCount, users, "Number of users");
     }
 
     private void checkItemsCount(int expectedCount, Collection collection, String message) {

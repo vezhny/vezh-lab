@@ -2,7 +2,6 @@ package vezh_bank.persistence.entity;
 
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,8 +19,7 @@ public class User {
     private String password;
 
     @ManyToOne
-    @JoinTable(name = "USER_ROLES")
-//    @Column(name = "ROLE_ID")
+    @JoinColumn(name = "ROLE_ID")
     private UserRole role;
 
     @Column(name = "CONFIG")
@@ -34,7 +32,7 @@ public class User {
     private boolean blocked;
 
     @Column(name = "LAST_SIGN_IN_DATE")
-    private Date lastSignIn;
+    private String lastSignIn;
 
     @Column(name = "USER_DATA")
     private String data;
@@ -42,19 +40,20 @@ public class User {
     @OneToMany(mappedBy = "holder")
     private List<Card> cards;
 
-//    @OneToMany(mappedBy = "user")
-//    private List<UserRequest> userRequests;
+    @OneToMany(mappedBy = "user")
+    private List<UserRequest> userRequests;
 
     public User() {
     }
 
-    public User(String login, String password, UserRole role, String data) {
+    //TODO: remove logic from entities
+    public User(String login, String password, UserRole role, String data, String config, int attemptsToSignIn) {
         this.login = login;
         this.password = password;
         this.role = role;
         this.data = data;
-        // TODO: generate default config
-        this.attemptsToSignIn = 3;
+        this.config = config;
+        this.attemptsToSignIn = attemptsToSignIn;
         this.blocked = false;
     }
 
@@ -86,7 +85,7 @@ public class User {
         return blocked;
     }
 
-    public Date getLastSignIn() {
+    public String getLastSignIn() {
         return lastSignIn;
     }
 
@@ -110,7 +109,7 @@ public class User {
         this.blocked = blocked;
     }
 
-    public void setLastSignIn(Date lastSignIn) {
+    public void setLastSignIn(String lastSignIn) {
         this.lastSignIn = lastSignIn;
     }
 
@@ -130,9 +129,9 @@ public class User {
         cards.remove(card);
     }
 
-//    public List<UserRequest> getUserRequests() {
-//        return userRequests;
-//    }
+    public List<UserRequest> getUserRequests() {
+        return userRequests;
+    }
 
     @Override
     public String toString() {

@@ -32,13 +32,20 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void deleteAll() {
         logger.info("Delete all users");
-        entityManager.clear();
+        entityManager.createNativeQuery("DELETE FROM USERS").executeUpdate();
     }
 
     @Override
     public void delete(User user) {
-        logger.info("Delete user: " + user);
-        entityManager.remove(user);
+        delete(user.getId());
+    }
+
+    @Override
+    public void delete(int id) {
+        logger.info("Delete user with ID: " + id);
+        entityManager.createNativeQuery("DELETE FROM USERS WHERE USER_ID = ?")
+                .setParameter(1, id)
+                .executeUpdate();
     }
 
     @Override
@@ -73,5 +80,78 @@ public class UserDaoImpl implements UserDao {
     public void insert(User user) {
         logger.info("Insert user: " + user);
         entityManager.persist(user);
+    }
+
+    @Override
+    public List<User> select(String login, String role, String blocked, String data) {
+        logger.info("Select users");
+        logger.info("Login: " + login);
+        logger.info("Role: " + role);
+        logger.info("Blocked: " + blocked);
+        logger.info("Data: " + data);
+        List<User> users;
+        try {
+            users = entityManager.createQuery("SELECT u FROM User u WHERE " +
+                    "u.login LIKE :login AND u.role.name LIKE :role " +
+                    "AND CAST(u.blocked AS string) LIKE :blocked AND u.data LIKE :data ORDER BY u.login", User.class)
+                    .setParameter("login", getLikeParam(login))
+                    .setParameter("role", getLikeParam(role))
+                    .setParameter("blocked", getLikeParam(blocked))
+                    .setParameter("data", getLikeParam(data))
+                    .getResultList();
+        } catch (NoResultException e) {
+            users = new ArrayList<>();
+        }
+        logger.info("Found " + users.size() + " of users");
+        return users;
+    }
+
+    @Override
+    public int selectCount(String login, String role, String blocked, String data) {
+        logger.info("Select number of users");
+        logger.info("Login: " + login);
+        logger.info("Role: " + role);
+        logger.info("Blocked: " + blocked);
+        logger.info("Data: " + data);
+        int users = 0;
+        try {
+            users = entityManager.createQuery("SELECT COUNT(*) FROM User u WHERE " +
+                    "u.login LIKE :login AND u.role.name LIKE :role " +
+                    "AND CAST(u.blocked AS string) LIKE :blocked AND u.data LIKE :data", Long.class)
+                    .setParameter("login", getLikeParam(login))
+                    .setParameter("role", getLikeParam(role))
+                    .setParameter("blocked", getLikeParam(blocked))
+                    .setParameter("data", getLikeParam(data))
+                    .getSingleResult().intValue();
+        } catch (NoResultException e) {
+        }
+        logger.info("Found " + users + " of users");
+        return users;
+    }
+
+    @Override
+    public List<User> select(int requiredPage, int rowsOnPage, String login, String role, String blocked, String data) {
+        logger.info("Select users");
+        logger.info("Login: " + login);
+        logger.info("Role: " + role);
+        logger.info("Blocked: " + blocked);
+        logger.info("Data: " + data);
+        List<User> users;
+        try {
+            users = entityManager.createQuery("SELECT u FROM User u WHERE " +
+                    "u.login LIKE :login AND u.role.name LIKE :role " +
+                    "AND CAST(u.blocked AS string) LIKE :blocked AND u.data LIKE :data ORDER BY u.login", User.class)
+                    .setParameter("login", getLikeParam(login))
+                    .setParameter("role", getLikeParam(role))
+                    .setParameter("blocked", getLikeParam(blocked))
+                    .setParameter("data", getLikeParam(data))
+                    .setFirstResult(getFirstResultIndex(requiredPage, rowsOnPage))
+                    .setMaxResults(rowsOnPage)
+                    .getResultList();
+        } catch (NoResultException e) {
+            users = new ArrayList<>();
+        }
+        logger.info("Found " + users.size() + " of users");
+        return users;
     }
 }

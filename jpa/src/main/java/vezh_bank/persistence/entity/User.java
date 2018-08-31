@@ -37,7 +37,7 @@ public class User {
     @Column(name = "USER_DATA")
     private String data;
 
-    @OneToMany(mappedBy = "holder")
+    @OneToMany(mappedBy = "holder", fetch = FetchType.EAGER)
     private List<Card> cards;
 
     @OneToMany(mappedBy = "user")

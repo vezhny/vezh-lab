@@ -1,4 +1,4 @@
-package vezh_bank.persistence;
+package vezh_bank.extended_tests;
 
 import core.config.VezhBankConfiguration;
 import org.junit.jupiter.api.AfterEach;
@@ -16,6 +16,7 @@ import org.springframework.web.context.WebApplicationContext;
 import vezh_bank.TestUtils;
 import vezh_bank.constants.MavenProfiles;
 import vezh_bank.enums.EventType;
+import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.Currency;
 import vezh_bank.persistence.entity.Event;
 import vezh_bank.util.Logger;
@@ -27,7 +28,7 @@ import java.util.List;
 @WebAppConfiguration
 @ActiveProfiles(MavenProfiles.TEST)
 public class PersistenceTest {
-    protected static Logger logger = Logger.getLogger(RoleTests.class);
+    protected static Logger logger = Logger.getLogger(PersistenceTest.class);
 
     protected TestUtils testUtils;
     protected MockMvc mockMvc;

@@ -1,0 +1,279 @@
+package vezh_bank.persistence;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import vezh_bank.extended_tests.PersistenceTest;
+import vezh_bank.persistence.entity.Currency;
+import vezh_bank.persistence.entity.Payment;
+import vezh_bank.persistence.providers.payment.SelectPaymentAllParamsArgumentsProvider;
+import vezh_bank.persistence.providers.payment.SelectPaymentCurrencyArgumentsProvider;
+import vezh_bank.persistence.providers.payment.SelectPaymentDeletedCurrencyArgumentsProvider;
+import vezh_bank.persistence.providers.payment.SelectPaymentNameAndCurrencyArgumentsProvider;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+public class PaymentTests extends PersistenceTest {
+
+    @Test
+    public void createPaymentTest() {
+        testUtils.logTestStart("Insert payment test");
+        String paymentName = "Test payment";
+        String paymentDescription = "Test description";
+        BigDecimal minAmount = new BigDecimal("100.05");
+        BigDecimal maxAmount = new BigDecimal("999.99");
+        BigDecimal commission = new BigDecimal("1.5");
+        Currency currency = new Currency(643, "RUB");
+        createCurrency(currency.getCode(), currency.getValue());
+        Payment payment = new Payment(paymentName, paymentDescription, minAmount.toString(),
+                maxAmount.toString(), commission.toString(), currency);
+        createPayment(payment);
+
+        List<Payment> payments = dataBaseService.getPaymentDao().selectAll();
+        checkPaymentCount(1, payments);
+        checkPayment(paymentName, paymentDescription, minAmount, maxAmount, commission, currency, payments.get(0));
+    }
+
+    @Test
+    public void selectByIdTest() {
+        testUtils.logTestStart("Select by ID test");
+        String paymentName = "Test payment";
+        String paymentDescription = "Test description";
+        BigDecimal minAmount = new BigDecimal("100.05");
+        BigDecimal maxAmount = new BigDecimal("999.99");
+        BigDecimal commission = new BigDecimal("1.5");
+        Currency currency = new Currency(643, "RUB");
+        createCurrency(currency.getCode(), currency.getValue());
+        Payment payment = new Payment(paymentName, paymentDescription, minAmount.toString(),
+                maxAmount.toString(), commission.toString(), currency);
+        createPayment(payment);
+
+        payment = dataBaseService.getPaymentDao().getById(dataBaseService.getPaymentDao().selectAll().get(0).getId());
+        checkPayment(paymentName, paymentDescription, minAmount, maxAmount, commission, currency, payment);
+    }
+
+    @Test
+    public void updatePaymentTest() {
+        testUtils.logTestStart("Update payment test");
+        String paymentName = "Test payment";
+        String paymentDescription = "Test description";
+        BigDecimal minAmount = new BigDecimal("100.05");
+        BigDecimal maxAmount = new BigDecimal("999.99");
+        BigDecimal commission = new BigDecimal("1.5");
+        Currency currency = new Currency(643, "RUB");
+        createCurrency(currency.getCode(), currency.getValue());
+        Payment payment = new Payment(paymentName, paymentDescription, minAmount.toString(),
+                maxAmount.toString(), commission.toString(), currency);
+        createPayment(payment);
+
+        payment = dataBaseService.getPaymentDao().getById(dataBaseService.getPaymentDao().selectAll().get(0).getId());
+        String updatedName = "Test update";
+        payment.setName(updatedName);
+        dataBaseService.getPaymentDao().update(payment);
+
+        List<Payment> payments = dataBaseService.getPaymentDao().selectAll();
+        checkPaymentCount(1, payments);
+        checkPayment(updatedName, paymentDescription, minAmount, maxAmount, commission, currency, payments.get(0));
+    }
+
+    @Test
+    public void deletePaymentTest() {
+        testUtils.logTestStart("Delete payment test");
+        String paymentName = "Test payment";
+        String paymentDescription = "Test description";
+        BigDecimal minAmount = new BigDecimal("100.05");
+        BigDecimal maxAmount = new BigDecimal("999.99");
+        BigDecimal commission = new BigDecimal("1.5");
+        Currency currency = new Currency(643, "RUB");
+        createCurrency(currency.getCode(), currency.getValue());
+        Payment payment = new Payment(paymentName, paymentDescription, minAmount.toString(),
+                maxAmount.toString(), commission.toString(), currency);
+        createPayment(payment);
+
+        payment = dataBaseService.getPaymentDao().getById(dataBaseService.getPaymentDao().selectAll().get(0).getId());
+        dataBaseService.getPaymentDao().delete(payment);
+        checkPaymentCount(0, dataBaseService.getPaymentDao().selectAll());
+    }
+
+    @Test
+    public void deletePaymentByIdTest() {
+        testUtils.logTestStart("Delete payment by ID test");
+        String paymentName = "Test payment";
+        String paymentDescription = "Test description";
+        BigDecimal minAmount = new BigDecimal("100.05");
+        BigDecimal maxAmount = new BigDecimal("999.99");
+        BigDecimal commission = new BigDecimal("1.5");
+        Currency currency = new Currency(643, "RUB");
+        createCurrency(currency.getCode(), currency.getValue());
+        Payment payment = new Payment(paymentName, paymentDescription, minAmount.toString(),
+                maxAmount.toString(), commission.toString(), currency);
+        createPayment(payment);
+
+        dataBaseService.getPaymentDao().delete(dataBaseService.getPaymentDao().selectAll().get(0).getId());
+        checkPaymentCount(0, dataBaseService.getPaymentDao().selectAll());
+    }
+
+    @Test
+    public void selectCountTest() {
+        testUtils.logTestStart("Select count test");
+        Currency currency = new Currency(643, "RUB");
+        createCurrency(currency.getCode(), currency.getValue());
+        Payment payment1 = new Payment("Payment1", "Test description",
+                "100.05", "999.99", "1.5", currency);
+        Payment payment2 = new Payment("Payment2", "Test description",
+                "100.05", "999.99", "1.5", currency);
+        createPayment(payment1);
+        createPayment(payment2);
+
+        Assertions.assertEquals(2, dataBaseService.getPaymentDao().selectCount(), "Number of payments");
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(SelectPaymentCurrencyArgumentsProvider.class)
+    public void selectPaymentWithCurrency(String currency, int expectedPaymentCount) {
+        testUtils.logTestStart("Select payment with currency test");
+        Currency currency1 = new Currency(643, "RUB");
+        Currency currency2 = new Currency(891, "BYN");
+        createCurrency(currency1);
+        createCurrency(currency2);
+
+        Payment payment1 = new Payment("Payment1", "Test description",
+                "100.05", "999.99", "1.5", currency1);
+        Payment payment2 = new Payment("Payment2", "Test description",
+                "100.05", "999.99", "1.5", currency2);
+        Payment payment3 = new Payment("Payment3", "Test description",
+                "100.05", "999.99", "1.5", currency1);
+        Payment payment4 = new Payment("Payment4", "Test description",
+                "100.05", "999.99", "1.5", currency2);
+
+        createPayment(payment1);
+        createPayment(payment2);
+        createPayment(payment3);
+        createPayment(payment4);
+
+        List<Payment> payments = dataBaseService.getPaymentDao().select(currency);
+        checkPaymentCount(expectedPaymentCount, payments);
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(SelectPaymentNameAndCurrencyArgumentsProvider.class)
+    public void selectPaymentWithNameAndCurrencyTest(String name, String currency, int expectedPaymentCount) {
+        testUtils.logTestStart("Select payment with name and currency test");
+        Currency currency1 = new Currency(643, "RUB");
+        Currency currency2 = new Currency(891, "BYN");
+        createCurrency(currency1);
+        createCurrency(currency2);
+
+        Payment payment1 = new Payment("Payment1", "Test description",
+                "100.05", "999.99", "1.5", currency1);
+        Payment payment2 = new Payment("Payment2", "Test description",
+                "100.05", "999.99", "1.5", currency2);
+        Payment payment3 = new Payment("Payment3", "Test description",
+                "100.05", "999.99", "1.5", currency1);
+        Payment payment4 = new Payment("Payment4", "Test description",
+                "100.05", "999.99", "1.5", currency2);
+
+        createPayment(payment1);
+        createPayment(payment2);
+        createPayment(payment3);
+        createPayment(payment4);
+
+        List<Payment> payments = dataBaseService.getPaymentDao().select(name, currency);
+        checkPaymentCount(expectedPaymentCount, payments);
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(SelectPaymentAllParamsArgumentsProvider.class)
+    public void selectPaymentAllParamsTest(int requiredPage, int rowsOnPage,
+                                           String name, String currency, int expectedPaymentCount) {
+        testUtils.logTestStart("Select payment with all params test");
+        Currency currency1 = new Currency(643, "RUB");
+        Currency currency2 = new Currency(891, "BYN");
+        createCurrency(currency1);
+        createCurrency(currency2);
+
+        Payment payment1 = new Payment("Payment1", "Test description",
+                "100.05", "999.99", "1.5", currency1);
+        Payment payment2 = new Payment("Payment2", "Test description",
+                "100.05", "999.99", "1.5", currency2);
+        Payment payment3 = new Payment("Payment3", "Test description",
+                "100.05", "999.99", "1.5", currency1);
+        Payment payment4 = new Payment("Payment4", "Test description",
+                "100.05", "999.99", "1.5", currency2);
+        Payment payment8 = new Payment("Payment5", "Test description",
+                "100.05", "999.99", "1.5", currency1);
+        Payment payment5 = new Payment("Payment6", "Test description",
+                "100.05", "999.99", "1.5", currency2);
+        Payment payment6 = new Payment("Payment7", "Test description",
+                "100.05", "999.99", "1.5", currency1);
+        Payment payment7 = new Payment("Payment8", "Test description",
+                "100.05", "999.99", "1.5", currency2);
+
+        createPayment(payment1);
+        createPayment(payment2);
+        createPayment(payment3);
+        createPayment(payment4);
+        createPayment(payment5);
+        createPayment(payment6);
+        createPayment(payment7);
+        createPayment(payment8);
+
+        List<Payment> payments = dataBaseService.getPaymentDao().select(requiredPage, rowsOnPage, name, currency);
+        checkPaymentCount(expectedPaymentCount, payments);
+    }
+
+    @Test
+    public void deletePaymentCurrencyTest() {
+        testUtils.logTestStart("Delete payment currency test");
+        Currency currency = new Currency(643, "RUB");
+        createCurrency(currency);
+        String paymentName = "Test payment";
+        String paymentDescription = "Test description";
+        BigDecimal minAmount = new BigDecimal("100.05");
+        BigDecimal maxAmount = new BigDecimal("999.99");
+        BigDecimal commission = new BigDecimal("1.5");
+        Payment payment = new Payment(paymentName, paymentDescription, minAmount.toString(),
+                maxAmount.toString(), commission.toString(), currency);
+        createPayment(payment);
+
+        dataBaseService.getCurrencyDao().delete(currency);
+        payment = dataBaseService.getPaymentDao().getById(dataBaseService.getPaymentDao().selectAll().get(0).getId());
+        Assertions.assertEquals(paymentName, payment.getName(), "Payment name");
+        Assertions.assertEquals(paymentDescription, payment.getDescription(), "Payment description");
+        Assertions.assertEquals(minAmount, payment.getMinAmount(), "Payment min amount");
+        Assertions.assertEquals(maxAmount, payment.getMaxAmount(), "Payment max amount");
+        Assertions.assertEquals(commission, payment.getCommission(), "Payment commission");
+        Assertions.assertNull(payment.getCurrency(), "Payment currency");
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(SelectPaymentDeletedCurrencyArgumentsProvider.class)
+    public void selectPaymentDeletedCurrencyTest(String name, String currency, int expectedPaymentCount) {
+        testUtils.logTestStart("Select payment with deleted currency test");
+        Currency currency1 = new Currency(643, "RUB");
+        Currency currency2 = new Currency(891, "BYN");
+        createCurrency(currency1);
+        createCurrency(currency2);
+
+        Payment payment1 = new Payment("Payment1", "Test description",
+                "100.05", "999.99", "1.5", currency1);
+        Payment payment2 = new Payment("Payment2", "Test description",
+                "100.05", "999.99", "1.5", currency2);
+        Payment payment3 = new Payment("Payment3", "Test description",
+                "100.05", "999.99", "1.5", currency1);
+        Payment payment4 = new Payment("Payment4", "Test description",
+                "100.05", "999.99", "1.5", currency2);
+
+        createPayment(payment1);
+        createPayment(payment2);
+        createPayment(payment3);
+        createPayment(payment4);
+
+        dataBaseService.getCurrencyDao().delete(currency1.getCode());
+
+        List<Payment> payments = dataBaseService.getPaymentDao().select(name, currency);
+        checkPaymentCount(expectedPaymentCount, payments);
+    }
+}

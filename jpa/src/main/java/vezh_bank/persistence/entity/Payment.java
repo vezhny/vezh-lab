@@ -1,5 +1,8 @@
 package vezh_bank.persistence.entity;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -27,8 +30,8 @@ public class Payment {
     private String commission;
 
     @ManyToOne
-//    @Column(name = "CURRENCY")
-    @JoinTable(name = "CURRENCIES")
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "CURRENCY")
     private Currency currency;
 
     public Payment() {

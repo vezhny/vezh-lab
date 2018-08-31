@@ -19,8 +19,11 @@ import vezh_bank.enums.EventType;
 import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.Currency;
 import vezh_bank.persistence.entity.Event;
+import vezh_bank.persistence.entity.Payment;
 import vezh_bank.util.Logger;
 
+import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 @ExtendWith(SpringExtension.class)
@@ -50,10 +53,15 @@ public class PersistenceTest {
         testUtils.logTestEnd();
         dataBaseService.getCurrencyDao().deleteAll();
         dataBaseService.getEventDao().deleteAll();
+        dataBaseService.getPaymentDao().deleteAll();
     }
 
     protected void createCurrency(int code, String value) {
         dataBaseService.getCurrencyDao().insert(new Currency(code, value));
+    }
+
+    protected void createCurrency(Currency currency) {
+        createCurrency(currency.getCode(), currency.getValue());
     }
 
     protected void checkCurrency(int expectedCode, String expectedValue,
@@ -65,8 +73,9 @@ public class PersistenceTest {
     }
 
     protected void checkCurrenciesCount(int expectedCount, List<Currency> actualCurrencyList) {
-        Assertions.assertEquals(expectedCount, actualCurrencyList.size(),
-                "Currencies count");
+//        Assertions.assertEquals(expectedCount, actualCurrencyList.size(),
+//                "Currencies count");
+        checkItemsCount(expectedCount, actualCurrencyList, "Currencies count");
     }
 
     protected void createEvent(Event event) {
@@ -80,6 +89,30 @@ public class PersistenceTest {
     }
 
     protected void checkEventsCount(int expectedEventCount, List<Event> events) {
-        Assertions.assertEquals(expectedEventCount, events.size(), "Number of events");
+//        Assertions.assertEquals(expectedEventCount, events.size(), "Number of events");
+        checkItemsCount(expectedEventCount, events, "Number of events");
+    }
+
+    protected void createPayment(Payment payment) {
+        dataBaseService.getPaymentDao().insert(payment);
+    }
+
+    protected void checkPayment(String expectedName, String expectedDescription, BigDecimal expectedMinAmount,
+                                BigDecimal expectedMaxAmount, BigDecimal expectedCommission, Currency expectedCurrency,
+                                Payment actualPayment) {
+        Assertions.assertEquals(expectedName, actualPayment.getName(), "Payment name");
+        Assertions.assertEquals(expectedDescription, actualPayment.getDescription(), "Payment description");
+        Assertions.assertEquals(expectedMinAmount, actualPayment.getMinAmount(), "Payment min amount");
+        Assertions.assertEquals(expectedMaxAmount, actualPayment.getMaxAmount(), "Payment max amount");
+        Assertions.assertEquals(expectedCommission, actualPayment.getCommission(), "Payment commission");
+        checkCurrency(expectedCurrency.getCode(), expectedCurrency.getValue(), actualPayment.getCurrency());
+    }
+
+    protected void checkPaymentCount(int expectedPaymentCount, List<Payment> payments) {
+        checkItemsCount(expectedPaymentCount, payments, "Number of payments");
+    }
+
+    private void checkItemsCount(int expectedCount, Collection collection, String message) {
+        Assertions.assertEquals(expectedCount, collection.size(), message);
     }
 }

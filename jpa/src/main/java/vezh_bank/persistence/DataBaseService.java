@@ -30,6 +30,9 @@ public class DataBaseService {
     @Autowired
     private UserRequestDao userRequestDao;
 
+    @Autowired
+    private PaymentDao paymentDao;
+
     public CardDao getCardDao() {
         return cardDao;
     }
@@ -56,5 +59,9 @@ public class DataBaseService {
 
     public UserRequestDao getUserRequestDao() {
         return userRequestDao;
+    }
+
+    public PaymentDao getPaymentDao() {
+        return paymentDao;
     }
 }

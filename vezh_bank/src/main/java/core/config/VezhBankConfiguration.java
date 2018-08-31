@@ -71,4 +71,10 @@ public class VezhBankConfiguration implements WebMvcConfigurer {
         return new UserRequestDaoImpl(){};
     }
 
+    @Bean
+    @Lazy
+    public PaymentDao paymentDao() {
+        return new PaymentDaoImpl(){};
+    }
+
 }

@@ -33,4 +33,16 @@ public interface PaymentDao extends GlobalDao<Payment> {
     @Transactional
     @Override
     Payment getById(int id);
+
+    @Transactional
+    void delete(int id);
+
+    @Transactional
+    List<Payment> select(String currencyCode);
+
+    @Transactional
+    List<Payment> select(String name, String currency);
+
+    @Transactional
+    List<Payment> select(int requiredPage, int rowsOnPage, String name, String currency);
 }

@@ -4,7 +4,10 @@ import vezh_bank.enums.TransactionStatus;
 import vezh_bank.enums.TransactionType;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static vezh_bank.constants.DatePatterns.DEFAULT_DATE_TIME_PATTERN;
 
 @Entity
 @Table(name = "TRANSACTIONS")
@@ -18,7 +21,7 @@ public class Transaction {
     private String type;
 
     @Column(name = "DATE_TIME")
-    private Date dateTime;
+    private String dateTime;
 
     @Column(name = "TRX_DATA")
     private String data;
@@ -31,7 +34,7 @@ public class Transaction {
 
     public Transaction(TransactionType type, String data, TransactionStatus status) {
         this.type = type.toString();
-        this.dateTime = new Date();
+        this.dateTime = new SimpleDateFormat(DEFAULT_DATE_TIME_PATTERN).format(new Date());
         this.data = data;
         this.status = status.toString();
     }
@@ -40,12 +43,11 @@ public class Transaction {
         return id;
     }
 
-    // TODO: return TransactionType
     public String getType() {
         return type;
     }
 
-    public Date getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 
@@ -53,7 +55,6 @@ public class Transaction {
         return data;
     }
 
-    // TODO: return TransactionStatus
     public String getStatus() {
         return status;
     }

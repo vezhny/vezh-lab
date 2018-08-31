@@ -5,32 +5,28 @@ import vezh_bank.persistence.entity.Transaction;
 import javax.transaction.Transactional;
 import java.util.List;
 
-public interface TransactionDao extends GlobalDao<Transaction> {
+public interface TransactionDao extends GlobalSelectDao<Transaction> {
     @Transactional
     @Override
     List<Transaction> selectAll();
 
     @Transactional
-    @Override
     void deleteAll();
-
-    @Transactional
-    @Override
-    void delete(Transaction transaction);
 
     @Transactional
     @Override
     Transaction getById(int id);
 
     @Transactional
-    @Override
     int selectCount();
 
     @Transactional
-    @Override
-    void update(Transaction transaction);
+    void insert(Transaction transaction);
 
     @Transactional
-    @Override
-    void insert(Transaction transaction);
+    List<Transaction> select(String trxType, String dateTime, String data, String status);
+
+    @Transactional
+    List<Transaction> select(int requiredPage, int rowsOnPage, String trxType,
+                             String dateTime, String data, String status);
 }

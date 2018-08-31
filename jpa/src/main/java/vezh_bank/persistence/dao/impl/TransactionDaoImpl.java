@@ -21,7 +21,8 @@ public class TransactionDaoImpl implements TransactionDao {
         logger.info("Select all transactions");
         List<Transaction> transactions;
         try {
-            transactions = entityManager.createQuery("SELECT t FROM Transaction t ORDER BY t.dateTime", Transaction.class).getResultList();
+            transactions = entityManager.createQuery("SELECT t FROM Transaction t ORDER BY t.dateTime DESC",
+                    Transaction.class).getResultList();
         } catch (NoResultException e) {
             transactions = new ArrayList<>();
         }
@@ -32,13 +33,7 @@ public class TransactionDaoImpl implements TransactionDao {
     @Override
     public void deleteAll() {
         logger.info("Delete all transactions");
-        entityManager.clear();
-    }
-
-    @Override
-    public void delete(Transaction transaction) {
-        logger.info("Delete transaction: " + transaction);
-        entityManager.remove(transaction);
+        entityManager.createNativeQuery("DELETE FROM TRANSACTIONS").executeUpdate();
     }
 
     @Override
@@ -58,20 +53,66 @@ public class TransactionDaoImpl implements TransactionDao {
     @Override
     public int selectCount() {
         logger.info("Select number of transactions");
-        int numberOfTransactions = entityManager.createQuery("SELECT COUNT(*) FROM Transaction t", Long.class).getSingleResult().intValue();
+        int numberOfTransactions = entityManager.createQuery("SELECT COUNT(*) FROM Transaction t",
+                Long.class).getSingleResult().intValue();
         logger.info("Number of transactions: " + numberOfTransactions);
         return numberOfTransactions;
-    }
-
-    @Override
-    public void update(Transaction transaction) {
-        logger.info("Update transaction: " + transaction);
-        entityManager.merge(transaction);
     }
 
     @Override
     public void insert(Transaction transaction) {
         logger.info("Insert transaction: " + transaction);
         entityManager.persist(transaction);
+    }
+
+    @Override
+    public List<Transaction> select(String trxType, String dateTime, String data, String status) {
+        logger.info("Select transaction");
+        logger.info("Type: " + trxType);
+        logger.info("Date&Time: " + dateTime);
+        logger.info("Data: " + data);
+        logger.info("Status: " + status);
+        List<Transaction> transactions;
+        try {
+            transactions = entityManager.createQuery("SELECT t FROM Transaction t WHERE " +
+                    "t.type LIKE :trxType AND t.dateTime LIKE :dateTime AND t.data LIKE :data " +
+                    "AND t.status LIKE :status ORDER BY t.dateTime DESC", Transaction.class)
+                    .setParameter("trxType", getLikeParam(trxType))
+                    .setParameter("dateTime", getLikeParam(dateTime))
+                    .setParameter("data", getLikeParam(data))
+                    .setParameter("status", getLikeParam(status))
+                    .getResultList();
+        } catch (NoResultException e) {
+            transactions = new ArrayList<>();
+        }
+        logger.info("Found " + transactions.size() + " of transactions");
+        return transactions;
+    }
+
+    @Override
+    public List<Transaction> select(int requiredPage, int rowsOnPage, String trxType, String dateTime,
+                                    String data, String status) {
+        logger.info("Select transaction");
+        logger.info("Type: " + trxType);
+        logger.info("Date&Time: " + dateTime);
+        logger.info("Data: " + data);
+        logger.info("Status: " + status);
+        List<Transaction> transactions;
+        try {
+            transactions = entityManager.createQuery("SELECT t FROM Transaction t WHERE " +
+                    "t.type LIKE :trxType AND t.dateTime LIKE :dateTime AND t.data LIKE :data " +
+                    "AND t.status LIKE :status ORDER BY t.dateTime DESC", Transaction.class)
+                    .setParameter("trxType", getLikeParam(trxType))
+                    .setParameter("dateTime", getLikeParam(dateTime))
+                    .setParameter("data", getLikeParam(data))
+                    .setParameter("status", getLikeParam(status))
+                    .setFirstResult(getFirstResultIndex(requiredPage, rowsOnPage))
+                    .setMaxResults(rowsOnPage)
+                    .getResultList();
+        } catch (NoResultException e) {
+            transactions = new ArrayList<>();
+        }
+        logger.info("Found " + transactions.size() + " of transactions");
+        return transactions;
     }
 }

@@ -16,10 +16,13 @@ import org.springframework.web.context.WebApplicationContext;
 import vezh_bank.TestUtils;
 import vezh_bank.constants.MavenProfiles;
 import vezh_bank.enums.EventType;
+import vezh_bank.enums.TransactionStatus;
+import vezh_bank.enums.TransactionType;
 import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.Currency;
 import vezh_bank.persistence.entity.Event;
 import vezh_bank.persistence.entity.Payment;
+import vezh_bank.persistence.entity.Transaction;
 import vezh_bank.util.Logger;
 
 import java.math.BigDecimal;
@@ -54,6 +57,7 @@ public class PersistenceTest {
         dataBaseService.getCurrencyDao().deleteAll();
         dataBaseService.getEventDao().deleteAll();
         dataBaseService.getPaymentDao().deleteAll();
+        dataBaseService.getTransactionDao().deleteAll();
     }
 
     protected void createCurrency(int code, String value) {
@@ -110,6 +114,21 @@ public class PersistenceTest {
 
     protected void checkPaymentCount(int expectedPaymentCount, List<Payment> payments) {
         checkItemsCount(expectedPaymentCount, payments, "Number of payments");
+    }
+
+    protected void createTransaction(Transaction transaction) {
+        dataBaseService.getTransactionDao().insert(transaction);
+    }
+
+    protected void checkTransaction(TransactionType expectedTrxType, String expectedTrxData,
+                                    TransactionStatus expectedTrxStatus, Transaction actualTrx) {
+        Assertions.assertEquals(expectedTrxType.toString(), actualTrx.getType(), "Transaction type");
+        Assertions.assertEquals(expectedTrxData, actualTrx.getData(), "Transaction data");
+        Assertions.assertEquals(expectedTrxStatus.toString(), actualTrx.getStatus(), "Transaction status");
+    }
+
+    protected void checkTransactionCount(int expectedTransactionsCount, List<Transaction> transactions) {
+        checkItemsCount(expectedTransactionsCount, transactions, "Number of transactions");
     }
 
     private void checkItemsCount(int expectedCount, Collection collection, String message) {

@@ -299,7 +299,29 @@ public class UserRequestTests extends PersistenceTest {
                 "User requests count");
     }
 
-    //TODO: add test for absent user
+    @Test
+    public void absentUserTest() {
+        testUtils.logTestStart("Absent user test");
+
+        UserRole userRole = dataBaseService.getRoleDao().getById(1);
+
+        User user = new User("test", "test", userRole,
+                "Test data", "Config", 3);
+        dataBaseService.getUserDao().insert(user);
+        user = dataBaseService.getUserDao().selectAll().get(0);
+
+        String data = "data";
+        UserRequest userRequest = new UserRequest(user, data);
+
+        dataBaseService.getUserRequestDao().insert(userRequest);
+        dataBaseService.getUserDao().delete(user);
+
+        List<UserRequest> userRequests = dataBaseService.getUserRequestDao().selectAll();
+        checkUserRequestsCount(1, userRequests);
+        Assertions.assertEquals(null, userRequests.get(0).getUser());
+        Assertions.assertEquals(UserRequestStatus.OPEN.toString(), userRequests.get(0).getStatus());
+        Assertions.assertEquals(data, userRequests.get(0).getData());
+    }
 
     private String getUserId(String user, List<User> users) {
         if (!user.isEmpty()) {

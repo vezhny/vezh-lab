@@ -1,5 +1,7 @@
 package vezh_bank.persistence.entity;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import vezh_bank.enums.UserRequestStatus;
 
 import javax.persistence.*;
@@ -17,6 +19,7 @@ public class UserRequest {
     private int id;
 
     @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "USER_ID")
     private User user;
 

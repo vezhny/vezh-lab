@@ -25,7 +25,8 @@ public class CardDaoImpl implements CardDao {
     @Override
     public int selectCount() {
         logger.info("Select number of cards");
-        int numberOfCards = entityManager.createQuery("SELECT COUNT(*) FROM Card c", Long.class).getSingleResult().intValue();
+        int numberOfCards = entityManager.createQuery("SELECT COUNT(*) FROM Card c",
+                Long.class).getSingleResult().intValue();
         logger.info("Number of cards: " + numberOfCards);
         return numberOfCards;
     }
@@ -47,13 +48,20 @@ public class CardDaoImpl implements CardDao {
     @Override
     public void deleteAll() {
         logger.info("Delete all cards");
-        entityManager.clear();
+        entityManager.createNativeQuery("DELETE FROM CARDS").executeUpdate();
     }
 
     @Override
     public void delete(Card card) {
-        logger.info("Delete card: " + card);
-        entityManager.remove(card);
+        delete(card.getId());
+    }
+
+    @Override
+    public void delete(int cardId) {
+        logger.info("Delete card with ID: " + cardId);
+        entityManager.createNativeQuery("DELETE FROM CARDS WHERE CARD_ID = ?")
+                .setParameter(1, cardId)
+                .executeUpdate();
     }
 
     @Override
@@ -74,5 +82,123 @@ public class CardDaoImpl implements CardDao {
     public void update(Card card) {
         logger.info("Update card: " + card);
         entityManager.merge(card);
+    }
+
+    @Override
+    public List<Card> select(int holderId) {
+        logger.info("Select cards where holder ID: " + holderId);
+        List<Card> cards;
+        try {
+            cards = entityManager.createQuery("SELECT c FROM Card c WHERE " +
+                    "c.holder.id = :holderId ORDER BY c.pan", Card.class)
+                    .setParameter("holderId", holderId)
+                    .getResultList();
+        } catch (NoResultException e) {
+            cards = new ArrayList<>();
+        }
+        logger.info("Found " + cards.size() + " of cards");
+        return cards;
+    }
+
+    @Override
+    public List<Card> select(String pan, String holderName, String creationDate,
+                             String expiry, String currency, String status) {
+        logger.info("Select cards");
+        logger.info("PAN: " + pan);
+        logger.info("Holder name: " + holderName);
+        logger.info("Creation date: " + creationDate);
+        logger.info("Expiry: " + expiry);
+        logger.info("Currency: " + currency);
+        logger.info("Status: " + status);
+        List<Card> cards;
+        try {
+            cards = entityManager.createQuery("SELECT c FROM Card c WHERE " +
+                    "c.pan LIKE :pan AND " +
+                    "c.holder.data LIKE :holderName AND " +
+                    "c.creationDate LIKE :craetionDate AND " +
+                    "c.expiry LIKE :expiry AND " +
+                    "(CAST(c.currency.code AS string) LIKE :currency OR c.currency.value LIKE :currency) AND " +
+                    "c.status LIKE :status ORDER BY c.pan", Card.class)
+                    .setParameter("pan", getLikeParam(pan))
+                    .setParameter("holderName", getLikeParam(holderName))
+                    .setParameter("creationDate", getLikeParam(creationDate))
+                    .setParameter("expiry", getLikeParam(expiry))
+                    .setParameter("currency", getLikeParam(currency))
+                    .setParameter("status", getLikeParam(status))
+                    .getResultList();
+        } catch (NoResultException e) {
+            cards = new ArrayList<>();
+        }
+        logger.info("Found " + cards.size() + " of cards");
+        return cards;
+    }
+
+    @Override
+    public int selectCount(String pan, String holderName, String creationDate, String expiry,
+                           String currency, String status) {
+        logger.info("Select number of cards");
+        logger.info("PAN: " + pan);
+        logger.info("Holder name: " + holderName);
+        logger.info("Creation date: " + creationDate);
+        logger.info("Expiry: " + expiry);
+        logger.info("Currency: " + currency);
+        logger.info("Status: " + status);
+        int cards = 0;
+        try {
+            cards = entityManager.createQuery("SELECT COUNT(*) FROM Card c WHERE " +
+                    "c.pan LIKE :pan AND " +
+                    "c.holder.data LIKE :holderName AND " +
+                    "c.creationDate LIKE :craetionDate AND " +
+                    "c.expiry LIKE :expiry AND " +
+                    "(CAST(c.currency.code AS string) LIKE :currency OR c.currency.value LIKE :currency) AND " +
+                    "c.status LIKE :status ", Long.class)
+                    .setParameter("pan", getLikeParam(pan))
+                    .setParameter("holderName", getLikeParam(holderName))
+                    .setParameter("creationDate", getLikeParam(creationDate))
+                    .setParameter("expiry", getLikeParam(expiry))
+                    .setParameter("currency", getLikeParam(currency))
+                    .setParameter("status", getLikeParam(status))
+                    .getSingleResult().intValue();
+        } catch (NoResultException e) {
+        }
+        logger.info("Found " + cards + " of cards");
+        return cards;
+    }
+
+    @Override
+    public List<Card> select(int requiredPage, int rowsOnPage, String pan, String holderName,
+                             String creationDate, String expiry, String currency, String status) {
+        logger.info("Select cards");
+        logger.info("Required page: " + requiredPage);
+        logger.info("Rows on page: " + rowsOnPage);
+        logger.info("PAN: " + pan);
+        logger.info("Holder name: " + holderName);
+        logger.info("Creation date: " + creationDate);
+        logger.info("Expiry: " + expiry);
+        logger.info("Currency: " + currency);
+        logger.info("Status: " + status);
+        List<Card> cards;
+        try {
+            cards = entityManager.createQuery("SELECT c FROM Card c WHERE " +
+                    "c.pan LIKE :pan AND " +
+                    "c.holder.data LIKE :holderName AND " +
+                    "c.creationDate LIKE :craetionDate AND " +
+                    "c.expiry LIKE :expiry AND " +
+                    "(CAST(c.currency.code AS string) LIKE :currency OR c.currency.value LIKE :currency) AND " +
+                    "c.status LIKE :status ORDER BY c.pan", Card.class)
+                    .setParameter("pan", getLikeParam(pan))
+                    .setParameter("holderName", getLikeParam(holderName))
+                    .setParameter("creationDate", getLikeParam(creationDate))
+                    .setParameter("expiry", getLikeParam(expiry))
+                    .setParameter("currency", getLikeParam(currency))
+                    .setParameter("status", getLikeParam(status))
+                    .setFirstResult(getFirstResultIndex(requiredPage, rowsOnPage))
+                    .setMaxResults(rowsOnPage)
+                    .getResultList();
+        } catch (NoResultException e) {
+            cards = new ArrayList<>();
+        }
+        logger.info("Found " + cards.size() + " of cards");
+        return cards;
     }
 }

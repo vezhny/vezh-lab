@@ -15,10 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import vezh_bank.TestUtils;
 import vezh_bank.constants.MavenProfiles;
-import vezh_bank.enums.EventType;
-import vezh_bank.enums.TransactionStatus;
-import vezh_bank.enums.TransactionType;
-import vezh_bank.enums.UserRequestStatus;
+import vezh_bank.enums.*;
 import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.*;
 import vezh_bank.util.Logger;
@@ -58,6 +55,7 @@ public class PersistenceTest {
         dataBaseService.getTransactionDao().deleteAll();
         dataBaseService.getUserDao().deleteAll();
         dataBaseService.getUserRequestDao().deleteAll();
+        dataBaseService.getCardDao().deleteAll();
     }
 
     protected void createCurrency(int code, String value) {
@@ -164,6 +162,29 @@ public class PersistenceTest {
 
     protected void checkUserRequestsCount(int expectedCount, List<UserRequest> userRequests) {
         checkItemsCount(expectedCount, userRequests, "Number of user requests");
+    }
+
+    protected void createCard(Card card) {
+        dataBaseService.getCardDao().insert(card);
+    }
+
+    protected void checkCard(String expectedPan, User expectedHolder, String expectedCvc,
+                             String expectedExpiry, Currency expectedCurrency, CardStatus expectedStatus,
+                             Card actualCard) {
+        Assertions.assertEquals(expectedPan, actualCard.getPan(), "PAN");
+        Assertions.assertEquals(expectedHolder, actualCard.getHolder(), "Holder");
+        Assertions.assertEquals(expectedCvc, actualCard.getCvc(), "CVC");
+        Assertions.assertEquals(expectedExpiry, actualCard.getExpiry(), "Expiry");
+        Assertions.assertEquals(expectedCurrency, actualCard.getCurrency(), "Currency");
+        Assertions.assertEquals(expectedStatus.toString(), actualCard.getStatus(), "Status");
+        checkUser(expectedHolder.getLogin(), expectedHolder.getPassword(), expectedHolder.getRole(),
+                expectedHolder.getConfig(), expectedHolder.getAttemptsToSignIn(), expectedHolder.isBlocked(),
+                expectedHolder.getLastSignIn(), expectedHolder.getData(), actualCard.getHolder());
+        checkCurrency(expectedCurrency.getCode(), expectedCurrency.getValue(), actualCard.getCurrency());
+    }
+
+    protected void checkCardsCount(int expectedCount, List<Card> cards) {
+        checkItemsCount(expectedCount, cards, "Number of cards");
     }
 
     private void checkItemsCount(int expectedCount, Collection collection, String message) {

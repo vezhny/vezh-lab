@@ -18,6 +18,7 @@ import vezh_bank.constants.MavenProfiles;
 import vezh_bank.enums.EventType;
 import vezh_bank.enums.TransactionStatus;
 import vezh_bank.enums.TransactionType;
+import vezh_bank.enums.UserRequestStatus;
 import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.*;
 import vezh_bank.util.Logger;
@@ -56,6 +57,7 @@ public class PersistenceTest {
         dataBaseService.getPaymentDao().deleteAll();
         dataBaseService.getTransactionDao().deleteAll();
         dataBaseService.getUserDao().deleteAll();
+        dataBaseService.getUserRequestDao().deleteAll();
     }
 
     protected void createCurrency(int code, String value) {
@@ -147,6 +149,21 @@ public class PersistenceTest {
 
     protected void checkUsersCount(int expectedCount, List<User> users) {
         checkItemsCount(expectedCount, users, "Number of users");
+    }
+
+    protected void createUserRequest(UserRequest userRequest) {
+        dataBaseService.getUserRequestDao().insert(userRequest);
+    }
+
+    protected void checkUserRequest(int expectedUserId, UserRequestStatus expectedRequestStatus,
+                                    String expectedData, UserRequest actualUserRequest) {
+        Assertions.assertEquals(expectedUserId, actualUserRequest.getUser().getId(), "User ID");
+        Assertions.assertEquals(expectedRequestStatus.toString(), actualUserRequest.getStatus(), "Status");
+        Assertions.assertEquals(expectedData, actualUserRequest.getData(), "Data");
+    }
+
+    protected void checkUserRequestsCount(int expectedCount, List<UserRequest> userRequests) {
+        checkItemsCount(expectedCount, userRequests, "Number of user requests");
     }
 
     private void checkItemsCount(int expectedCount, Collection collection, String message) {

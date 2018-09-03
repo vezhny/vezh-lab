@@ -3,7 +3,10 @@ package vezh_bank.persistence.entity;
 import vezh_bank.enums.UserRequestStatus;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static vezh_bank.constants.DatePatterns.DEFAULT_DATE_PATTERN;
 
 @Entity
 @Table(name = "USER_REQUESTS")
@@ -14,12 +17,11 @@ public class UserRequest {
     private int id;
 
     @ManyToOne
-    @JoinTable(name = "USERS")
-//    @Column(name = "USER_ID")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     @Column(name = "CREATION_DATE")
-    private Date date;
+    private String date;
 
     @Column(name = "REQUEST_STATUS")
     private String status;
@@ -34,7 +36,7 @@ public class UserRequest {
         this.user = user;
         this.data = data;
 
-        this.date = new Date();
+        this.date = new SimpleDateFormat(DEFAULT_DATE_PATTERN).format(new Date());
         this.status = UserRequestStatus.OPEN.toString();
     }
 
@@ -46,11 +48,10 @@ public class UserRequest {
         return user;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    // TODO: return RequestStatus
     public String getStatus() {
         return status;
     }
@@ -59,8 +60,8 @@ public class UserRequest {
         return data;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(UserRequestStatus status) {
+        this.status = status.toString();
     }
 
     @Override

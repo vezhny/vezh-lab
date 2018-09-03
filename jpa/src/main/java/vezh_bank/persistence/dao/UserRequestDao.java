@@ -19,6 +19,9 @@ public interface UserRequestDao extends GlobalDao<UserRequest> {
     void delete(UserRequest userRequest);
 
     @Transactional
+    void delete(int requestId);
+
+    @Transactional
     @Override
     UserRequest getById(int id);
 
@@ -33,4 +36,14 @@ public interface UserRequestDao extends GlobalDao<UserRequest> {
     @Transactional
     @Override
     void insert(UserRequest userRequest);
+
+    @Transactional
+    List<UserRequest> select(String userId, String creationDate, String status, String data);
+
+    @Transactional
+    int selectCount(String userId, String creationDate, String status, String data);
+
+    @Transactional
+    List<UserRequest> select(int requiredPage, int rowsOnPage, String userId, String creationDate,
+                             String status, String data);
 }

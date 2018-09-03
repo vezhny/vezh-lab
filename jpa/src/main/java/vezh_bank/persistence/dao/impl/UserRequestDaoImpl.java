@@ -21,7 +21,7 @@ public class UserRequestDaoImpl implements UserRequestDao {
         logger.info("Select all user requests");
         List<UserRequest> userRequests;
         try {
-            userRequests = entityManager.createQuery("SELECT ur FROM UserRequest ur ORDER BY ur.date", UserRequest.class)
+            userRequests = entityManager.createQuery("SELECT ur FROM UserRequest ur ORDER BY ur.date DESC ", UserRequest.class)
                     .getResultList();
         } catch (NoResultException e) {
             userRequests = new ArrayList<>();
@@ -33,13 +33,20 @@ public class UserRequestDaoImpl implements UserRequestDao {
     @Override
     public void deleteAll() {
         logger.info("Delete all user requests");
-        entityManager.clear();
+        entityManager.createNativeQuery("DELETE FROM USER_REQUESTS").executeUpdate();
     }
 
     @Override
     public void delete(UserRequest userRequest) {
-        logger.info("Delete user request: " + userRequest);
-        entityManager.remove(userRequest);
+        delete(userRequest.getId());
+    }
+
+    @Override
+    public void delete(int requestId) {
+        logger.info("Delete user request wit ID: " + requestId);
+        entityManager.createNativeQuery("DELETE FROM USER_REQUESTS WHERE REQUEST_ID = ?")
+                .setParameter(1, requestId)
+                .executeUpdate();
     }
 
     @Override
@@ -74,5 +81,79 @@ public class UserRequestDaoImpl implements UserRequestDao {
     public void insert(UserRequest userRequest) {
         logger.info("Insert user request: " + userRequest);
         entityManager.persist(userRequest);
+    }
+
+    @Override
+    public List<UserRequest> select(String userId, String creationDate, String status, String data) {
+        logger.info("Select user requests");
+        logger.info("User ID: " + userId);
+        logger.info("Creation date: " + creationDate);
+        logger.info("Status: " + status);
+        logger.info("Data: " + data);
+        List<UserRequest> userRequests;
+        try {
+            userRequests = entityManager.createQuery("SELECT ur FROM UserRequest ur WHERE CAST(ur.user.id AS string) " +
+                    "LIKE :userId AND ur.date LIKE :date AND ur.status LIKE :status AND ur.data LIKE :data " +
+                    "ORDER BY ur.date DESC ", UserRequest.class)
+                    .setParameter("userId", getLikeParam(userId))
+                    .setParameter("date", getLikeParam(creationDate))
+                    .setParameter("status", getLikeParam(status))
+                    .setParameter("data", getLikeParam(data))
+                    .getResultList();
+        } catch (NoResultException e) {
+            userRequests = new ArrayList<>();
+        }
+        logger.info("Found " + userRequests.size() + " of user requests");
+        return userRequests;
+    }
+
+    @Override
+    public int selectCount(String userId, String creationDate, String status, String data) {
+        logger.info("Select number of user requests");
+        logger.info("User ID: " + userId);
+        logger.info("Creation date: " + creationDate);
+        logger.info("Status: " + status);
+        logger.info("Data: " + data);
+        int userRequests = 0;
+        try {
+            userRequests = entityManager.createQuery("SELECT COUNT(*) FROM UserRequest ur WHERE CAST(ur.user.id AS string) " +
+                    "LIKE :userId AND ur.date LIKE :date AND ur.status LIKE :status AND ur.data LIKE :data ", Long.class)
+                    .setParameter("userId", getLikeParam(userId))
+                    .setParameter("date", getLikeParam(creationDate))
+                    .setParameter("status", getLikeParam(status))
+                    .setParameter("data", getLikeParam(data))
+                    .getSingleResult().intValue();
+        } catch (NoResultException e) {
+        }
+        logger.info("Found " + userRequests + " of user requests");
+        return userRequests;
+    }
+
+    @Override
+    public List<UserRequest> select(int requiredPage, int rowsOnPage, String userId, String creationDate, String status, String data) {
+        logger.info("Select user requests");
+        logger.info("Required page: " + requiredPage);
+        logger.info("Rows on page: " + rowsOnPage);
+        logger.info("User ID: " + userId);
+        logger.info("Creation date: " + creationDate);
+        logger.info("Status: " + status);
+        logger.info("Data: " + data);
+        List<UserRequest> userRequests;
+        try {
+            userRequests = entityManager.createQuery("SELECT ur FROM UserRequest ur WHERE CAST(ur.user.id AS string) " +
+                    "LIKE :userId AND ur.date LIKE :date AND ur.status LIKE :status AND ur.data LIKE :data " +
+                    "ORDER BY ur.date DESC ", UserRequest.class)
+                    .setParameter("userId", getLikeParam(userId))
+                    .setParameter("date", getLikeParam(creationDate))
+                    .setParameter("status", getLikeParam(status))
+                    .setParameter("data", getLikeParam(data))
+                    .setFirstResult(getFirstResultIndex(requiredPage, rowsOnPage))
+                    .setMaxResults(rowsOnPage)
+                    .getResultList();
+        } catch (NoResultException e) {
+            userRequests = new ArrayList<>();
+        }
+        logger.info("Found " + userRequests.size() + " of user requests");
+        return userRequests;
     }
 }

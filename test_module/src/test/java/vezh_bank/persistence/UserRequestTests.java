@@ -131,7 +131,7 @@ public class UserRequestTests extends PersistenceTest {
 
     @ParameterizedTest
     @ArgumentsSource(SelectRequestArgumentsProvider.class)
-    public void selectTest(int user, String creationDate, String status, String data,
+    public void selectTest(String user, String creationDate, String status, String data,
                            int expectedUserRequestsCount) {
         testUtils.logTestStart("Select user request with params test");
 
@@ -167,7 +167,7 @@ public class UserRequestTests extends PersistenceTest {
         createUserRequest(userRequest8);
 
         List<UserRequest> userRequests = dataBaseService.getUserRequestDao().select(
-                String.valueOf(users.get(user).getId()), creationDate, status, data);
+                getUserId(user, users), creationDate, status, data);
 
         checkUserRequestsCount(expectedUserRequestsCount, userRequests);
     }
@@ -213,7 +213,7 @@ public class UserRequestTests extends PersistenceTest {
 
     @ParameterizedTest
     @ArgumentsSource(SelectRequestWirhPageArgumentsProvider.class)
-    public void selectWithPageTest(int requiredPage, int rowsOnPage, String userId, String creationDate,
+    public void selectWithPageTest(int requiredPage, int rowsOnPage, String user, String creationDate,
                                    String status, String data,
                                    int expectedUserRequestsCount) {
         testUtils.logTestStart("Select user requests with pages test");
@@ -250,7 +250,7 @@ public class UserRequestTests extends PersistenceTest {
         createUserRequest(userRequest8);
 
         List<UserRequest> userRequests = dataBaseService.getUserRequestDao().select(requiredPage, rowsOnPage,
-                userId, creationDate, status, data);
+                getUserId(user, users), creationDate, status, data);
 
         checkUserRequestsCount(expectedUserRequestsCount, userRequests);
     }
@@ -292,12 +292,19 @@ public class UserRequestTests extends PersistenceTest {
         createUserRequest(userRequest7);
         createUserRequest(userRequest8);
 
-        int userRequests = dataBaseService.getUserRequestDao().selectCount(
-               users.get(user).getId(), creationDate, status, data); //TODO: fix this shit
+        int userRequests = dataBaseService.getUserRequestDao().selectCount(getUserId(user, users),
+                creationDate, status, data);
 
         Assertions.assertEquals(expectedUserRequestsCount, userRequests,
                 "User requests count");
     }
 
     //TODO: add test for absent user
+
+    private String getUserId(String user, List<User> users) {
+        if (!user.isEmpty()) {
+            return String.valueOf(users.get(Integer.parseInt(user)).getId());
+        }
+        return user;
+    }
 }

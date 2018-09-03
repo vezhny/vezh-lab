@@ -323,6 +323,35 @@ public class UserRequestTests extends PersistenceTest {
         Assertions.assertEquals(data, userRequests.get(0).getData());
     }
 
+    @Test
+    public void selectWithUserIdTest() {
+        testUtils.logTestStart("Select user requests with user iD test");
+
+        List<UserRole> roles = dataBaseService.getRoleDao().selectAll();
+
+        dataBaseService.getUserDao().insert(new User("Test 1", "Password", roles.get(0),
+                "data", "config", 3));
+        dataBaseService.getUserDao().insert(new User("Test 2", "Password", roles.get(1),
+                "data", "config", 3));
+        dataBaseService.getUserDao().insert(new User("Test 3", "Password", roles.get(2),
+                "data", "config", 3));
+        List<User> users = dataBaseService.getUserDao().selectAll();
+
+        UserRequest userRequest1 = new UserRequest(users.get(0), "Request data 1");
+        UserRequest userRequest2 = new UserRequest(users.get(1), "Request data 2");
+        UserRequest userRequest3 = new UserRequest(users.get(2), "Request data 3");
+        UserRequest userRequest4 = new UserRequest(users.get(0), "Request data 4");
+
+        createUserRequest(userRequest1);
+        createUserRequest(userRequest2);
+        createUserRequest(userRequest3);
+        createUserRequest(userRequest4);
+
+        List<UserRequest> userRequests = dataBaseService.getUserRequestDao().select(users.get(0).getId());
+
+        checkUserRequestsCount(2, userRequests);
+    }
+
     private String getUserId(String user, List<User> users) {
         if (!user.isEmpty()) {
             return String.valueOf(users.get(Integer.parseInt(user)).getId());

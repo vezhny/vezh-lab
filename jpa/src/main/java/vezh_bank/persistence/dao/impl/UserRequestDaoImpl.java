@@ -156,4 +156,20 @@ public class UserRequestDaoImpl implements UserRequestDao {
         logger.info("Found " + userRequests.size() + " of user requests");
         return userRequests;
     }
+
+    @Override
+    public List<UserRequest> select(int userId) {
+        logger.info("Select user requests with user ID: " + userId);
+        List<UserRequest> userRequests;
+        try {
+            userRequests = entityManager.createQuery("SELECT ur FROM UserRequest ur WHERE " +
+                    "ur.user.id = :userId ORDER BY ur.date DESC ", UserRequest.class)
+                    .setParameter("userId", userId)
+                    .getResultList();
+        } catch (NoResultException e) {
+            userRequests = new ArrayList<>();
+        }
+        logger.info("Found " + userRequests.size() + " of user requests");
+        return userRequests;
+    }
 }

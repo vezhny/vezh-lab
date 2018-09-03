@@ -46,4 +46,7 @@ public interface UserRequestDao extends GlobalDao<UserRequest> {
     @Transactional
     List<UserRequest> select(int requiredPage, int rowsOnPage, String userId, String creationDate,
                              String status, String data);
+
+    @Transactional
+    List<UserRequest> select(int userId);
 }

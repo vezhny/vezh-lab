@@ -1,5 +1,6 @@
 package core.config;
 
+import core.services.ServiceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -75,6 +76,12 @@ public class VezhBankConfiguration implements WebMvcConfigurer {
     @Lazy
     public PaymentDao paymentDao() {
         return new PaymentDaoImpl(){};
+    }
+
+    @Bean
+    @Lazy
+    public ServiceProvider serviceProvider() {
+        return new ServiceProvider();
     }
 
 }

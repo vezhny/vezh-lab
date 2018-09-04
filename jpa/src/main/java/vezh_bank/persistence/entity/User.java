@@ -1,8 +1,13 @@
 package vezh_bank.persistence.entity;
 
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "USERS")
@@ -37,11 +42,13 @@ public class User {
     @Column(name = "USER_DATA")
     private String data;
 
-    @OneToMany(mappedBy = "holder", fetch = FetchType.EAGER)
-    private List<Card> cards;
+    @OneToMany(mappedBy = "holder", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Set<Card> cards;
 
-    @OneToMany(mappedBy = "user")
-    private List<UserRequest> userRequests;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Set<UserRequest> userRequests;
 
     public User() {
     }
@@ -118,7 +125,7 @@ public class User {
     }
 
     public List<Card> getCards() {
-        return cards;
+        return new ArrayList<>(cards);
     }
 
     public void addCard(Card card) {
@@ -130,7 +137,7 @@ public class User {
     }
 
     public List<UserRequest> getUserRequests() {
-        return userRequests;
+        return new ArrayList<>(userRequests);
     }
 
     @Override

@@ -4,9 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import vezh_bank.enums.CardStatus;
+import vezh_bank.enums.UserRequestStatus;
 import vezh_bank.extended_tests.PersistenceTest;
-import vezh_bank.persistence.entity.User;
-import vezh_bank.persistence.entity.UserRole;
+import vezh_bank.persistence.entity.*;
 import vezh_bank.persistence.providers.user.SelectUserArgumentsProvider;
 import vezh_bank.persistence.providers.user.SelectUserPageArgumentsProvider;
 
@@ -256,5 +257,87 @@ public class UserTests extends PersistenceTest {
         int users = dataBaseService.getUserDao().selectCount(login, role,
                 blocked, data);
         Assertions.assertEquals(expectedUsersCount, users, "Number of users");
+    }
+
+    @Test
+    public void getUserRequestsTest() {
+        testUtils.logTestStart("Get user requests test");
+
+        List<UserRole> userRoles = dataBaseService.getRoleDao().selectAll();
+        User user = new User("Login1", "password", userRoles.get(0),
+                "User data 1", "Config", ATTEMPTS_TO_SIGN_IN);
+        createUser(user);
+        user = dataBaseService.getUserDao().selectAll().get(0);
+
+        UserRequest userRequest = new UserRequest(user, "Request data 1");
+        createUserRequest(userRequest);
+        userRequest = dataBaseService.getUserRequestDao().selectAll().get(0);
+
+        user = dataBaseService.getUserDao().getById(user.getId());
+        Assertions.assertEquals(1, user.getUserRequests().size(), "User requests count");
+        checkUserRequest(user.getId(), UserRequestStatus.OPEN, userRequest.getData(), user.getUserRequests().get(0));
+    }
+
+    @Test
+    public void deleteUserRequestTest() {
+        testUtils.logTestStart("Delete user request test");
+
+        List<UserRole> userRoles = dataBaseService.getRoleDao().selectAll();
+        User user = new User("Login1", "password", userRoles.get(0),
+                "User data 1", "Config", ATTEMPTS_TO_SIGN_IN);
+        createUser(user);
+        user = dataBaseService.getUserDao().selectAll().get(0);
+
+        UserRequest userRequest = new UserRequest(user, "Request data 1");
+        createUserRequest(userRequest);
+        userRequest = dataBaseService.getUserRequestDao().selectAll().get(0);
+        dataBaseService.getUserRequestDao().delete(userRequest);
+
+        user = dataBaseService.getUserDao().getById(user.getId());
+        Assertions.assertEquals(0, user.getUserRequests().size(), "User requests count");
+    }
+
+    @Test
+    public void getCardsTest() {
+        testUtils.logTestStart("Get cards test");
+
+        List<UserRole> userRoles = dataBaseService.getRoleDao().selectAll();
+        User user = new User("Login1", "password", userRoles.get(0),
+                "User data 1", "Config", ATTEMPTS_TO_SIGN_IN);
+        createUser(user);
+        user = dataBaseService.getUserDao().selectAll().get(0);
+
+        Currency cardCurrency = new Currency(643, "RUB");
+        createCurrency(cardCurrency);
+
+        Card card = new Card("5454545454545454", user, 111, "1020", cardCurrency);
+        createCard(card);
+
+        user = dataBaseService.getUserDao().getById(user.getId());
+        Assertions.assertEquals(1, user.getCards().size(), "Cards count");
+        checkCard(card.getPan(), user, card.getCvc(), card.getExpiry(), cardCurrency, CardStatus.ACTIVE, card.getAmount(),
+                user.getCards().get(0));
+    }
+
+    @Test
+    public void deleteCardTest() {
+        testUtils.logTestStart("Delete card test");
+
+        List<UserRole> userRoles = dataBaseService.getRoleDao().selectAll();
+        User user = new User("Login1", "password", userRoles.get(0),
+                "User data 1", "Config", ATTEMPTS_TO_SIGN_IN);
+        createUser(user);
+        user = dataBaseService.getUserDao().selectAll().get(0);
+
+        Currency cardCurrency = new Currency(643, "RUB");
+        createCurrency(cardCurrency);
+
+        Card card = new Card("5454545454545454", user, 111, "1020", cardCurrency);
+        createCard(card);
+        card = dataBaseService.getCardDao().selectAll().get(0);
+        dataBaseService.getCardDao().delete(card);
+
+        user = dataBaseService.getUserDao().getById(user.getId());
+        Assertions.assertEquals(0, user.getCards().size(), "Cards count");
     }
 }

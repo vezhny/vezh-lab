@@ -3,7 +3,11 @@ package vezh_bank.persistence.entity;
 import vezh_bank.enums.CardStatus;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static vezh_bank.constants.DatePatterns.DEFAULT_DATE_PATTERN;
 
 @Entity
 @Table(name = "CARDS")
@@ -17,20 +21,20 @@ public class Card {
     private String pan;
 
     @Column(name = "AMOUNT")
-    private Long amount;
+    private String amount;
 
     @ManyToOne
     @JoinColumn(name = "HOLDER_ID")
     private User holder;
 
     @Column(name = "CREATION_DATE")
-    private Date creationDate;
+    private String creationDate;
 
     @Column(name = "CVC")
     private int cvc;
 
     @Column(name = "EXPIRY")
-    private int expiry;
+    private String expiry;
 
     @ManyToOne
     @JoinColumn(name = "CURRENCY")
@@ -42,15 +46,15 @@ public class Card {
     public Card() {
     }
 
-    public Card(String pan, User holder, int expiry, Currency currency) {
+    public Card(String pan, User holder, int cvc, String expiry, Currency currency) {
         this.pan = pan;
         this.holder = holder;
         this.expiry = expiry;
         this.currency = currency;
 
-        this.amount = 0L;
-        this.creationDate = new Date();
-        // TODO: generate cvc
+        this.amount = "0.00";
+        this.creationDate = new SimpleDateFormat(DEFAULT_DATE_PATTERN).format(new Date());
+        this.cvc = cvc;
         this.status = CardStatus.ACTIVE.toString();
     }
 
@@ -62,15 +66,15 @@ public class Card {
         return pan;
     }
 
-    public Long getAmount() {
-        return amount;
+    public BigDecimal getAmount() {
+        return new BigDecimal(amount);
     }
 
     public User getHolder() {
         return holder;
     }
 
-    public Date getCreationDate() {
+    public String getCreationDate() {
         return creationDate;
     }
 
@@ -78,7 +82,7 @@ public class Card {
         return cvc;
     }
 
-    public int getExpiry() {
+    public String getExpiry() {
         return expiry;
     }
 
@@ -86,7 +90,6 @@ public class Card {
         return currency;
     }
 
-    // TODO: return CardStatus
     public String getStatus() {
         return status;
     }
@@ -95,6 +98,9 @@ public class Card {
         this.status = status.toString();
     }
 
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount.toString();
+    }
 
     @Override
     public String toString() {

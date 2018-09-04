@@ -115,7 +115,7 @@ public class CardDaoImpl implements CardDao {
             cards = entityManager.createQuery("SELECT c FROM Card c WHERE " +
                     "c.pan LIKE :pan AND " +
                     "c.holder.data LIKE :holderName AND " +
-                    "c.creationDate LIKE :craetionDate AND " +
+                    "c.creationDate LIKE :creationDate AND " +
                     "c.expiry LIKE :expiry AND " +
                     "(CAST(c.currency.code AS string) LIKE :currency OR c.currency.value LIKE :currency) AND " +
                     "c.status LIKE :status ORDER BY c.pan", Card.class)
@@ -148,7 +148,7 @@ public class CardDaoImpl implements CardDao {
             cards = entityManager.createQuery("SELECT COUNT(*) FROM Card c WHERE " +
                     "c.pan LIKE :pan AND " +
                     "c.holder.data LIKE :holderName AND " +
-                    "c.creationDate LIKE :craetionDate AND " +
+                    "c.creationDate LIKE :creationDate AND " +
                     "c.expiry LIKE :expiry AND " +
                     "(CAST(c.currency.code AS string) LIKE :currency OR c.currency.value LIKE :currency) AND " +
                     "c.status LIKE :status ", Long.class)
@@ -182,7 +182,7 @@ public class CardDaoImpl implements CardDao {
             cards = entityManager.createQuery("SELECT c FROM Card c WHERE " +
                     "c.pan LIKE :pan AND " +
                     "c.holder.data LIKE :holderName AND " +
-                    "c.creationDate LIKE :craetionDate AND " +
+                    "c.creationDate LIKE :creationDate AND " +
                     "c.expiry LIKE :expiry AND " +
                     "(CAST(c.currency.code AS string) LIKE :currency OR c.currency.value LIKE :currency) AND " +
                     "c.status LIKE :status ORDER BY c.pan", Card.class)

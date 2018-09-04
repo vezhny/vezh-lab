@@ -145,7 +145,6 @@ public class User {
                 ", blocked=" + blocked +
                 ", lastSignIn=" + lastSignIn +
                 ", data='" + data + '\'' +
-                ", cards=" + cards +
                 '}';
     }
 }

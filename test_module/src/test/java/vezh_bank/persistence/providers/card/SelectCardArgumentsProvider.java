@@ -1,0 +1,98 @@
+package vezh_bank.persistence.providers.card;
+
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import vezh_bank.enums.CardStatus;
+
+import java.util.stream.Stream;
+
+public class SelectCardArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
+        return Stream.of(
+//                pan, holderName, creationDate, expiry, currency, status
+            Arguments.of("", "", "", "", "", "", 8),
+            Arguments.of("54", "", "", "", "", "", 1),
+            Arguments.of("666", "", "", "", "", "", 1),
+            Arguments.of("", "User", "", "", "", "", 8),
+            Arguments.of("", "User data", "", "", "", "", 8),
+            Arguments.of("", "User data 1", "", "", "", "", 3),
+            Arguments.of("", "", "", "10", "", "", 2),
+            Arguments.of("", "", "", "102", "", "", 2),
+            Arguments.of("", "", "", "1020", "", "", 1),
+            Arguments.of("", "", "", "", "643", "", 3),
+            Arguments.of("", "", "", "", "RUB", "", 3),
+            Arguments.of("", "", "", "", "", CardStatus.ACTIVE.toString(), 5),
+            Arguments.of("", "", "", "", "", CardStatus.BLOCKED.toString(), 2),
+            Arguments.of("", "", "", "", "", CardStatus.EXPIRED.toString(), 1),
+            Arguments.of("54", "User", "", "", "", "", 1),
+            Arguments.of("666", "User", "", "", "", "", 1),
+            Arguments.of("54", "User data", "", "", "", "", 1),
+            Arguments.of("666", "User data", "", "", "", "", 1),
+            Arguments.of("54", "User data 1", "", "", "", "", 1),
+            Arguments.of("666", "User data 1", "", "", "", "", 1),
+            Arguments.of("54", "", "", "10", "", "", 1),
+            Arguments.of("666", "", "", "10", "", "", 1),
+            Arguments.of("54", "", "", "102", "", "", 1),
+            Arguments.of("666", "", "", "102", "", "", 1),
+            Arguments.of("54", "", "", "1020", "", "", 1),
+            Arguments.of("666", "", "", "1020", "", "", 0),
+            Arguments.of("54", "", "", "", "643", "", 1),
+            Arguments.of("666", "", "", "", "643", "", 0),
+            Arguments.of("54", "", "", "", "RUB", "", 1),
+            Arguments.of("666", "", "", "", "RUB", "", 0),
+            Arguments.of("54", "", "", "", "", CardStatus.ACTIVE.toString(), 1),
+            Arguments.of("666", "", "", "", "", CardStatus.ACTIVE.toString(), 1),
+            Arguments.of("54", "", "", "", "", CardStatus.BLOCKED.toString(), 0),
+            Arguments.of("666", "", "", "", "", CardStatus.BLOCKED.toString(), 0),
+            Arguments.of("54", "", "", "", "", CardStatus.EXPIRED.toString(), 0),
+            Arguments.of("666", "", "", "", "", CardStatus.EXPIRED.toString(), 0),
+            Arguments.of("", "User", "", "10", "", "", 2),
+            Arguments.of("", "User", "", "102", "", "", 2),
+            Arguments.of("", "User", "", "1020", "", "", 1),
+            Arguments.of("", "User", "", "", "643", "", 3),
+            Arguments.of("", "User", "", "", "RUB", "", 3),
+            Arguments.of("", "User", "", "", "", CardStatus.ACTIVE.toString(), 5),
+            Arguments.of("", "User", "", "", "", CardStatus.BLOCKED.toString(), 2),
+            Arguments.of("", "User", "", "", "", CardStatus.EXPIRED.toString(), 1),
+            Arguments.of("", "User data", "", "10", "", "", 2),
+            Arguments.of("", "User data", "", "102", "", "", 2),
+            Arguments.of("", "User data", "", "1020", "", "", 1),
+            Arguments.of("", "User data", "", "", "643", "", 3),
+            Arguments.of("", "User data", "", "", "RUB", "", 3),
+            Arguments.of("", "User data", "", "", "", CardStatus.ACTIVE.toString(), 5),
+            Arguments.of("", "User data", "", "", "", CardStatus.BLOCKED.toString(), 2),
+            Arguments.of("", "User data", "", "", "", CardStatus.EXPIRED.toString(), 1),
+            Arguments.of("", "User data 1", "", "10", "", "", 2),
+            Arguments.of("", "User data 1", "", "102", "", "", 2),
+            Arguments.of("", "User data 1", "", "1020", "", "", 1),
+            Arguments.of("", "User data 1", "", "", "643", "", 1),
+            Arguments.of("", "User data 1", "", "", "RUB", "", 1),
+            Arguments.of("", "User data 1", "", "", "", CardStatus.ACTIVE.toString(), 3),
+            Arguments.of("", "User data 1", "", "", "", CardStatus.BLOCKED.toString(), 0),
+            Arguments.of("", "User data 1", "", "", "", CardStatus.EXPIRED.toString(), 0),
+            Arguments.of("", "", "", "10", "643", "", 1),
+            Arguments.of("", "", "", "102", "643", "", 1),
+            Arguments.of("", "", "", "1020", "643", "", 1),
+            Arguments.of("", "", "", "10", "RUB", "", 1),
+            Arguments.of("", "", "", "102", "RUB", "", 1),
+            Arguments.of("", "", "", "1020", "RUB", "", 1),
+            Arguments.of("", "", "", "10", "", CardStatus.ACTIVE.toString(), 2),
+            Arguments.of("", "", "", "10", "", CardStatus.BLOCKED.toString(), 0),
+            Arguments.of("", "", "", "10", "", CardStatus.EXPIRED.toString(), 0),
+            Arguments.of("", "", "", "102", "", CardStatus.ACTIVE.toString(), 2),
+            Arguments.of("", "", "", "102", "", CardStatus.BLOCKED.toString(), 0),
+            Arguments.of("", "", "", "102", "", CardStatus.EXPIRED.toString(), 0),
+            Arguments.of("", "", "", "1020", "", CardStatus.ACTIVE.toString(), 1),
+            Arguments.of("", "", "", "1020", "", CardStatus.BLOCKED.toString(), 0),
+            Arguments.of("", "", "", "1020", "", CardStatus.EXPIRED.toString(), 0),
+            Arguments.of("", "", "", "", "643", CardStatus.ACTIVE.toString(), 3),
+            Arguments.of("", "", "", "", "643", CardStatus.BLOCKED.toString(), 0),
+            Arguments.of("", "", "", "", "643", CardStatus.EXPIRED.toString(), 0),
+            Arguments.of("", "", "", "", "RUB", CardStatus.ACTIVE.toString(), 3),
+            Arguments.of("", "", "", "", "RUB", CardStatus.BLOCKED.toString(), 0),
+            Arguments.of("", "", "", "", "RUB", CardStatus.EXPIRED.toString(), 0)
+        );
+    }
+}

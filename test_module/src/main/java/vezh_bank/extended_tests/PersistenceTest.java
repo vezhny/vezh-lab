@@ -168,19 +168,16 @@ public class PersistenceTest {
         dataBaseService.getCardDao().insert(card);
     }
 
-    protected void checkCard(String expectedPan, User expectedHolder, String expectedCvc,
+    protected void checkCard(String expectedPan, User expectedHolder, int expectedCvc,
                              String expectedExpiry, Currency expectedCurrency, CardStatus expectedStatus,
-                             Card actualCard) {
+                             BigDecimal expectedAmount, Card actualCard) {
         Assertions.assertEquals(expectedPan, actualCard.getPan(), "PAN");
-        Assertions.assertEquals(expectedHolder, actualCard.getHolder(), "Holder");
+        Assertions.assertEquals(expectedHolder.toString(), actualCard.getHolder().toString(), "Holder");
         Assertions.assertEquals(expectedCvc, actualCard.getCvc(), "CVC");
         Assertions.assertEquals(expectedExpiry, actualCard.getExpiry(), "Expiry");
-        Assertions.assertEquals(expectedCurrency, actualCard.getCurrency(), "Currency");
+        Assertions.assertEquals(expectedCurrency.toString(), actualCard.getCurrency().toString(), "Currency");
         Assertions.assertEquals(expectedStatus.toString(), actualCard.getStatus(), "Status");
-        checkUser(expectedHolder.getLogin(), expectedHolder.getPassword(), expectedHolder.getRole(),
-                expectedHolder.getConfig(), expectedHolder.getAttemptsToSignIn(), expectedHolder.isBlocked(),
-                expectedHolder.getLastSignIn(), expectedHolder.getData(), actualCard.getHolder());
-        checkCurrency(expectedCurrency.getCode(), expectedCurrency.getValue(), actualCard.getCurrency());
+        Assertions.assertEquals(expectedAmount, actualCard.getAmount(), "Amount");
     }
 
     protected void checkCardsCount(int expectedCount, List<Card> cards) {

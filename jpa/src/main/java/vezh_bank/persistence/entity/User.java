@@ -53,7 +53,6 @@ public class User {
     public User() {
     }
 
-    //TODO: remove logic from entities
     public User(String login, String password, UserRole role, String data, String config, int attemptsToSignIn) {
         this.login = login;
         this.password = password;

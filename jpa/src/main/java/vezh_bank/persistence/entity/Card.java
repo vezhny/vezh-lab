@@ -51,7 +51,6 @@ public class Card {
         this.holder = holder;
         this.expiry = expiry;
         this.currency = currency;
-
         this.amount = "0.00";
         this.creationDate = new SimpleDateFormat(DEFAULT_DATE_PATTERN).format(new Date());
         this.cvc = cvc;

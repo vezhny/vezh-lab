@@ -15,9 +15,6 @@ public class UserRole {
     @Column(name = "ROLE_NAME")
     private String name;
 
-//    @OneToMany(mappedBy = "role")
-//    private List<User> users;
-
     public UserRole() {
     }
 
@@ -29,7 +26,6 @@ public class UserRole {
         return id;
     }
 
-    // TODO: return Role
     public String getName() {
         return name;
     }

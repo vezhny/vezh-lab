@@ -15,7 +15,6 @@ import java.util.List;
 
 import static vezh_bank.constants.UserDefault.ATTEMPTS_TO_SIGN_IN;
 
-//TODO: add card and user request cases
 public class UserTests extends PersistenceTest {
 
     @Test

@@ -1,9 +1,13 @@
 package server;
 
 
+import core.config.VezhBankConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
+//@AutoConfigureAfter({VezhBankConfiguration.class})
+@ComponentScan(basePackageClasses = VezhBankConfiguration.class)
 @SpringBootApplication
 public class Server {
 

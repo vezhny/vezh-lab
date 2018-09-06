@@ -7,4 +7,16 @@ public class TypeConverter {
         }
         return 0;
     }
+
+    public static int stringToInt(String value, int exceptionValue) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return exceptionValue;
+        }
+    }
+
+    public static int stringToInt(String value) {
+        return stringToInt(value, 0);
+    }
 }

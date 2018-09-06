@@ -15,7 +15,7 @@ import vezh_bank.persistence.dao.impl.*;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"vezh_bank"})
+@ComponentScan(basePackages = {"core"})
 public class VezhBankConfiguration implements WebMvcConfigurer {
 
     @Override

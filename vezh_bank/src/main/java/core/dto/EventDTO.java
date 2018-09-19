@@ -5,7 +5,7 @@ import core.json.EventData;
 import vezh_bank.enums.EventType;
 import vezh_bank.persistence.entity.Event;
 
-public class EventDTO extends AbstractDTO implements BaseDTO<Event> {
+public class EventDTO implements BaseDTO<Event> {
     private int id;
     private EventType type;
     private EventData eventData;

@@ -10,6 +10,7 @@ public class ServiceProvider {
     @Autowired
     private DataBaseService dataBaseService;
 
+    @Autowired
     private EventService eventService;
 
     public ServiceProvider() {

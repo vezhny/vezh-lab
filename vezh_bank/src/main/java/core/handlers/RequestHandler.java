@@ -43,7 +43,7 @@ public interface RequestHandler<T> {
 
         logger.info(e.getMessage());
         MultiValueMap<String, String> headers = new HttpHeaders();
-        headers.set(Headers.ERROR_MESSAGE, String.valueOf(e.getMessage()));
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        headers.set(Headers.ERROR_MESSAGE, e.getMessage());
+        return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
     }
 }

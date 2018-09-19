@@ -21,8 +21,16 @@ public class TestUtils {
         logger.info("-------------------------\n");
     }
 
-    public int createUser(DataBaseService dataBaseService) {
+    public int createNotAClient(DataBaseService dataBaseService) {
         UserRole role = dataBaseService.getRoleDao().getById(2);
+        return createUser(dataBaseService, role);
+    }
+
+    public int createClient(DataBaseService dataBaseService) {
+        UserRole role = dataBaseService.getRoleDao().getById(1);
+        return createUser(dataBaseService, role);    }
+
+    private int createUser(DataBaseService dataBaseService, UserRole role) {
         User user = new User("Test generated", "password", role,
                 "Test generated", "No config yet", 3);
         dataBaseService.getUserDao().insert(user);

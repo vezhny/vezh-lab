@@ -37,4 +37,13 @@ public interface RequestHandler<T> {
         logger.info("Response status: " + HttpStatus.OK.name());
         return responseEntity;
     }
+
+    default ResponseEntity<T> error(Exception e) {
+        Logger logger = Logger.getLogger(this.getClass());
+
+        logger.info(e.getMessage());
+        MultiValueMap<String, String> headers = new HttpHeaders();
+        headers.set(Headers.ERROR_MESSAGE, String.valueOf(e.getMessage()));
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }

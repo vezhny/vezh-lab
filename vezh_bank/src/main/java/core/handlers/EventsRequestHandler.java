@@ -1,7 +1,9 @@
 package core.handlers;
 
 import core.dto.EventDTO;
+import core.exceptions.BadRequestException;
 import core.services.ServiceProvider;
+import core.validators.EventRequestValidator;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import vezh_bank.constants.RequestParams;
@@ -19,14 +21,22 @@ public class EventsRequestHandler implements RequestHandler<List<EventDTO>> {
 
     private ServiceProvider serviceProvider;
     private Map<String, String> requestParams;
+    private EventRequestValidator eventRequestValidator;
 
     public EventsRequestHandler(ServiceProvider serviceProvider, Map<String, String> requestParams) {
         this.serviceProvider = serviceProvider;
         this.requestParams = requestParams;
+        this.eventRequestValidator = new EventRequestValidator(requestParams, serviceProvider.getDataBaseService());
     }
 
     @Override
     public ResponseEntity<List<EventDTO>> getResponse(HttpMethod httpMethod) {
+        try {
+            eventRequestValidator.checkRequestParams();
+        } catch (BadRequestException e) {
+            return error(e);
+        }
+
         int rowsOntPage = UserDefault.ROWS_ON_PAGE; //TODO: get from user config
         logger.info("Rows on page: " + rowsOntPage);
 

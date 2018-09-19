@@ -25,6 +25,12 @@ public class EventController {
     @Autowired
     private ServiceProvider serviceProvider;
 
+    /**
+     * Required params: userId
+     * filters: type, date, data
+     * @param params
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<EventDTO>> getEvents(@RequestParam Map<String, String> params) {
         logger.info("Events GET request");

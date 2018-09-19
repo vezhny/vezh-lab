@@ -1,6 +1,9 @@
 package vezh_bank;
 
 
+import vezh_bank.persistence.DataBaseService;
+import vezh_bank.persistence.entity.User;
+import vezh_bank.persistence.entity.UserRole;
 import vezh_bank.util.Logger;
 
 public class TestUtils {
@@ -16,5 +19,13 @@ public class TestUtils {
 
     public void logTestEnd() {
         logger.info("-------------------------\n");
+    }
+
+    public int createUser(DataBaseService dataBaseService) {
+        UserRole role = dataBaseService.getRoleDao().getById(2);
+        User user = new User("Test generated", "password", role,
+                "Test generated", "No config yet", 3);
+        dataBaseService.getUserDao().insert(user);
+        return dataBaseService.getUserDao().selectAll().get(0).getId();
     }
 }

@@ -3,6 +3,7 @@ package vezh_bank.extended_tests;
 import core.config.VezhBankConfiguration;
 import core.services.ServiceProvider;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +50,13 @@ public class RootTest {
         serviceProvider.getDataBaseService().getUserDao().deleteAll();
         serviceProvider.getDataBaseService().getUserRequestDao().deleteAll();
         serviceProvider.getDataBaseService().getCardDao().deleteAll();
+    }
+
+    protected void checkNumberOfEvents(int expected, int actual) {
+        checkNumber(expected, actual, "Number of events");
+    }
+
+    private void checkNumber(int expected, int actual, String message) {
+        Assertions.assertEquals(expected, actual, message);
     }
 }

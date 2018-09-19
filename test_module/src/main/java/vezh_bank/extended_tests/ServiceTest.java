@@ -14,12 +14,4 @@ public class ServiceTest extends RootTest {
         Assertions.assertEquals(expectedEventType, eventDTO.getType());
         Assertions.assertEquals(expectedEventData.toString(), eventDTO.getEventData().toString());
     }
-
-    protected void checkNumberOfEvents(int expected, int actual) {
-        checkNumber(expected, actual, "Number of events");
-    }
-
-    private void checkNumber(int expected, int actual, String message) {
-        Assertions.assertEquals(expected, actual, message);
-    }
 }

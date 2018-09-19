@@ -3,6 +3,7 @@ package core.validators;
 import core.exceptions.BadRequestException;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.persistence.DataBaseService;
+import vezh_bank.persistence.entity.User;
 
 import java.util.Map;
 
@@ -29,8 +30,12 @@ public class EventRequestValidator extends Validator {
         if (!isStringCanBeNumber(userId)) {
             throw new BadRequestException(String.format(VALUE_CAN_NOT_BE_A_NUMBER, userId));
         }
-        if (isNull(dataBaseService.getUserDao().getById(stringToInt(userId)))) {
+        User user = dataBaseService.getUserDao().getById(stringToInt(userId));
+        if (isNull(user)) {
             throw new BadRequestException(String.format(USER_DOES_NOT_EXIST, userId));
+        }
+        if (isClient(user)) {
+            throw new BadRequestException(THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS);
         }
     }
 }

@@ -2,6 +2,7 @@ package core.handlers;
 
 import core.dto.EventDTO;
 import core.exceptions.BadRequestException;
+import core.json.Events;
 import core.services.ServiceProvider;
 import core.validators.EventRequestValidator;
 import org.springframework.http.HttpMethod;
@@ -16,7 +17,7 @@ import vezh_bank.util.TypeConverter;
 import java.util.List;
 import java.util.Map;
 
-public class EventsRequestHandler implements RequestHandler<List<EventDTO>> {
+public class EventsRequestHandler implements RequestHandler<Events> {
     private Logger logger = Logger.getLogger(this.getClass());
 
     private ServiceProvider serviceProvider;
@@ -30,7 +31,7 @@ public class EventsRequestHandler implements RequestHandler<List<EventDTO>> {
     }
 
     @Override
-    public ResponseEntity<List<EventDTO>> getResponse(HttpMethod httpMethod) {
+    public ResponseEntity<Events> getResponse(HttpMethod httpMethod) {
         try {
             eventRequestValidator.checkRequestParams();
         } catch (BadRequestException e) {
@@ -54,8 +55,9 @@ public class EventsRequestHandler implements RequestHandler<List<EventDTO>> {
                 .select(requiredPage, rowsOntPage, type, date, data);
 
         List<EventDTO> eventDTOS = serviceProvider.getEventService().getEvents(events);
+        Events eventsResponse = new Events(eventDTOS);
 
-        ResponseEntity<List<EventDTO>> response = getResponseEntity(eventDTOS, requiredPage, pagesCount);
+        ResponseEntity<Events> response = getResponseEntity(eventsResponse, requiredPage, pagesCount);
         return response;
     }
 }

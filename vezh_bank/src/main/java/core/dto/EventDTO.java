@@ -1,14 +1,22 @@
 package core.dto;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import core.json.EventData;
 import vezh_bank.enums.EventType;
 import vezh_bank.persistence.entity.Event;
 
 public class EventDTO implements BaseDTO<Event> {
+    @Expose
     private int id;
+
+    @Expose
     private EventType type;
+
+    @Expose
     private EventData eventData;
+
+    @Expose
     private String date;
 
     public EventDTO(EventType type, EventData eventData) {

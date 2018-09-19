@@ -2,6 +2,7 @@ package vezh_bank.controller;
 
 import core.dto.EventDTO;
 import core.json.EventData;
+import core.json.Events;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.util.LinkedMultiValueMap;
@@ -30,11 +31,9 @@ public class EventControllerTests extends ControllerTest {
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
         checkResponseCode(200, response.getStatus());
-        logger.info(response.getContentAsString());
 
-//        List<EventDTO> eventDTOS = response.getContentAsString().getBody().as(List.class);
-//
-//        checkNumberOfEvents(3, eventDTOS.size());
+        Events events = gson.fromJson(response.getContentAsString(), Events.class);
+        checkNumberOfEvents(3, events.getEvents().size());
     }
 
     private void createEvent(EventDTO eventDTO) {

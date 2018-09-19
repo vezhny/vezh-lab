@@ -3,6 +3,7 @@ package core.controllers;
 import core.dto.EventDTO;
 import core.handlers.EventsRequestHandler;
 import core.handlers.RequestHandler;
+import core.json.Events;
 import core.services.ServiceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -32,9 +33,9 @@ public class EventController {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<EventDTO>> getEvents(@RequestParam Map<String, String> params) {
+    public ResponseEntity<Events> getEvents(@RequestParam Map<String, String> params) {
         logger.info("Events GET request");
-        RequestHandler<List<EventDTO>> handler = new EventsRequestHandler(serviceProvider, params);
+        RequestHandler<Events> handler = new EventsRequestHandler(serviceProvider, params);
         return handler.getResponse(HttpMethod.GET);
     }
 }

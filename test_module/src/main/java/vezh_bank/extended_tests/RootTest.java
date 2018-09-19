@@ -1,5 +1,6 @@
 package vezh_bank.extended_tests;
 
+import com.google.gson.Gson;
 import core.config.VezhBankConfiguration;
 import core.services.ServiceProvider;
 import org.junit.jupiter.api.AfterEach;
@@ -27,6 +28,7 @@ public class RootTest {
 
     protected TestUtils testUtils;
     protected MockMvc mockMvc;
+    protected Gson gson;
 
     @Autowired
     protected WebApplicationContext webApplicationContext;
@@ -38,6 +40,7 @@ public class RootTest {
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         testUtils = new TestUtils(logger);
+        gson = new Gson();
     }
 
     @AfterEach

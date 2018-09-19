@@ -95,6 +95,7 @@ public class EventTests extends PersistenceTest {
                 type, date, data);
         checkEventsCount(expectedEventCount, events);
     }
+
     @ParameterizedTest
     @ArgumentsSource(SelectEventArgumentsProvider.class)
     public void selectEventCountTest(String eventType, String date, String data, int expectedEventCount) {

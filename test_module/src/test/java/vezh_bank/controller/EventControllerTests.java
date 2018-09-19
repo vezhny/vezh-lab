@@ -3,10 +3,12 @@ package vezh_bank.controller;
 import core.dto.EventDTO;
 import core.json.EventData;
 import core.json.Events;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import vezh_bank.constants.Headers;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.constants.Urls;
 import vezh_bank.enums.EventType;
@@ -34,6 +36,10 @@ public class EventControllerTests extends ControllerTest {
 
         Events events = gson.fromJson(response.getContentAsString(), Events.class);
         checkNumberOfEvents(3, events.getEvents().size());
+        Assertions.assertEquals(String.valueOf(1), response.getHeader(Headers.CURRENT_PAGE),
+                "Current page");
+        Assertions.assertEquals(String.valueOf(1), response.getHeader(Headers.PAGES_COUNT),
+                "Pages count");
     }
 
     private void createEvent(EventDTO eventDTO) {

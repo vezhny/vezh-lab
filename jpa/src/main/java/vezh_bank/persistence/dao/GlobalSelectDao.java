@@ -7,10 +7,17 @@ public interface GlobalSelectDao<T> {
     T getById(int id);
 
     default String getLikeParam(String field) {
-        return "%" + field  + "%";
+        return "%" + avoidNull(field)  + "%";
     }
 
     default int getFirstResultIndex(int requiredPage, int rowsOnPage) {
         return (requiredPage - 1) * rowsOnPage;
+    }
+
+    default String avoidNull(String value) {
+        if (value == null) {
+            return "";
+        }
+        return value;
     }
 }

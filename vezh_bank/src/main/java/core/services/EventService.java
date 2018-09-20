@@ -10,8 +10,6 @@ import java.util.List;
 
 @Service
 public class EventService {
-    // TODO: get events
-// TODO: event tests
     private DataBaseService dataBaseService;
 
     public EventService(DataBaseService dataBaseService) {

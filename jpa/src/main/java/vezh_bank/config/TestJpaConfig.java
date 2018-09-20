@@ -28,7 +28,9 @@ public class TestJpaConfig {
     public EntityManagerFactory emf(@Qualifier("H2DS") DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(dataSource);
-        factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
+        hibernateJpaVendorAdapter.setShowSql(false);
+        factory.setJpaVendorAdapter(hibernateJpaVendorAdapter);
         factory.setPersistenceUnitName("vezh_bank");
         factory.afterPropertiesSet();
         return factory.getObject();

@@ -12,7 +12,7 @@
             <property name="hibernate.max_fetch_depth" value="3"/>
             <property name="hibernate.jdbc.fetch_size" value="50"/>
             <property name="hibernate.jdbc.batch_size" value="10"/>
-            <!--<property name="hibernate.show_sql" value="true"/>-->
+            <property name="hibernate.show_sql" value="false"/>
             <!--<property name="hibernate.format_sql" value="true"/>-->
             <property name="hibernate.flushMode" value="FLUSH_AUTO"/>
             <property name="hbm2ddl.auto" value="update"/>

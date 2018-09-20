@@ -3,7 +3,10 @@ package vezh_bank.controller;
 import core.dto.EventDTO;
 import core.json.EventData;
 import core.json.Events;
+import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Link;
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,10 +24,12 @@ import vezh_bank.extended_tests.ControllerTest;
 
 import java.io.UnsupportedEncodingException;
 
+@Link("https://github.com/vezhny/vezh-lab/issues/11")
 @Feature("Event controller")
 public class EventControllerTests extends ControllerTest {
 
     @Test
+    @Description("Get all events test")
     public void getEventsTest() throws UnsupportedEncodingException {
         testUtils.logTestStart("Get all events test");
 
@@ -49,6 +54,7 @@ public class EventControllerTests extends ControllerTest {
     }
 
     @Test
+    @Description("Get events when user ID absent test")
     public void getEventsUserIdAbsent() {
         testUtils.logTestStart("Get events when user ID absent test");
 
@@ -67,6 +73,7 @@ public class EventControllerTests extends ControllerTest {
     }
 
     @Test
+    @Description("Get events when user ID can't be a number test")
     public void getEventsUserIdCantBeNumber() {
         testUtils.logTestStart("Get events when user ID can't be a number test");
 
@@ -87,6 +94,7 @@ public class EventControllerTests extends ControllerTest {
     }
 
     @Test
+    @Description("Get events when user doesn't exist test")
     public void getEventsUserIdDoesntExist() {
         testUtils.logTestStart("Get events when user doesn't exist test");
 
@@ -107,6 +115,7 @@ public class EventControllerTests extends ControllerTest {
     }
 
     @Test
+    @Description("Get events when user is client test")
     public void getEventsUserIsClient() {
         testUtils.logTestStart("Get events when user is client test");
 
@@ -126,6 +135,7 @@ public class EventControllerTests extends ControllerTest {
                 response.getHeader(Headers.ERROR_MESSAGE), "Error message");
     }
 
+    @Description("Get events where required page: {0}, event type: {1}, event data {2}")
     @ParameterizedTest
     @ArgumentsSource(EventControllerArgumentsProvider.class)
     public void getEvents(String requiredPage, String eventType, String eventData, int expectedEventsCount,
@@ -155,6 +165,7 @@ public class EventControllerTests extends ControllerTest {
                 "Pages count");
     }
 
+    @Step("Creating event {0}")
     private void createEvent(EventDTO eventDTO) {
         serviceProvider.getEventService().addEvent(eventDTO);
     }

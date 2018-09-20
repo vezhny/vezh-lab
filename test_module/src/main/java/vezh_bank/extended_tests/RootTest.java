@@ -3,6 +3,7 @@ package vezh_bank.extended_tests;
 import com.google.gson.Gson;
 import core.config.VezhBankConfiguration;
 import core.services.ServiceProvider;
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,7 @@ public class RootTest {
     @Autowired
     protected ServiceProvider serviceProvider;
 
+    @Step("Preparing environment")
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
@@ -43,6 +45,7 @@ public class RootTest {
         gson = new Gson();
     }
 
+    @Step("Clear database")
     @AfterEach
     public void tearDown() {
         testUtils.logTestEnd();
@@ -55,6 +58,7 @@ public class RootTest {
         serviceProvider.getDataBaseService().getCardDao().deleteAll();
     }
 
+    @Step("Check number of events. Expected {0}. Actual {1}")
     protected void checkNumberOfEvents(int expected, int actual) {
         checkNumber(expected, actual, "Number of events");
     }

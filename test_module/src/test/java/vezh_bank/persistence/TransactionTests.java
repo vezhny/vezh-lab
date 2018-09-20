@@ -1,5 +1,8 @@
 package vezh_bank.persistence;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Link;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,8 +16,11 @@ import vezh_bank.persistence.providers.transaction.SelectTransactionArgumentsPro
 
 import java.util.List;
 
+@Feature("Transaction persistence")
+@Link("https://github.com/vezhny/vezh-lab/issues/5")
 public class TransactionTests extends PersistenceTest {
 
+    @Description("Insert transaction test")
     @Test
     public void insertTrxTest() {
         testUtils.logTestStart("Insert transaction test");
@@ -28,6 +34,7 @@ public class TransactionTests extends PersistenceTest {
         checkTransaction(transactionType, trxData, transactionStatus, transactions.get(0));
     }
 
+    @Description("Select by ID test")
     @Test
     public void selectByIdTest() {
         testUtils.logTestStart("Select by ID test");
@@ -41,6 +48,7 @@ public class TransactionTests extends PersistenceTest {
         checkTransaction(transactionType, trxData, transactionStatus, transaction);
     }
 
+    @Description("Select with params test. Type: {0}, data: {2}, status: {3}")
     @ParameterizedTest
     @ArgumentsSource(SelectTransactionArgumentsProvider.class)
     public void selectTest(String type, String dateTime, String data, String status, int expectedTransactionsCount) {
@@ -68,6 +76,7 @@ public class TransactionTests extends PersistenceTest {
         checkTransactionCount(expectedTransactionsCount, transactions);
     }
 
+    @Description("Select with params test. Required page: {0}, rows on page: {1}, type: {2}, data: {4}, status: {5}")
     @ParameterizedTest
     @ArgumentsSource(SelectTransactionPagesArgumentsProvider.class)
     public void selectTest(int requiredPage, int rowsOnPage, String type, String dateTime,
@@ -97,6 +106,7 @@ public class TransactionTests extends PersistenceTest {
         checkTransactionCount(expectedTransactionsCount, transactions);
     }
 
+    @Description("Select count test")
     @Test
     public void selectCountTest() {
         testUtils.logTestStart("Select count test");
@@ -117,6 +127,7 @@ public class TransactionTests extends PersistenceTest {
                 "Number of transactions");
     }
 
+    @Description("Select count with params test. Type: {0}, data: {2}, status: {3}")
     @ParameterizedTest
     @ArgumentsSource(SelectTransactionArgumentsProvider.class)
     public void selectCountTest(String type, String dateTime, String data, String status, int expectedTransactionsCount) {

@@ -1,6 +1,7 @@
 package vezh_bank;
 
 
+import io.qameta.allure.Step;
 import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.User;
 import vezh_bank.persistence.entity.UserRole;
@@ -13,10 +14,12 @@ public class TestUtils {
         this.logger = logger;
     }
 
+    @Step("Start test: {0}")
     public void logTestStart(String log) {
         logger.info("------ " + log + " ------");
     }
 
+    @Step("End test")
     public void logTestEnd() {
         logger.info("-------------------------\n");
     }
@@ -28,8 +31,10 @@ public class TestUtils {
 
     public int createClient(DataBaseService dataBaseService) {
         UserRole role = dataBaseService.getRoleDao().getById(1);
-        return createUser(dataBaseService, role);    }
+        return createUser(dataBaseService, role);
+    }
 
+    @Step("Create user. Role: {1}")
     private int createUser(DataBaseService dataBaseService, UserRole role) {
         User user = new User("Test generated", "password", role,
                 "Test generated", "No config yet", 3);

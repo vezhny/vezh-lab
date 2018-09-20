@@ -1,5 +1,8 @@
 package vezh_bank.persistence;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Link;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,8 +14,11 @@ import vezh_bank.persistence.providers.role.RoleArgumentsProvider;
 
 import java.util.List;
 
+@Feature("Role persistence")
+@Link("https://github.com/vezhny/vezh-lab/issues/5")
 public class RoleTests extends PersistenceTest {
 
+    @Description("Select all roles")
     @Test
     public void selectAllRoles() {
         testUtils.logTestStart("Select all roles");
@@ -20,6 +26,7 @@ public class RoleTests extends PersistenceTest {
         Assertions.assertEquals(3, roles.size(), "Roles count");
     }
 
+    @Description("Select role by id test. ID: {0}")
     @ParameterizedTest
     @ArgumentsSource(RoleArgumentsProvider.class)
     public void selectRoleById(int id, Role role) {

@@ -1,5 +1,8 @@
 package vezh_bank.persistence;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Link;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,8 +22,11 @@ import java.util.List;
 
 import static vezh_bank.constants.UserDefault.ATTEMPTS_TO_SIGN_IN;
 
+@Feature("Card persistence")
+@Link("https://github.com/vezhny/vezh-lab/issues/5")
 public class CardTests extends PersistenceTest {
 
+    @Description("Insert card test")
     @Test
     public void insertTest() {
         testUtils.logTestStart("Insert card test");
@@ -46,6 +52,7 @@ public class CardTests extends PersistenceTest {
         checkCard(pan, holder, cvc, expiry, currency, CardStatus.ACTIVE, new BigDecimal("0.00"), cards.get(0));
     }
 
+    @Description("Select card with ID test")
     @Test
     public void selectTest() {
         testUtils.logTestStart("Select card with ID test");
@@ -72,6 +79,7 @@ public class CardTests extends PersistenceTest {
         checkCard(pan, holder, cvc, expiry, currency, CardStatus.ACTIVE, new BigDecimal("0.00"), card);
     }
 
+    @Description("Update card test")
     @Test
     public void updateTest() {
         testUtils.logTestStart("Update card test");
@@ -102,6 +110,7 @@ public class CardTests extends PersistenceTest {
         checkCard(pan, holder, cvc, expiry, currency, CardStatus.ACTIVE, newAmount, card);
     }
 
+    @Description("Delete card test")
     @Test
     public void deleteTest() {
         testUtils.logTestStart("Delete card test");
@@ -129,6 +138,7 @@ public class CardTests extends PersistenceTest {
         checkCardsCount(0, dataBaseService.getCardDao().selectAll());
     }
 
+    @Description("Delete card by ID test")
     @Test
     public void deleteByIdTest() {
         testUtils.logTestStart("Delete card by ID test");
@@ -156,6 +166,7 @@ public class CardTests extends PersistenceTest {
         checkCardsCount(0, dataBaseService.getCardDao().selectAll());
     }
 
+    @Description("Select cards with holder test")
     @Test
     public void selectByHolderTest() {
         testUtils.logTestStart("Select cards with holder test");
@@ -200,6 +211,7 @@ public class CardTests extends PersistenceTest {
         checkCardsCount(3, cards);
     }
 
+    @Description("Select cards count test")
     @Test
     public void selectCountTest() {
         testUtils.logTestStart("Select cards count test");
@@ -244,6 +256,8 @@ public class CardTests extends PersistenceTest {
         Assertions.assertEquals(6, cards, "Number of cards");
     }
 
+    @Description("Select card where: pan: {0}, holder name: {1}, creation date: {2}, expiry: {3}, currency: {4}" +
+            ", status: {5}")
     @ParameterizedTest
     @ArgumentsSource(SelectCardArgumentsProvider.class)
     public void selectTest(String pan, String holderName, String creationDate, String expiry, String currency,
@@ -301,6 +315,8 @@ public class CardTests extends PersistenceTest {
         checkCardsCount(expectedCardsCount, cards);
     }
 
+    @Description("Select cards count where pan: {0}, holder name: {1}, creation date: {2}, expiry: {3}, currency: {4} " +
+            ", status: {5}")
     @ParameterizedTest
     @ArgumentsSource(SelectCardArgumentsProvider.class)
     public void selectCountTest(String pan, String holderName, String creationDate, String expiry, String currency,
@@ -358,6 +374,8 @@ public class CardTests extends PersistenceTest {
         Assertions.assertEquals(expectedCardsCount, cards, "Number of cards");
     }
 
+    @Description("Select cards where required page: {0}, rows on page: {1},  pan: {2}, holder name: {3}, " +
+            "creation date: {4}, expiry: {5}, currency: {6}, status: {7}")
     @ParameterizedTest
     @ArgumentsSource(SelectCardWithPageArgumentsProvider.class)
     public void selectTest(int requiredPage, int rowsOnPage, String pan, String holderName, String creationDate,
@@ -416,6 +434,7 @@ public class CardTests extends PersistenceTest {
         checkCardsCount(expectedCardsCount, cards);
     }
 
+    @Description("Delete card holder test")
     @Test
     public void deleteCardHolderTest() {
         testUtils.logTestStart("Delete card holder test");
@@ -440,6 +459,7 @@ public class CardTests extends PersistenceTest {
         Assertions.assertThrows(EntityNotFoundException.class, () -> dataBaseService.getCardDao().selectAll().get(0));
     }
 
+    @Description("Delete card currency test")
     @Test
     public void deleteCardCurrencyTest() {
         testUtils.logTestStart("Delete card currency test");

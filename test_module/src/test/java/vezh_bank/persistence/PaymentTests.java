@@ -1,5 +1,8 @@
 package vezh_bank.persistence;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Link;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,8 +18,11 @@ import vezh_bank.persistence.providers.payment.SelectPaymentNameAndCurrencyArgum
 import java.math.BigDecimal;
 import java.util.List;
 
+@Feature("Payment persistence")
+@Link("https://github.com/vezhny/vezh-lab/issues/5")
 public class PaymentTests extends PersistenceTest {
 
+    @Description("Insert payment test")
     @Test
     public void createPaymentTest() {
         testUtils.logTestStart("Insert payment test");
@@ -36,6 +42,7 @@ public class PaymentTests extends PersistenceTest {
         checkPayment(paymentName, paymentDescription, minAmount, maxAmount, commission, currency, payments.get(0));
     }
 
+    @Description("Select by ID test")
     @Test
     public void selectByIdTest() {
         testUtils.logTestStart("Select by ID test");
@@ -54,6 +61,7 @@ public class PaymentTests extends PersistenceTest {
         checkPayment(paymentName, paymentDescription, minAmount, maxAmount, commission, currency, payment);
     }
 
+    @Description("Update payment test")
     @Test
     public void updatePaymentTest() {
         testUtils.logTestStart("Update payment test");
@@ -78,6 +86,7 @@ public class PaymentTests extends PersistenceTest {
         checkPayment(updatedName, paymentDescription, minAmount, maxAmount, commission, currency, payments.get(0));
     }
 
+    @Description("Delete payment test")
     @Test
     public void deletePaymentTest() {
         testUtils.logTestStart("Delete payment test");
@@ -97,6 +106,7 @@ public class PaymentTests extends PersistenceTest {
         checkPaymentCount(0, dataBaseService.getPaymentDao().selectAll());
     }
 
+    @Description("Delete payment by ID test")
     @Test
     public void deletePaymentByIdTest() {
         testUtils.logTestStart("Delete payment by ID test");
@@ -115,6 +125,7 @@ public class PaymentTests extends PersistenceTest {
         checkPaymentCount(0, dataBaseService.getPaymentDao().selectAll());
     }
 
+    @Description("Select count test")
     @Test
     public void selectCountTest() {
         testUtils.logTestStart("Select count test");
@@ -130,6 +141,7 @@ public class PaymentTests extends PersistenceTest {
         Assertions.assertEquals(2, dataBaseService.getPaymentDao().selectCount(), "Number of payments");
     }
 
+    @Description("Select payment with currency \"{0}\" test")
     @ParameterizedTest
     @ArgumentsSource(SelectPaymentCurrencyArgumentsProvider.class)
     public void selectPaymentWithCurrency(String currency, int expectedPaymentCount) {
@@ -157,6 +169,7 @@ public class PaymentTests extends PersistenceTest {
         checkPaymentCount(expectedPaymentCount, payments);
     }
 
+    @Description("Select payment with name \"{0}\" and currency \"{1}\" test")
     @ParameterizedTest
     @ArgumentsSource(SelectPaymentNameAndCurrencyArgumentsProvider.class)
     public void selectPaymentWithNameAndCurrencyTest(String name, String currency, int expectedPaymentCount) {
@@ -184,6 +197,7 @@ public class PaymentTests extends PersistenceTest {
         checkPaymentCount(expectedPaymentCount, payments);
     }
 
+    @Description("Select payment with all params test. Required page: {0}, rows on page: {1}, name: {2}, currency: {3}")
     @ParameterizedTest
     @ArgumentsSource(SelectPaymentAllParamsArgumentsProvider.class)
     public void selectPaymentAllParamsTest(int requiredPage, int rowsOnPage,
@@ -224,6 +238,7 @@ public class PaymentTests extends PersistenceTest {
         checkPaymentCount(expectedPaymentCount, payments);
     }
 
+    @Description("Delete payment currency test")
     @Test
     public void deletePaymentCurrencyTest() {
         testUtils.logTestStart("Delete payment currency test");
@@ -248,6 +263,7 @@ public class PaymentTests extends PersistenceTest {
         Assertions.assertNull(payment.getCurrency(), "Payment currency");
     }
 
+    @Description("Select payment with deleted currency test")
     @ParameterizedTest
     @ArgumentsSource(SelectPaymentDeletedCurrencyArgumentsProvider.class)
     public void selectPaymentDeletedCurrencyTest(String name, String currency, int expectedPaymentCount) {
@@ -276,6 +292,8 @@ public class PaymentTests extends PersistenceTest {
         List<Payment> payments = dataBaseService.getPaymentDao().select(name, currency);
         checkPaymentCount(expectedPaymentCount, payments);
     }
+
+    @Description("Select payments count with name \"{0}\" and currency \"{1}\" test")
     @ParameterizedTest
     @ArgumentsSource(SelectPaymentNameAndCurrencyArgumentsProvider.class)
     public void selectPaymentsCountWithNameAndCurrencyTest(String name, String currency, int expectedPaymentCount) {

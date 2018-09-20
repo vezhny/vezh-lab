@@ -12,6 +12,7 @@ public class EventPagesArgumentsProvider implements ArgumentsProvider {
     public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
         return Stream.of(
             Arguments.of(1, 4, "", "", "", 4),
+            Arguments.of(1, 4, null, null, null, 4),
             Arguments.of(2, 4, "", "", "", 3),
             Arguments.of(1, 4, EventType.USER_SIGN_IN.toString(), "", "", 3),
             Arguments.of(1, 4, EventType.USER_SIGN_UP.toString(), "", "", 1),

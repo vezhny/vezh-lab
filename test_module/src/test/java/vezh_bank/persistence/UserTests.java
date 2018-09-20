@@ -1,5 +1,8 @@
 package vezh_bank.persistence;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Link;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,8 +18,11 @@ import java.util.List;
 
 import static vezh_bank.constants.UserDefault.ATTEMPTS_TO_SIGN_IN;
 
+@Feature("User persistence")
+@Link("https://github.com/vezhny/vezh-lab/issues/5")
 public class UserTests extends PersistenceTest {
 
+    @Description("Insert user test")
     @Test
     public void insertUserTest() {
         testUtils.logTestStart("Insert user test");
@@ -35,6 +41,7 @@ public class UserTests extends PersistenceTest {
                 null, data, users.get(0));
     }
 
+    @Description("Select user by ID test")
     @Test
     public void selectByIdUserTest() {
         testUtils.logTestStart("Select user by ID test");
@@ -53,6 +60,7 @@ public class UserTests extends PersistenceTest {
                 null, data, user);
     }
 
+    @Description("Update user test")
     @Test
     public void updateTest() {
         testUtils.logTestStart("Update user test");
@@ -76,6 +84,7 @@ public class UserTests extends PersistenceTest {
                 null, newData, users.get(0));
     }
 
+    @Description("Delete user test")
     @Test
     public void deleteTest() {
         testUtils.logTestStart("Delete user test");
@@ -93,6 +102,7 @@ public class UserTests extends PersistenceTest {
         checkUsersCount(0, dataBaseService.getUserDao().selectAll());
     }
 
+    @Description("Delete user by id test")
     @Test
     public void deleteByIdTest() {
         testUtils.logTestStart("Delete user by id test");
@@ -110,6 +120,7 @@ public class UserTests extends PersistenceTest {
         checkUsersCount(0, dataBaseService.getUserDao().selectAll());
     }
 
+    @Description("Select user count test")
     @Test
     public void selectCountTest() {
         testUtils.logTestStart("Select user count test");
@@ -126,6 +137,7 @@ public class UserTests extends PersistenceTest {
                 "Number of users");
     }
 
+    @Description("Select user with params test. Login: {0}, role: {1}, blocked: {2}, data: {3}")
     @ParameterizedTest
     @ArgumentsSource(SelectUserArgumentsProvider.class)
     public void selectTest(String login, String role, String blocked, String data,
@@ -169,6 +181,8 @@ public class UserTests extends PersistenceTest {
         checkUsersCount(expectedUsersCount, users);
     }
 
+    @Description("Select user with pages test. Required page: {0}, rows on page: {1}, login: {2}, role: {3}, " +
+            "blocked: {4}, data: {5}")
     @ParameterizedTest
     @ArgumentsSource(SelectUserPageArgumentsProvider.class)
     public void selectPageTest(int requiredPage, int rowsOnPage,
@@ -214,6 +228,7 @@ public class UserTests extends PersistenceTest {
         checkUsersCount(expectedUsersCount, users);
     }
 
+    @Description("Select user count with params test. Login: {0}, role: {1}, blocked: {2}, data: {3}")
     @ParameterizedTest
     @ArgumentsSource(SelectUserArgumentsProvider.class)
     public void selectCountTest(String login, String role, String blocked, String data,
@@ -258,6 +273,7 @@ public class UserTests extends PersistenceTest {
         Assertions.assertEquals(expectedUsersCount, users, "Number of users");
     }
 
+    @Description("Get user requests test")
     @Test
     public void getUserRequestsTest() {
         testUtils.logTestStart("Get user requests test");
@@ -277,6 +293,7 @@ public class UserTests extends PersistenceTest {
         checkUserRequest(user.getId(), UserRequestStatus.OPEN, userRequest.getData(), user.getUserRequests().get(0));
     }
 
+    @Description("Delete user request test")
     @Test
     public void deleteUserRequestTest() {
         testUtils.logTestStart("Delete user request test");
@@ -296,6 +313,7 @@ public class UserTests extends PersistenceTest {
         Assertions.assertEquals(0, user.getUserRequests().size(), "User requests count");
     }
 
+    @Description("Get cards test")
     @Test
     public void getCardsTest() {
         testUtils.logTestStart("Get cards test");
@@ -318,6 +336,7 @@ public class UserTests extends PersistenceTest {
                 user.getCards().get(0));
     }
 
+    @Description("Delete card test")
     @Test
     public void deleteCardTest() {
         testUtils.logTestStart("Delete card test");

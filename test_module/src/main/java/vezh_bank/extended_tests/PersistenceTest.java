@@ -1,71 +1,32 @@
 package vezh_bank.extended_tests;
 
-import core.config.VezhBankConfiguration;
-import org.junit.jupiter.api.AfterEach;
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import vezh_bank.TestUtils;
-import vezh_bank.constants.MavenProfiles;
 import vezh_bank.enums.*;
 import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.*;
-import vezh_bank.util.Logger;
 
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = VezhBankConfiguration.class)
-@WebAppConfiguration
-@ActiveProfiles(MavenProfiles.TEST)
-public class PersistenceTest {
-    protected static Logger logger = Logger.getLogger(PersistenceTest.class);
-
-    protected TestUtils testUtils;
-    protected MockMvc mockMvc;
-
-    @Autowired
-    protected WebApplicationContext webApplicationContext;
+public class PersistenceTest extends RootTest {
 
     @Autowired
     protected DataBaseService dataBaseService;
 
-    @BeforeEach
-    public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        testUtils = new TestUtils(logger);
-    }
-
-    @AfterEach
-    public void tearDown() {
-        testUtils.logTestEnd();
-        dataBaseService.getCurrencyDao().deleteAll();
-        dataBaseService.getEventDao().deleteAll();
-        dataBaseService.getPaymentDao().deleteAll();
-        dataBaseService.getTransactionDao().deleteAll();
-        dataBaseService.getUserDao().deleteAll();
-        dataBaseService.getUserRequestDao().deleteAll();
-        dataBaseService.getCardDao().deleteAll();
-    }
-
+    @Step("Create currency with code \"{0}\", value \"{1}\"")
     protected void createCurrency(int code, String value) {
         dataBaseService.getCurrencyDao().insert(new Currency(code, value));
     }
 
+    @Step("Create currency \"{0}\"")
     protected void createCurrency(Currency currency) {
         createCurrency(currency.getCode(), currency.getValue());
     }
 
+    @Step("Check currency. Expected code: {0}. Expected value: {1}. Actual currency: {3}")
     protected void checkCurrency(int expectedCode, String expectedValue,
                                Currency actualCurrency) {
         Assertions.assertEquals(expectedCode, actualCurrency.getCode(),
@@ -78,10 +39,12 @@ public class PersistenceTest {
         checkItemsCount(expectedCount, actualCurrencyList, "Currencies count");
     }
 
+    @Step("Create event. {0}")
     protected void createEvent(Event event) {
         dataBaseService.getEventDao().insert(event);
     }
 
+    @Step("Check event. Expected type: {0}. Should contain data: {1}. Actual event: {2}")
     protected void checkEvent(EventType expectedEventType, String containingData, Event actualEvent) {
         Assertions.assertEquals(expectedEventType.toString(), actualEvent.getType(), "Event type");
         Assertions.assertTrue(actualEvent.getData().contains(containingData), "Event data");
@@ -89,14 +52,16 @@ public class PersistenceTest {
     }
 
     protected void checkEventsCount(int expectedEventCount, List<Event> events) {
-//        Assertions.assertEquals(expectedEventCount, events.size(), "Number of events");
         checkItemsCount(expectedEventCount, events, "Number of events");
     }
 
+    @Step("Create payment. {0}")
     protected void createPayment(Payment payment) {
         dataBaseService.getPaymentDao().insert(payment);
     }
 
+    @Step("Check payment. Expected name: {0}. Expected description: {1}. Expected min amount: {2}. " +
+            "Expected max amount: {3}. Expected currency: {4}. Actual payment: {5}")
     protected void checkPayment(String expectedName, String expectedDescription, BigDecimal expectedMinAmount,
                                 BigDecimal expectedMaxAmount, BigDecimal expectedCommission, Currency expectedCurrency,
                                 Payment actualPayment) {
@@ -112,10 +77,12 @@ public class PersistenceTest {
         checkItemsCount(expectedPaymentCount, payments, "Number of payments");
     }
 
+    @Step("Create transaction. {0}")
     protected void createTransaction(Transaction transaction) {
         dataBaseService.getTransactionDao().insert(transaction);
     }
 
+    @Step("Check transaction. Expected type: {0}. Expected data: {1}. Expected status: {2}. Actual transaction: {3}")
     protected void checkTransaction(TransactionType expectedTrxType, String expectedTrxData,
                                     TransactionStatus expectedTrxStatus, Transaction actualTrx) {
         Assertions.assertEquals(expectedTrxType.toString(), actualTrx.getType(), "Transaction type");
@@ -127,10 +94,13 @@ public class PersistenceTest {
         checkItemsCount(expectedTransactionsCount, transactions, "Number of transactions");
     }
 
+    @Step("Create user. {0}")
     protected void createUser(User user) {
         dataBaseService.getUserDao().insert(user);
     }
 
+    @Step("Check user. Expected login: {0}. Expected password: {1}. Expected role: {2}. Expected config: {3}. " +
+            "Expected attempts to sign in: {4}. Expected blocked status: {5}. Expected data: {7}. Actual user: {8}")
     protected void checkUser(String expectedLogin, String expectedPassword, UserRole expectedRole,
                              String expectedConfig, int expectedAttemptsToSignInLeft, boolean expectedBlocked,
                              String expectedLastSignInDate, String expectedData, User actualUser) {
@@ -149,10 +119,12 @@ public class PersistenceTest {
         checkItemsCount(expectedCount, users, "Number of users");
     }
 
+    @Step("Create user request. {0}")
     protected void createUserRequest(UserRequest userRequest) {
         dataBaseService.getUserRequestDao().insert(userRequest);
     }
 
+    @Step("Check user request. Expected user ID: {0}. Expected status: {1}. Expected data: {2}. Actual request: {3}")
     protected void checkUserRequest(int expectedUserId, UserRequestStatus expectedRequestStatus,
                                     String expectedData, UserRequest actualUserRequest) {
         Assertions.assertEquals(expectedUserId, actualUserRequest.getUser().getId(), "User ID");
@@ -164,10 +136,13 @@ public class PersistenceTest {
         checkItemsCount(expectedCount, userRequests, "Number of user requests");
     }
 
+    @Step("Create card. {0}")
     protected void createCard(Card card) {
         dataBaseService.getCardDao().insert(card);
     }
 
+    @Step("Check card. Expected PAN: {0}. Expected holder: {1}. Expected CVC: {2}. Expected expiry: {3}." +
+            " Expected currency: {4}. Expected status: {5}. Expected amount: {6}. Actual card: {7}")
     protected void checkCard(String expectedPan, User expectedHolder, int expectedCvc,
                              String expectedExpiry, Currency expectedCurrency, CardStatus expectedStatus,
                              BigDecimal expectedAmount, Card actualCard) {
@@ -184,6 +159,7 @@ public class PersistenceTest {
         checkItemsCount(expectedCount, cards, "Number of cards");
     }
 
+    @Step("Check {2}. Expected count: {0}")
     private void checkItemsCount(int expectedCount, Collection collection, String message) {
         Assertions.assertEquals(expectedCount, collection.size(), message);
     }

@@ -1,5 +1,8 @@
 package vezh_bank.persistence;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Link;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,8 +15,11 @@ import vezh_bank.persistence.providers.event.SelectEventArgumentsProvider;
 
 import java.util.List;
 
+@Feature("Event persistence")
+@Link("https://github.com/vezhny/vezh-lab/issues/5")
 public class EventTests extends PersistenceTest {
 
+    @Description("Insert event test")
     @Test
     public void insertEventTest() {
         testUtils.logTestStart("Insert event test");
@@ -26,6 +32,7 @@ public class EventTests extends PersistenceTest {
         checkEvent(eventType, eventData, events.get(0));
     }
 
+    @Description("Select all events test")
     @Test
     public void selectAllEventsTest() throws InterruptedException {
         testUtils.logTestStart("Select all events test");
@@ -40,6 +47,7 @@ public class EventTests extends PersistenceTest {
         checkEventsCount(2, events);
     }
 
+    @Description("Select event by ID test")
     @Test
     public void getEventByIdTest() {
         testUtils.logTestStart("Select event by ID test");
@@ -52,6 +60,7 @@ public class EventTests extends PersistenceTest {
         checkEvent(eventType, eventData, event);
     }
 
+    @Description("Select event test. Type: {0}, data: {2}")
     @ParameterizedTest
     @ArgumentsSource(SelectEventArgumentsProvider.class)
     public void selectEventTest(String eventType, String date, String data, int expectedEventCount) {
@@ -68,6 +77,7 @@ public class EventTests extends PersistenceTest {
         checkEventsCount(expectedEventCount, events);
     }
 
+    @Description("Select count test")
     @Test
     public void selectCountTest() {
         testUtils.logTestStart("Select count test");
@@ -77,6 +87,7 @@ public class EventTests extends PersistenceTest {
         Assertions.assertEquals(2, dataBaseService.getEventDao().selectCount(), "Events count");
     }
 
+    @Description("Select event pages test. Required page: {0}, rows on page: {1}, type: {2}, data: {4}")
     @ParameterizedTest
     @ArgumentsSource(EventPagesArgumentsProvider.class)
     public void selectPagesTest(int requiredPage, int rowsOnPage,
@@ -95,6 +106,8 @@ public class EventTests extends PersistenceTest {
                 type, date, data);
         checkEventsCount(expectedEventCount, events);
     }
+
+    @Description("Select events count test. Type: {0}, data: {2}")
     @ParameterizedTest
     @ArgumentsSource(SelectEventArgumentsProvider.class)
     public void selectEventCountTest(String eventType, String date, String data, int expectedEventCount) {

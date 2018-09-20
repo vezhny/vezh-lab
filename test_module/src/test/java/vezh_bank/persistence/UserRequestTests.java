@@ -1,5 +1,9 @@
 package vezh_bank.persistence;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Link;
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,8 +18,11 @@ import vezh_bank.persistence.providers.user_request.SelectRequestWirhPageArgumen
 
 import java.util.List;
 
+@Feature("User request persistence")
+@Link("https://github.com/vezhny/vezh-lab/issues/5")
 public class UserRequestTests extends PersistenceTest {
 
+    @Description("Insert user request test")
     @Test
     public void insertTest() {
         testUtils.logTestStart("Insert user request test");
@@ -36,6 +43,7 @@ public class UserRequestTests extends PersistenceTest {
         checkUserRequest(user.getId(), UserRequestStatus.OPEN, data, userRequests.get(0));
     }
 
+    @Description("Select user request by ID test")
     @Test
     public void selectByIdTest() {
         testUtils.logTestStart("Select user request by ID test");
@@ -57,6 +65,7 @@ public class UserRequestTests extends PersistenceTest {
         checkUserRequest(user.getId(), UserRequestStatus.OPEN, data, userRequest);
     }
 
+    @Description("Update user request test")
     @Test
     public void updateTest() {
         testUtils.logTestStart("Update user request test");
@@ -83,6 +92,7 @@ public class UserRequestTests extends PersistenceTest {
         checkUserRequest(user.getId(), userRequestStatus, data, userRequest);
     }
 
+    @Description("Delete user request test")
     @Test
     public void deleteTest() {
         testUtils.logTestStart("Delete user request test");
@@ -106,6 +116,7 @@ public class UserRequestTests extends PersistenceTest {
         checkUserRequestsCount(0, dataBaseService.getUserRequestDao().selectAll());
     }
 
+    @Description("Delete user request by ID test")
     @Test
     public void deleteByIdTest() {
         testUtils.logTestStart("Delete user request by ID test");
@@ -129,6 +140,7 @@ public class UserRequestTests extends PersistenceTest {
         checkUserRequestsCount(0, dataBaseService.getUserRequestDao().selectAll());
     }
 
+    @Description("Select user request with params test. User: {0}, status: {2}, data: {3}")
     @ParameterizedTest
     @ArgumentsSource(SelectRequestArgumentsProvider.class)
     public void selectTest(String user, String creationDate, String status, String data,
@@ -172,6 +184,7 @@ public class UserRequestTests extends PersistenceTest {
         checkUserRequestsCount(expectedUserRequestsCount, userRequests);
     }
 
+    @Description("Select user request count test")
     @Test
     public void selectCountTest() {
         testUtils.logTestStart("Select user request count test");
@@ -211,6 +224,8 @@ public class UserRequestTests extends PersistenceTest {
                 "User requests count");
     }
 
+    @Description("Select user request with pages test. Required page: {0}, rows on page: {1}, user: {2}, status: {4}, " +
+            "data: {5}")
     @ParameterizedTest
     @ArgumentsSource(SelectRequestWirhPageArgumentsProvider.class)
     public void selectWithPageTest(int requiredPage, int rowsOnPage, String user, String creationDate,
@@ -255,6 +270,7 @@ public class UserRequestTests extends PersistenceTest {
         checkUserRequestsCount(expectedUserRequestsCount, userRequests);
     }
 
+    @Description("Select user requests count with params test. User: {0}, status: {2}, data: {3}")
     @ParameterizedTest
     @ArgumentsSource(SelectRequestArgumentsProvider.class)
     public void selectCountTest(String user, String creationDate, String status, String data,
@@ -299,6 +315,7 @@ public class UserRequestTests extends PersistenceTest {
                 "User requests count");
     }
 
+    @Description("Absent user test")
     @Test
     public void absentUserTest() {
         testUtils.logTestStart("Absent user test");
@@ -323,6 +340,7 @@ public class UserRequestTests extends PersistenceTest {
         Assertions.assertEquals(data, userRequests.get(0).getData());
     }
 
+    @Description("Select user requests with user iD test")
     @Test
     public void selectWithUserIdTest() {
         testUtils.logTestStart("Select user requests with user iD test");
@@ -352,6 +370,7 @@ public class UserRequestTests extends PersistenceTest {
         checkUserRequestsCount(2, userRequests);
     }
 
+    @Step
     private String getUserId(String user, List<User> users) {
         if (!user.isEmpty()) {
             return String.valueOf(users.get(Integer.parseInt(user)).getId());

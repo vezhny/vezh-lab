@@ -51,5 +51,13 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <!-- Json -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.5</version>
+        </dependency>
+
+
     </dependencies>
 </project>

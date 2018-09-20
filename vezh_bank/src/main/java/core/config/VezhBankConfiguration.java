@@ -1,5 +1,6 @@
 package core.config;
 
+import core.services.ServiceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -9,12 +10,13 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.dao.*;
 import vezh_bank.persistence.dao.impl.*;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"vezh_bank"})
+@ComponentScan(basePackages = {"core", "vezh_bank"})
 public class VezhBankConfiguration implements WebMvcConfigurer {
 
     @Override
@@ -27,6 +29,18 @@ public class VezhBankConfiguration implements WebMvcConfigurer {
         InternalResourceViewResolver internalResourceViewResolver = new InternalResourceViewResolver("/WEB-INF/views/", ".jsp");
 //        internalResourceViewResolver.setRedirectHttp10Compatible(false);
         return internalResourceViewResolver;
+    }
+
+    @Bean
+    @Lazy
+    public ServiceProvider serviceProvider() {
+        return new ServiceProvider();
+    }
+
+    @Bean
+    @Lazy
+    public DataBaseService dataBaseService() {
+        return new DataBaseService();
     }
 
     @Bean
@@ -76,5 +90,4 @@ public class VezhBankConfiguration implements WebMvcConfigurer {
     public PaymentDao paymentDao() {
         return new PaymentDaoImpl(){};
     }
-
 }

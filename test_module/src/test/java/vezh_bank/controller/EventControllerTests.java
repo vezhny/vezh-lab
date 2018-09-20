@@ -5,6 +5,8 @@ import core.json.EventData;
 import core.json.Events;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -12,6 +14,7 @@ import vezh_bank.constants.ExceptionMessages;
 import vezh_bank.constants.Headers;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.constants.Urls;
+import vezh_bank.controller.providers.EventControllerArgumentsProvider;
 import vezh_bank.enums.EventType;
 import vezh_bank.extended_tests.ControllerTest;
 
@@ -119,6 +122,35 @@ public class EventControllerTests extends ControllerTest {
 
         Assertions.assertEquals(ExceptionMessages.THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS,
                 response.getHeader(Headers.ERROR_MESSAGE), "Error message");
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(EventControllerArgumentsProvider.class)
+    public void getEvents(String requiredPage, String eventType, String eventData, int expectedEventsCount,
+                          int expectedCurrentPage, int expectedPagesCount) throws UnsupportedEncodingException {
+        testUtils.logTestStart("Get events with filters test");
+
+        int userId = testUtils.createNotAClient(serviceProvider.getDataBaseService());
+        createEvent(new EventDTO(EventType.ACTIVATING_CARD, new EventData("some data 1")));
+        createEvent(new EventDTO(EventType.DELETE_CARD, new EventData("some data 2")));
+        createEvent(new EventDTO(EventType.USER_SIGN_IN, new EventData("some data 3")));
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.set(RequestParams.USER_ID, String.valueOf(userId));
+        params.set(RequestParams.REQUIRED_PAGE, requiredPage);
+        params.set(RequestParams.EVENT_TYPE, eventType);
+        params.set(RequestParams.EVENT_DATA, eventData);
+
+        MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
+
+        checkResponseCode(200, response.getStatus());
+
+        Events events = gson.fromJson(response.getContentAsString(), Events.class);
+        checkNumberOfEvents(expectedEventsCount, events.getEvents().size());
+        Assertions.assertEquals(String.valueOf(expectedCurrentPage), response.getHeader(Headers.CURRENT_PAGE),
+                "Current page");
+        Assertions.assertEquals(String.valueOf(expectedPagesCount), response.getHeader(Headers.PAGES_COUNT),
+                "Pages count");
     }
 
     private void createEvent(EventDTO eventDTO) {

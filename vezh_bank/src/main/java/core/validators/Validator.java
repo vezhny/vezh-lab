@@ -1,9 +1,14 @@
 package core.validators;
 
 import vezh_bank.enums.Role;
+import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.User;
 
+import java.util.Map;
+
 public abstract class Validator {
+    protected Map<String, String> requestParams;
+    protected DataBaseService dataBaseService;
 
     protected boolean isStringCanBeNumber(String value) {
         try {

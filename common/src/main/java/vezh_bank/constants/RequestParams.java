@@ -6,4 +6,5 @@ public class RequestParams {
     public static final String EVENT_TYPE = "eventType";
     public static final String REQUIRED_PAGE = "requiredPage";
     public static final String USER_ID = "userId";
+    public static final String REQUEST_TYPE = "requestType";
 }

@@ -47,5 +47,5 @@ public interface UserDao extends GlobalDao<User> {
     List<User> select(int requiredPage, int rowsOnPage, String login, String role, String blocked, String data);
 
     @Transactional
-    boolean isLoginUnique(String login); //TODO: test for this
+    boolean isLoginUnique(String login);
 }

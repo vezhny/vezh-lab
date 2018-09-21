@@ -358,4 +358,35 @@ public class UserTests extends PersistenceTest {
         user = dataBaseService.getUserDao().getById(user.getId());
         Assertions.assertEquals(0, user.getCards().size(), "Cards count");
     }
+
+    @Description("Unique user test")
+    @Test
+    public void uniqueUserTest() {
+        testUtils.logTestStart("Unique user test");
+
+        String login = "Login";
+        String anotherLogin = "Login1";
+        List<UserRole> userRoles = dataBaseService.getRoleDao().selectAll();
+        User user = new User(login, "password", userRoles.get(0),
+                "User data 1", "Config", ATTEMPTS_TO_SIGN_IN);
+
+        createUser(user);
+
+        Assertions.assertEquals(true, dataBaseService.getUserDao().isLoginUnique(anotherLogin)); //TODO: make class for assertions (allure)
+    }
+
+    @Description("Not unique user test")
+    @Test
+    public void notUniqueUserTest() {
+        testUtils.logTestStart("Not unique user test");
+
+        String login = "Login";
+        List<UserRole> userRoles = dataBaseService.getRoleDao().selectAll();
+        User user = new User(login, "password", userRoles.get(0),
+                "User data 1", "Config", ATTEMPTS_TO_SIGN_IN);
+
+        createUser(user);
+
+        Assertions.assertEquals(false, dataBaseService.getUserDao().isLoginUnique(login));
+    }
 }

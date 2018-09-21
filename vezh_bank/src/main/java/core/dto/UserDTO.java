@@ -12,6 +12,9 @@ import vezh_bank.persistence.entity.UserRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static vezh_bank.util.Encryptor.decrypt;
+import static vezh_bank.util.Encryptor.encrypt;
+
 public class UserDTO implements BaseDTO<User> {
     @Expose
     private int id;
@@ -48,7 +51,7 @@ public class UserDTO implements BaseDTO<User> {
 
     public UserDTO(String login, String password, UserRoleDTO role, UserData data) {
         this.login = login;
-        this.password = password;
+        this.password = encrypt(password);
         this.role = role;
         this.data = data;
         this.config = new UserConfig();
@@ -101,7 +104,7 @@ public class UserDTO implements BaseDTO<User> {
     }
 
     public String getPassword() {
-        return password;
+        return decrypt(password);
     }
 
     public void setPassword(String password) {

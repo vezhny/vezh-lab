@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDTO implements BaseDTO<User> {
-    private transient Encryptor encryptor;
+    private final transient Encryptor ENCRYPTOR = new Encryptor();
 
     @Expose
     private int id;
@@ -50,9 +50,8 @@ public class UserDTO implements BaseDTO<User> {
     private List<UserRequestDTO> userRequests;
 
     public UserDTO(String login, String password, UserRoleDTO role, UserData data) {
-        this.encryptor = new Encryptor();
         this.login = login;
-        this.password = encryptor.encrypt(password);
+        this.password = ENCRYPTOR.encrypt(password);
         this.role = role;
         this.data = data;
         this.config = new UserConfig();
@@ -105,7 +104,7 @@ public class UserDTO implements BaseDTO<User> {
     }
 
     public String getPassword() {
-        return encryptor.decrypt(password);
+        return ENCRYPTOR.decrypt(password);
     }
 
     public void setPassword(String password) {

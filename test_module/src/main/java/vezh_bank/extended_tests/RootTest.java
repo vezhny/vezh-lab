@@ -63,6 +63,11 @@ public class RootTest {
         checkNumber(expected, actual, "Number of events");
     }
 
+    @Step("Check number of users. Expected {0}. Actual {1}")
+    protected void checkNumberOfUsers(int expected, int actual) {
+        checkNumber(expected, actual, "Number of users");
+    }
+
     private void checkNumber(int expected, int actual, String message) {
         Assertions.assertEquals(expected, actual, message);
     }

@@ -2,7 +2,6 @@ package core.dto;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
-import vezh_bank.enums.Role;
 import vezh_bank.persistence.entity.UserRole;
 
 public class UserRoleDTO implements BaseDTO<UserRole> {
@@ -12,6 +11,8 @@ public class UserRoleDTO implements BaseDTO<UserRole> {
     @Expose
     private String name;
 
+    private transient UserRole userRole;
+
     public UserRoleDTO(String name) {
         this.name = name;
     }
@@ -19,6 +20,7 @@ public class UserRoleDTO implements BaseDTO<UserRole> {
     public UserRoleDTO(UserRole userRole) {
         this.id = userRole.getId();
         this.name = userRole.getName();
+        this.userRole = userRole;
     }
 
     public void setName(String name) {
@@ -35,7 +37,6 @@ public class UserRoleDTO implements BaseDTO<UserRole> {
 
     @Override
     public UserRole getEntity() {
-        UserRole userRole = new UserRole(Role.valueOf(name));
         return userRole;
     }
 

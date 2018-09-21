@@ -68,7 +68,7 @@ public class UserRequestHandler implements RequestHandler {
                 contactNumber, email);
         UserDTO userDTO = new UserDTO(login, password, roleDTO, userData);
 
-        serviceProvider.getDataBaseService().getUserDao().insert(userDTO.getEntity());
+        serviceProvider.getUserService().addUser(userDTO);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

@@ -8,14 +8,14 @@ import vezh_bank.constants.UserDefault;
 import vezh_bank.persistence.entity.Card;
 import vezh_bank.persistence.entity.User;
 import vezh_bank.persistence.entity.UserRequest;
+import vezh_bank.util.Encryptor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static vezh_bank.util.Encryptor.decrypt;
-import static vezh_bank.util.Encryptor.encrypt;
-
 public class UserDTO implements BaseDTO<User> {
+    private transient Encryptor encryptor;
+
     @Expose
     private int id;
 
@@ -50,8 +50,9 @@ public class UserDTO implements BaseDTO<User> {
     private List<UserRequestDTO> userRequests;
 
     public UserDTO(String login, String password, UserRoleDTO role, UserData data) {
+        this.encryptor = new Encryptor();
         this.login = login;
-        this.password = encrypt(password);
+        this.password = encryptor.encrypt(password);
         this.role = role;
         this.data = data;
         this.config = new UserConfig();
@@ -104,7 +105,7 @@ public class UserDTO implements BaseDTO<User> {
     }
 
     public String getPassword() {
-        return decrypt(password);
+        return encryptor.decrypt(password);
     }
 
     public void setPassword(String password) {

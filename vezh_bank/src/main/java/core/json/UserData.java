@@ -17,7 +17,7 @@ public class UserData {
     private String birthDate;
 
     @Expose
-    private String address;
+    private UserAddress address;
 
     @Expose
     private String contactNumber;
@@ -26,7 +26,7 @@ public class UserData {
     private String email;
 
     public UserData(String firstName, String middleName, String patronymic, String birthDate,
-                    String address, String contactNumber, String email) {
+                    UserAddress address, String contactNumber, String email) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.patronymic = patronymic;
@@ -68,11 +68,11 @@ public class UserData {
         this.birthDate = birthDate;
     }
 
-    public String getAddress() {
+    public UserAddress getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(UserAddress address) {
         this.address = address;
     }
 

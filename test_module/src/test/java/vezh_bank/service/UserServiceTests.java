@@ -15,7 +15,7 @@ import vezh_bank.persistence.entity.UserRole;
 
 import java.util.List;
 
-@Feature("User service")
+@Feature("User service") //TODO: try to user story instead on feature
 public class UserServiceTests extends ServiceTest {
 
     @Description("Add user test")

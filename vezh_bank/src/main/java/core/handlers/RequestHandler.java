@@ -8,6 +8,8 @@ import org.springframework.util.MultiValueMap;
 import vezh_bank.constants.Headers;
 import vezh_bank.util.Logger;
 
+import java.util.Map;
+
 public interface RequestHandler<T> {
 
     ResponseEntity<T> getResponse(HttpMethod httpMethod);
@@ -45,5 +47,11 @@ public interface RequestHandler<T> {
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.set(Headers.ERROR_MESSAGE, e.getMessage());
         return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
+    }
+
+    default void logRequestParams(Logger logger, Map<String, String> requestParams) {
+        for (Map.Entry entry : requestParams.entrySet()) {
+            logger.info(entry.getKey() + ": " + entry.getValue());
+        }
     }
 }

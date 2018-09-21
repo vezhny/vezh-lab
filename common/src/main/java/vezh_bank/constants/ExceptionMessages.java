@@ -8,6 +8,7 @@ public class ExceptionMessages {
     public static final String MISSING_REQUEST_TYPE_PARAMETER = "Missing request type parameter";
     public static final String MISSING_PARAMETER = "Missing %s parameter";
     public static final String CAN_NOT_READ_PROPERTIES = "Can't read property file";
-    public static final String PARAMETER_SHOULD_HAVE_LENGTH = "Parameter \"%s\" should have length [%s, %s]"; //TODO: add static methods for format
+    //TODO: add static methods for format
     public static final String INVALID_PARAMETER = "Invalid parameter: \"%s\"";
+    public static final String USER_WITH_LOGIN_IS_ALREADY_REGISTERED = "User with login \"%s\" already registered";
 }

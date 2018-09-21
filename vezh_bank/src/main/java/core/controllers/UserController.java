@@ -1,13 +1,19 @@
 package core.controllers;
 
+import core.handlers.RequestHandler;
+import core.handlers.UserRequestHandler;
 import core.services.ServiceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import vezh_bank.constants.Urls;
 import vezh_bank.util.Logger;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping(Urls.USERS)
@@ -18,5 +24,8 @@ public class UserController {
     private ServiceProvider serviceProvider;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<>
+    public ResponseEntity addUser(@RequestParam Map<String, String> params) {
+        RequestHandler requestHandler = new UserRequestHandler(serviceProvider, params);
+        return requestHandler.getResponse(HttpMethod.POST);
+    }
 }

@@ -154,4 +154,23 @@ public class UserDaoImpl implements UserDao {
         logger.info("Found " + users.size() + " of users");
         return users;
     }
+
+    @Override
+    public boolean isLoginUnique(String login) {
+        logger.info("Checking if login " + login + " unique");
+        User user;
+        try {
+            user = entityManager.createQuery("SELECT u FROM User u WHERE u.login = :login", User.class)
+                    .setParameter("login", login)
+                    .getSingleResult();
+            logger.info("Found user with login " + login);
+        } catch (NoResultException e) {
+            logger.info("User with login " + login + " not found");
+            user = null;
+        }
+        if (user == null) {
+            return true;
+        }
+        return false;
+    }
 }

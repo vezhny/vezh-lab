@@ -12,12 +12,13 @@ import java.util.Properties;
 
 import static vezh_bank.constants.ExceptionMessages.CAN_NOT_READ_PROPERTIES;
 
-public abstract class Validator {
+public abstract class Validator { //TODO: get logging better
     protected Map<String, String> requestParams;
     protected DataBaseService dataBaseService;
     protected Properties properties;
 
-    protected final String LETTERS_ONLY = "[a-z, A-Z]";
+    protected final String LETTERS_ONLY = "[a-z, A-Z, -]";
+    protected final String LETTERS_AND_NUMBERS = "[a-z, A-Z, 0-9, -]";
 
     protected void loadProperties() throws ServerErrorException {
         InputStream inputStream = ClassLoader.getSystemResourceAsStream("vezh_bank.properties");
@@ -53,6 +54,9 @@ public abstract class Validator {
     }
 
     protected boolean valueLengthValid(int minLength, int maxLength, String value) {
-
+        if (value.length() < minLength || value.length() > maxLength) {
+            return false;
+        }
+        return true;
     }
 }

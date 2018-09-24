@@ -3,6 +3,7 @@ package vezh_bank.persistence;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -17,7 +18,7 @@ import vezh_bank.persistence.providers.payment.SelectPaymentNameAndCurrencyArgum
 import java.math.BigDecimal;
 import java.util.List;
 
-@Feature("Payment persistence")
+@Story("Payment persistence")
 @Link("https://github.com/vezhny/vezh-lab/issues/5")
 public class PaymentTests extends PersistenceTest {
 

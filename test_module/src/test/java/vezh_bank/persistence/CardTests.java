@@ -3,6 +3,7 @@ package vezh_bank.persistence;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -21,7 +22,7 @@ import java.util.List;
 
 import static vezh_bank.constants.UserDefault.ATTEMPTS_TO_SIGN_IN;
 
-@Feature("Card persistence")
+@Story("Card persistence")
 @Link("https://github.com/vezhny/vezh-lab/issues/5")
 public class CardTests extends PersistenceTest {
 

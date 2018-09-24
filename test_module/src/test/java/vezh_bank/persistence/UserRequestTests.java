@@ -1,9 +1,6 @@
 package vezh_bank.persistence;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Link;
-import io.qameta.allure.Step;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -17,7 +14,7 @@ import vezh_bank.persistence.providers.user_request.SelectRequestWirhPageArgumen
 
 import java.util.List;
 
-@Feature("User request persistence")
+@Story("User request persistence")
 @Link("https://github.com/vezhny/vezh-lab/issues/5")
 public class UserRequestTests extends PersistenceTest {
 

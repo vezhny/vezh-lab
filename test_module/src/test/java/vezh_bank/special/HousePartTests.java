@@ -4,10 +4,11 @@ import core.json.UserAddress;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import vezh_bank.extended_tests.RootTest;
 
-@Feature("User address: house part")
+@Story("User address: house part")
 public class HousePartTests extends RootTest {
 
     @Description("House part test")

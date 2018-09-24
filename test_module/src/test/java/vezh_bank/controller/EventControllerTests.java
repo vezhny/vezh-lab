@@ -3,10 +3,7 @@ package vezh_bank.controller;
 import core.dto.EventDTO;
 import core.json.EventData;
 import core.json.Events;
-import io.qameta.allure.Description;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Link;
-import io.qameta.allure.Step;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -23,7 +20,7 @@ import vezh_bank.extended_tests.ControllerTest;
 import java.io.UnsupportedEncodingException;
 
 @Link("https://github.com/vezhny/vezh-lab/issues/11")
-@Feature("Event controller")
+@Story("Event controller")
 public class EventControllerTests extends ControllerTest {
 
     @Test

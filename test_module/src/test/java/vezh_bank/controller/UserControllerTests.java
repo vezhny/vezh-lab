@@ -7,6 +7,7 @@ import core.json.UserData;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -27,7 +28,7 @@ import vezh_bank.persistence.entity.UserRole;
 
 import java.util.List;
 
-@Feature("User controller")
+@Story("User controller")
 @Link("https://github.com/vezhny/vezh-lab/issues/15")
 public class UserControllerTests extends ControllerTest {
 

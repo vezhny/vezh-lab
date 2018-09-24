@@ -72,7 +72,7 @@ public class PaymentDaoImpl implements PaymentDao {
             logger.info(payment);
             return payment;
         } catch (NoResultException e) {
-            logger.info("Payment with ID " + id + " not found");
+            logger.info("Payment with ID \"" + id + "\" not found");
             return null;
         }
     }

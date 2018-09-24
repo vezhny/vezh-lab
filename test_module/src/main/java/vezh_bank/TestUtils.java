@@ -1,6 +1,9 @@
 package vezh_bank;
 
 
+import core.json.UserAddress;
+import core.json.UserConfig;
+import core.json.UserData;
 import io.qameta.allure.Step;
 import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.User;
@@ -36,8 +39,11 @@ public class TestUtils {
 
     @Step("Create user. Role: {1}")
     public int createUser(DataBaseService dataBaseService, UserRole role) {
+        UserAddress address = new UserAddress("", "", "", "", "", "", "");
+        UserData userData = new UserData("Test", "Test", "Test",
+                "10.10.1000", address, "Test", "");
         User user = new User("Test generated", "password", role,
-                "Test generated", "No config yet", 3);
+                userData.toString(), new UserConfig().toString(), 3);
         dataBaseService.getUserDao().insert(user);
         return dataBaseService.getUserDao().selectAll().get(0).getId();
     }

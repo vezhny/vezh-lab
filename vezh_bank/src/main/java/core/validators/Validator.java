@@ -96,4 +96,14 @@ public abstract class Validator {
             throw new BadRequestException(THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS);
         }
     }
+
+    protected void checkValueLength(String propertyMinLengthName, String propertyMaxLengthName,
+                                    String value, String paramName) throws BadRequestException {
+        int minLength = stringToInt(properties.getProperty(propertyMinLengthName));
+        int maxLength = stringToInt(properties.getProperty(propertyMaxLengthName));
+        if (!valueLengthValid(minLength, maxLength, value)) {
+            throw new BadRequestException(format(INVALID_PARAMETER, paramName),
+                    format(VALUE_SHOULD_HAVE_LENGTH, RequestParams.LOGIN, minLength, maxLength, value.length()));
+        }
+    }
 }

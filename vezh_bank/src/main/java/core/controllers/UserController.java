@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(Urls.USERS)
-public class UserController { //TODO: log start/end operation
+public class UserController implements BaseController {
     private Logger logger = Logger.getLogger(this.getClass());
 
     @Autowired
@@ -31,7 +31,9 @@ public class UserController { //TODO: log start/end operation
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addUser(@RequestParam Map<String, String> params) {
+        logStartOperation(logger);
         RequestHandler requestHandler = new UserRequestHandler(serviceProvider, params);
+        logEndOperation(logger);
         return requestHandler.getResponse(HttpMethod.POST);
     }
 }

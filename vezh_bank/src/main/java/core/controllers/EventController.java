@@ -1,6 +1,5 @@
 package core.controllers;
 
-import core.dto.EventDTO;
 import core.handlers.EventsRequestHandler;
 import core.handlers.RequestHandler;
 import core.json.Events;
@@ -15,12 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import vezh_bank.constants.Urls;
 import vezh_bank.util.Logger;
 
-import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping(value = Urls.EVENTS)
-public class EventController {
+public class EventController implements BaseController {
     private Logger logger = Logger.getLogger(this.getClass());
 
     @Autowired
@@ -34,8 +32,10 @@ public class EventController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Events> getEvents(@RequestParam Map<String, String> params) {
+        logStartOperation(logger);
         logger.info("Events GET request");
         RequestHandler<Events> handler = new EventsRequestHandler(serviceProvider, params);
+        logEndOperation(logger);
         return handler.getResponse(HttpMethod.GET);
     }
 }

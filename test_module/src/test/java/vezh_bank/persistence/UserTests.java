@@ -35,8 +35,8 @@ public class UserTests extends PersistenceTest {
         createUser(user);
 
         List<User> users = dataBaseService.getUserDao().selectAll();
-        anAssert.checkUsersCount(1, users);
-        anAssert.checkUser(login, password, role, config, ATTEMPTS_TO_SIGN_IN, false,
+        userAsserts.checkUsersCount(1, users);
+        userAsserts.checkUser(login, password, role, config, ATTEMPTS_TO_SIGN_IN, false,
                 null, data, users.get(0));
     }
 
@@ -55,7 +55,7 @@ public class UserTests extends PersistenceTest {
 
         List<User> users = dataBaseService.getUserDao().selectAll();
         user = dataBaseService.getUserDao().getById(users.get(0).getId());
-        anAssert.checkUser(login, password, role, config, ATTEMPTS_TO_SIGN_IN, false,
+        userAsserts.checkUser(login, password, role, config, ATTEMPTS_TO_SIGN_IN, false,
                 null, data, user);
     }
 
@@ -78,8 +78,8 @@ public class UserTests extends PersistenceTest {
         dataBaseService.getUserDao().update(user);
 
         List<User> users = dataBaseService.getUserDao().selectAll();
-        anAssert.checkUsersCount(1, users);
-        anAssert.checkUser(login, password, role, config, ATTEMPTS_TO_SIGN_IN, false,
+        userAsserts.checkUsersCount(1, users);
+        userAsserts.checkUser(login, password, role, config, ATTEMPTS_TO_SIGN_IN, false,
                 null, newData, users.get(0));
     }
 
@@ -98,7 +98,7 @@ public class UserTests extends PersistenceTest {
 
         user = dataBaseService.getUserDao().selectAll().get(0);
         dataBaseService.getUserDao().delete(user);
-        anAssert.checkUsersCount(0, dataBaseService.getUserDao().selectAll());
+        userAsserts.checkUsersCount(0, dataBaseService.getUserDao().selectAll());
     }
 
     @Description("Delete user by id test")
@@ -116,7 +116,7 @@ public class UserTests extends PersistenceTest {
 
         user = dataBaseService.getUserDao().selectAll().get(0);
         dataBaseService.getUserDao().delete(user.getId());
-        anAssert.checkUsersCount(0, dataBaseService.getUserDao().selectAll());
+        userAsserts.checkUsersCount(0, dataBaseService.getUserDao().selectAll());
     }
 
     @Description("Select user count test")
@@ -132,7 +132,7 @@ public class UserTests extends PersistenceTest {
         User user = new User(login, password, role, data, config, ATTEMPTS_TO_SIGN_IN);
         createUser(user);
 
-        anAssert.checkNumber(1, dataBaseService.getUserDao().selectCount(), "Number of users");
+        asserts.checkNumber(1, dataBaseService.getUserDao().selectCount(), "Number of users");
     }
 
     @Description("Select user with params test. Login: {0}, role: {1}, blocked: {2}, data: {3}")
@@ -176,7 +176,7 @@ public class UserTests extends PersistenceTest {
         createUser(user10);
 
         List<User> users = dataBaseService.getUserDao().select(login, role, blocked, data);
-        anAssert.checkUsersCount(expectedUsersCount, users);
+        userAsserts.checkUsersCount(expectedUsersCount, users);
     }
 
     @Description("Select user with pages test. Required page: {0}, rows on page: {1}, login: {2}, role: {3}, " +
@@ -223,7 +223,7 @@ public class UserTests extends PersistenceTest {
 
         List<User> users = dataBaseService.getUserDao().select(requiredPage,
                 rowsOnPage, login, role, blocked, data);
-        anAssert.checkUsersCount(expectedUsersCount, users);
+        userAsserts.checkUsersCount(expectedUsersCount, users);
     }
 
     @Description("Select user count with params test. Login: {0}, role: {1}, blocked: {2}, data: {3}")
@@ -268,7 +268,7 @@ public class UserTests extends PersistenceTest {
 
         int users = dataBaseService.getUserDao().selectCount(login, role,
                 blocked, data);
-        anAssert.checkNumber(expectedUsersCount, users, "Number of users");
+        asserts.checkNumber(expectedUsersCount, users, "Number of users");
     }
 
     @Description("Get user requests test")
@@ -287,7 +287,7 @@ public class UserTests extends PersistenceTest {
         userRequest = dataBaseService.getUserRequestDao().selectAll().get(0);
 
         user = dataBaseService.getUserDao().getById(user.getId());
-        anAssert.checkUserRequest(user.getId(), UserRequestStatus.OPEN, userRequest.getData(), user.getUserRequests().get(0));
+        userRequestAsserts.checkUserRequest(user.getId(), UserRequestStatus.OPEN, userRequest.getData(), user.getUserRequests().get(0));
     }
 
     @Description("Delete user request test")
@@ -307,7 +307,7 @@ public class UserTests extends PersistenceTest {
         dataBaseService.getUserRequestDao().delete(userRequest);
 
         user = dataBaseService.getUserDao().getById(user.getId());
-        anAssert.checkNumber(0, user.getUserRequests().size(), "User requests count");
+        asserts.checkNumber(0, user.getUserRequests().size(), "User requests count");
     }
 
     @Description("Get cards test")
@@ -328,8 +328,8 @@ public class UserTests extends PersistenceTest {
         createCard(card);
 
         user = dataBaseService.getUserDao().getById(user.getId());
-        anAssert.checkNumber(1, user.getCards().size(), "Cards count");
-        anAssert.checkCard(card.getPan(), user, card.getCvc(), card.getExpiry(), cardCurrency, CardStatus.ACTIVE, card.getAmount(),
+        asserts.checkNumber(1, user.getCards().size(), "Cards count");
+        cardAsserts.checkCard(card.getPan(), user, card.getCvc(), card.getExpiry(), cardCurrency, CardStatus.ACTIVE, card.getAmount(),
                 user.getCards().get(0));
     }
 
@@ -353,7 +353,7 @@ public class UserTests extends PersistenceTest {
         dataBaseService.getCardDao().delete(card);
 
         user = dataBaseService.getUserDao().getById(user.getId());
-        anAssert.checkNumber(0, user.getCards().size(), "Cards count");
+        asserts.checkNumber(0, user.getCards().size(), "Cards count");
     }
 
     @Description("Unique user test")
@@ -369,7 +369,7 @@ public class UserTests extends PersistenceTest {
 
         createUser(user);
 
-        anAssert.check(true, dataBaseService.getUserDao().isLoginUnique(anotherLogin), "Login unique");
+        asserts.checkObject(true, dataBaseService.getUserDao().isLoginUnique(anotherLogin), "Login unique");
     }
 
     @Description("Not unique user test")
@@ -384,6 +384,6 @@ public class UserTests extends PersistenceTest {
 
         createUser(user);
 
-        anAssert.check(false, dataBaseService.getUserDao().isLoginUnique(login), "Login unique");
+        asserts.checkObject(false, dataBaseService.getUserDao().isLoginUnique(login), "Login unique");
     }
 }

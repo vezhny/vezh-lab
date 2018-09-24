@@ -3,7 +3,6 @@ package vezh_bank.persistence;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -24,7 +23,7 @@ public class RoleTests extends PersistenceTest {
     public void selectAllRoles() {
         testUtils.logTestStart("Select all roles");
         List<UserRole> roles = dataBaseService.getRoleDao().selectAll();
-        anAssert.check(3, roles.size(), "Roles count");
+        asserts.checkObject(3, roles.size(), "Roles count");
     }
 
     @Description("Select role by id test. ID: {0}")
@@ -34,8 +33,8 @@ public class RoleTests extends PersistenceTest {
         testUtils.logTestStart("Select " + role.toString() + " role by id");
         int clientRoleId = id;
         UserRole userRole = dataBaseService.getRoleDao().getById(clientRoleId);
-        anAssert.check(clientRoleId, userRole.getId(), "Role ID");
-        anAssert.check(role.toString(), userRole.getName(), "Role name");
+        asserts.checkObject(clientRoleId, userRole.getId(), "Role ID");
+        asserts.checkObject(role.toString(), userRole.getName(), "Role name");
     }
 
     @Description("Select role by name test. Name: {0}")
@@ -44,6 +43,6 @@ public class RoleTests extends PersistenceTest {
     public void selectRoleByName(String name) {
         testUtils.logTestStart("Select role with name \"" + name + "\"");
         UserRole userRole = serviceProvider.getDataBaseService().getRoleDao().get(name);
-        anAssert.checkNotNull(userRole, "user role");
+        asserts.checkNotNull(userRole, "user role");
     }
 }

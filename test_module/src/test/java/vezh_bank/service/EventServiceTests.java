@@ -21,7 +21,7 @@ public class EventServiceTests extends ServiceTest {
     public void addEventTest() {
         testUtils.logTestStart("Add event test");
 
-        anAssert.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
+        eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
 
         EventType eventType = EventType.ACTIVATING_CARD;
         EventData eventData = new EventData("User activated card");
@@ -29,8 +29,7 @@ public class EventServiceTests extends ServiceTest {
         serviceProvider.getEventService().addEvent(eventDTO);
 
         List<Event> events = serviceProvider.getDataBaseService().getEventDao().selectAll();
-        anAssert.checkNumberOfEvents(1, events.size());
-
-        anAssert.checkEvent(eventType, eventData, events.get(0));
+        eventAsserts.checkNumberOfEvents(1, events.size());
+        eventAsserts.checkEvent(eventType, eventData, events.get(0));
     }
 }

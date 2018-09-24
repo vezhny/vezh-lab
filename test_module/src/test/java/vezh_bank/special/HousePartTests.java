@@ -4,7 +4,6 @@ import core.json.UserAddress;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import vezh_bank.extended_tests.RootTest;
 
@@ -22,6 +21,6 @@ public class HousePartTests extends RootTest {
         UserAddress userAddress = new UserAddress("country", "region", "city", "street",
                 house, housePart, "201");
 
-        anAssert.check("2/3", userAddress.getHouse(), "House part");
+        asserts.checkObject("2/3", userAddress.getHouse(), "House part");
     }
 }

@@ -3,7 +3,6 @@ package vezh_bank.persistence;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -28,8 +27,8 @@ public class EventTests extends PersistenceTest {
         createEvent(new Event(eventType, eventData));
 
         List<Event> events = dataBaseService.getEventDao().selectAll();
-        anAssert.checkEventsCount(1, events);
-        anAssert.checkEvent(eventType, eventData, events.get(0));
+        eventAsserts.checkEventsCount(1, events);
+        eventAsserts.checkEvent(eventType, eventData, events.get(0));
     }
 
     @Description("Select all events test")
@@ -44,7 +43,7 @@ public class EventTests extends PersistenceTest {
         createEvent(new Event(eventType, eventData2));
 
         List<Event> events = dataBaseService.getEventDao().selectAll();
-        anAssert.checkEventsCount(2, events);
+        eventAsserts.checkEventsCount(2, events);
     }
 
     @Description("Select event by ID test")
@@ -57,7 +56,7 @@ public class EventTests extends PersistenceTest {
 
         Event event = dataBaseService.getEventDao().selectAll().get(0);
         event = dataBaseService.getEventDao().getById(event.getId());
-        anAssert.checkEvent(eventType, eventData, event);
+        eventAsserts.checkEvent(eventType, eventData, event);
     }
 
     @Description("Select event test. Type: {0}, data: {2}")
@@ -74,7 +73,7 @@ public class EventTests extends PersistenceTest {
         createEvent(new Event(EventType.USER_SIGN_UP, "User ID: 3"));
 
         List<Event> events = dataBaseService.getEventDao().select(eventType, date, data);
-        anAssert.checkEventsCount(expectedEventCount, events);
+        eventAsserts.checkEventsCount(expectedEventCount, events);
     }
 
     @Description("Select count test")
@@ -84,7 +83,7 @@ public class EventTests extends PersistenceTest {
         createEvent(new Event(EventType.USER_SIGN_IN, "User ID: 1"));
         createEvent(new Event(EventType.USER_SIGN_IN, "User ID: 1"));
 
-        anAssert.check(2, dataBaseService.getEventDao().selectCount(), "Events count");
+        asserts.checkObject(2, dataBaseService.getEventDao().selectCount(), "Events count");
     }
 
     @Description("Select event pages test. Required page: {0}, rows on page: {1}, type: {2}, data: {4}")
@@ -104,7 +103,7 @@ public class EventTests extends PersistenceTest {
 
         List<Event> events = dataBaseService.getEventDao().select(requiredPage, rowsOnPage,
                 type, date, data);
-        anAssert.checkEventsCount(expectedEventCount, events);
+        eventAsserts.checkEventsCount(expectedEventCount, events);
     }
 
     @Description("Select events count test. Type: {0}, data: {2}")
@@ -121,7 +120,7 @@ public class EventTests extends PersistenceTest {
         createEvent(new Event(EventType.USER_SIGN_UP, "User ID: 3"));
 
         int events = dataBaseService.getEventDao().selectCount(eventType, date, data);
-        anAssert.check(expectedEventCount, events, "Number of events");
+        asserts.checkObject(expectedEventCount, events, "Number of events");
     }
 
 }

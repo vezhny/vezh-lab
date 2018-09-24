@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import vezh_bank.TestUtils;
-import vezh_bank.assertions.Assert;
+import vezh_bank.assertions.*;
 import vezh_bank.constants.MavenProfiles;
 import vezh_bank.util.Logger;
 
@@ -30,7 +30,17 @@ public class RootTest {
     protected TestUtils testUtils;
     protected MockMvc mockMvc;
     protected Gson gson;
-    protected Assert anAssert;
+
+    protected Asserts asserts;
+    protected CardAsserts cardAsserts;
+    protected CurrencyAsserts currencyAsserts;
+    protected EventAsserts eventAsserts;
+    protected HttpAsserts httpAsserts;
+    protected PaymentAsserts paymentAsserts;
+    protected RoleAsserts roleAsserts;
+    protected TransactionAsserts transactionAsserts;
+    protected UserAsserts userAsserts;
+    protected UserRequestAsserts userRequestAsserts;
 
     @Autowired
     protected WebApplicationContext webApplicationContext;
@@ -44,7 +54,17 @@ public class RootTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         testUtils = new TestUtils(logger);
         gson = new Gson();
-        anAssert = new Assert();
+
+        asserts = new Asserts();
+        cardAsserts = new CardAsserts();
+        currencyAsserts = new CurrencyAsserts();
+        eventAsserts = new EventAsserts();
+        httpAsserts = new HttpAsserts();
+        paymentAsserts = new PaymentAsserts();
+        roleAsserts = new RoleAsserts();
+        transactionAsserts = new TransactionAsserts();
+        userAsserts = new UserAsserts();
+        userRequestAsserts = new UserRequestAsserts();
     }
 
     @Step("Clear database")

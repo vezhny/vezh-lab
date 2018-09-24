@@ -37,9 +37,8 @@ public class UserServiceTests extends ServiceTest {
                 userRoles.get(0), userData));
 
         List<User> users = serviceProvider.getDataBaseService().getUserDao().selectAll();
-        anAssert.checkNumberOfUsers(1, users.size());
-
-        anAssert.checkUser(login, password, roleDTO, new UserConfig(), UserDefault.ATTEMPTS_TO_SIGN_IN,
+        userAsserts.checkNumberOfUsers(1, users.size());
+        userAsserts.checkUser(login, password, roleDTO, new UserConfig(), UserDefault.ATTEMPTS_TO_SIGN_IN,
                 false, null, userData, users.get(0));
     }
 }

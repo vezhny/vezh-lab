@@ -3,7 +3,6 @@ package vezh_bank.persistence;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -26,7 +25,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode, currencyValue);
 
         Currency currencyFromDb = dataBaseService.getCurrencyDao().getById(currencyCode);
-        anAssert.checkCurrency(currencyCode, currencyValue, currencyFromDb);
+        currencyAsserts.checkCurrency(currencyCode, currencyValue, currencyFromDb);
     }
 
     @Description("Update currency test")
@@ -42,7 +41,7 @@ public class CurrencyTests extends PersistenceTest {
         dataBaseService.getCurrencyDao().update(currency);
 
         currency = dataBaseService.getCurrencyDao().getById(currencyCode);
-        anAssert.checkCurrency(currencyCode, newCurrencyValue, currency);
+        currencyAsserts.checkCurrency(currencyCode, newCurrencyValue, currency);
     }
 
     @Description("Delete currency test")
@@ -53,7 +52,7 @@ public class CurrencyTests extends PersistenceTest {
         dataBaseService.getCurrencyDao().insert(currency);
 
         dataBaseService.getCurrencyDao().delete(currency);
-        anAssert.checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
+        currencyAsserts.checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
     }
 
     @Description("SelectCurrency by value test")
@@ -65,7 +64,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode, currencyValue);
 
         Currency currency = dataBaseService.getCurrencyDao().getByValue(currencyValue).get(0);
-        anAssert.checkCurrency(currencyCode, currencyValue, currency);
+        currencyAsserts.checkCurrency(currencyCode, currencyValue, currency);
     }
 
     @Description("Delete currency by code test")
@@ -77,7 +76,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode, currencyValue);
 
         dataBaseService.getCurrencyDao().delete(currencyCode);
-        anAssert.checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
+        currencyAsserts.checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
     }
 
     @Description("Delete currency by value test")
@@ -89,7 +88,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode, currencyValue);
 
         dataBaseService.getCurrencyDao().delete(currencyValue);
-        anAssert.checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
+        currencyAsserts.checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
     }
 
     @Description("Currency sorting test")
@@ -104,9 +103,9 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode2, currencyValue2);
 
         List<Currency> currencies = dataBaseService.getCurrencyDao().selectAll();
-        anAssert.checkCurrenciesCount(2, currencies);
-        anAssert.checkCurrency(currencyCode2, currencyValue2, currencies.get(0));
-        anAssert.checkCurrency(currencyCode1, currencyValue1, currencies.get(1));
+        currencyAsserts.checkCurrenciesCount(2, currencies);
+        currencyAsserts.checkCurrency(currencyCode2, currencyValue2, currencies.get(0));
+        currencyAsserts.checkCurrency(currencyCode1, currencyValue1, currencies.get(1));
     }
 
     @Description("Search currency by value test")
@@ -121,7 +120,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode2, currencyValue2);
 
         List<Currency> currencies = dataBaseService.getCurrencyDao().getByValue("RU");
-        anAssert.checkCurrenciesCount(2, currencies);
+        currencyAsserts.checkCurrenciesCount(2, currencies);
     }
 
     @Description("Search currency where code: {0}, value: {1}")
@@ -137,7 +136,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode2, currencyValue2);
 
         List<Currency> currencies = dataBaseService.getCurrencyDao().get(code, value);
-        anAssert.checkCurrenciesCount(expectedCurrenciesCount, currencies);
+        currencyAsserts.checkCurrenciesCount(expectedCurrenciesCount, currencies);
     }
 
     @Description("Currency count test")
@@ -147,7 +146,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(643, "RUB");
 
         int numberOfCurrencies = dataBaseService.getCurrencyDao().selectCount();
-        anAssert.check(1, numberOfCurrencies, "Number of currencies");
+        asserts.checkObject(1, numberOfCurrencies, "Number of currencies");
     }
 
     @Description("Currency page test. Required page: {0}, rows on page: {1}, code: {2}, value: {3}")
@@ -163,7 +162,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(853, "BYN");
 
         List<Currency> currencies = dataBaseService.getCurrencyDao().select(requiredPage, rowsOfPage, code, value);
-        anAssert.checkCurrenciesCount(expectedCurrenciesCount, currencies);
+        currencyAsserts.checkCurrenciesCount(expectedCurrenciesCount, currencies);
     }
 
     @Description("Search currencies count test. Code: {0}, value: {1}")
@@ -179,6 +178,6 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode2, currencyValue2);
 
         int currencies = dataBaseService.getCurrencyDao().selectCount(code, value);
-        anAssert.check(expectedCurrenciesCount, currencies, "Number of currencies");
+        asserts.checkObject(expectedCurrenciesCount, currencies, "Number of currencies");
     }
 }

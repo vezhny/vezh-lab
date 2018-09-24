@@ -3,7 +3,6 @@ package vezh_bank.persistence;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -48,8 +47,8 @@ public class CardTests extends PersistenceTest {
         createCard(card);
 
         List<Card> cards = dataBaseService.getCardDao().selectAll();
-        anAssert.checkCardsCount(1, cards);
-        anAssert.checkCard(pan, holder, cvc, expiry, currency, CardStatus.ACTIVE, new BigDecimal("0.00"), cards.get(0));
+        cardAsserts.checkCardsCount(1, cards);
+        cardAsserts.checkCard(pan, holder, cvc, expiry, currency, CardStatus.ACTIVE, new BigDecimal("0.00"), cards.get(0));
     }
 
     @Description("Select card with ID test")
@@ -76,7 +75,7 @@ public class CardTests extends PersistenceTest {
         List<Card> cards = dataBaseService.getCardDao().selectAll();
         card = dataBaseService.getCardDao().getById(cards.get(0).getId());
 
-        anAssert.checkCard(pan, holder, cvc, expiry, currency, CardStatus.ACTIVE, new BigDecimal("0.00"), card);
+        cardAsserts.checkCard(pan, holder, cvc, expiry, currency, CardStatus.ACTIVE, new BigDecimal("0.00"), card);
     }
 
     @Description("Update card test")
@@ -107,7 +106,7 @@ public class CardTests extends PersistenceTest {
         dataBaseService.getCardDao().update(card);
 
         card = dataBaseService.getCardDao().getById(card.getId());
-        anAssert.checkCard(pan, holder, cvc, expiry, currency, CardStatus.ACTIVE, newAmount, card);
+        cardAsserts.checkCard(pan, holder, cvc, expiry, currency, CardStatus.ACTIVE, newAmount, card);
     }
 
     @Description("Delete card test")
@@ -135,7 +134,7 @@ public class CardTests extends PersistenceTest {
         card = dataBaseService.getCardDao().getById(cards.get(0).getId());
         dataBaseService.getCardDao().delete(card);
 
-        anAssert.checkCardsCount(0, dataBaseService.getCardDao().selectAll());
+        cardAsserts.checkCardsCount(0, dataBaseService.getCardDao().selectAll());
     }
 
     @Description("Delete card by ID test")
@@ -163,7 +162,7 @@ public class CardTests extends PersistenceTest {
         card = dataBaseService.getCardDao().getById(cards.get(0).getId());
         dataBaseService.getCardDao().delete(card.getId());
 
-        anAssert.checkCardsCount(0, dataBaseService.getCardDao().selectAll());
+        cardAsserts.checkCardsCount(0, dataBaseService.getCardDao().selectAll());
     }
 
     @Description("Select cards with holder test")
@@ -208,7 +207,7 @@ public class CardTests extends PersistenceTest {
 
         List<Card> cards = dataBaseService.getCardDao().select(holder2.getId());
 
-        anAssert.checkCardsCount(3, cards);
+        cardAsserts.checkCardsCount(3, cards);
     }
 
     @Description("Select cards count test")
@@ -253,7 +252,7 @@ public class CardTests extends PersistenceTest {
 
         int cards = dataBaseService.getCardDao().selectCount();
 
-        anAssert.check(6, cards, "Number of cards");
+        cardAsserts.checkNumber(6, cards, "Number of cards");
     }
 
     @Description("Select card where: pan: {0}, holder name: {1}, creation date: {2}, expiry: {3}, currency: {4}" +
@@ -312,7 +311,7 @@ public class CardTests extends PersistenceTest {
 
         List<Card> cards = dataBaseService.getCardDao().select(pan, holderName, creationDate, expiry, currency, status);
 
-        anAssert.checkCardsCount(expectedCardsCount, cards);
+        cardAsserts.checkCardsCount(expectedCardsCount, cards);
     }
 
     @Description("Select cards count where pan: {0}, holder name: {1}, creation date: {2}, expiry: {3}, currency: {4} " +
@@ -371,7 +370,7 @@ public class CardTests extends PersistenceTest {
 
         int cards = dataBaseService.getCardDao().selectCount(pan, holderName, creationDate, expiry, currency, status);
 
-        anAssert.check(expectedCardsCount, cards, "Number of cards");
+        cardAsserts.checkNumber(6, cards, "Number of cards");
     }
 
     @Description("Select cards where required page: {0}, rows on page: {1},  pan: {2}, holder name: {3}, " +
@@ -431,7 +430,7 @@ public class CardTests extends PersistenceTest {
         List<Card> cards = dataBaseService.getCardDao().select(requiredPage, rowsOnPage, pan, holderName, creationDate,
                 expiry, currency, status);
 
-        anAssert.checkCardsCount(expectedCardsCount, cards);
+        cardAsserts.checkCardsCount(expectedCardsCount, cards);
     }
 
     @Description("Delete card holder test")
@@ -456,7 +455,7 @@ public class CardTests extends PersistenceTest {
         createCard(card);
 
         dataBaseService.getUserDao().delete(holder);
-        anAssert.checkException(EntityNotFoundException.class, () -> dataBaseService.getCardDao().selectAll().get(0));
+        asserts.checkException(EntityNotFoundException.class, () -> dataBaseService.getCardDao().selectAll().get(0));
     }
 
     @Description("Delete card currency test")
@@ -481,6 +480,6 @@ public class CardTests extends PersistenceTest {
         createCard(card);
 
         dataBaseService.getCurrencyDao().delete(currency);
-        anAssert.checkException(EntityNotFoundException.class, () -> dataBaseService.getCardDao().selectAll().get(0));
+        asserts.checkException(EntityNotFoundException.class, () -> dataBaseService.getCardDao().selectAll().get(0));
     }
 }

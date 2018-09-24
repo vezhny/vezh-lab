@@ -41,12 +41,12 @@ public class EventControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
-        anAssert.checkResponseCode(200, response.getStatus());
+        httpAsserts.checkResponseCode(200, response.getStatus());
 
         Events events = gson.fromJson(response.getContentAsString(), Events.class);
-        anAssert.checkNumberOfEvents(3, events.getEvents().size());
-        anAssert.checkCurrentPage(1, response);
-        anAssert.checkPagesCount(1, response);
+        eventAsserts.checkNumberOfEvents(3, events.getEvents().size());
+        httpAsserts.checkCurrentPage(1, response);
+        httpAsserts.checkPagesCount(1, response);
     }
 
     @Test
@@ -62,9 +62,8 @@ public class EventControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
-        anAssert.checkResponseCode(400, response.getStatus());
-
-        anAssert.checkExceptionMessage(ExceptionMessages.USER_ID_MUST_PRESENT, response);
+        httpAsserts.checkResponseCode(400, response.getStatus());
+        httpAsserts.checkExceptionMessage(ExceptionMessages.USER_ID_MUST_PRESENT, response);
     }
 
     @Test
@@ -82,9 +81,8 @@ public class EventControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
-        anAssert.checkResponseCode(400, response.getStatus());
-
-        anAssert.checkExceptionMessage(String.format(ExceptionMessages.VALUE_CAN_NOT_BE_A_NUMBER, userId), response);
+        httpAsserts.checkResponseCode(400, response.getStatus());
+        httpAsserts.checkExceptionMessage(String.format(ExceptionMessages.VALUE_CAN_NOT_BE_A_NUMBER, userId), response);
     }
 
     @Test
@@ -102,9 +100,8 @@ public class EventControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
-        anAssert.checkResponseCode(400, response.getStatus());
-
-        anAssert.checkExceptionMessage(String.format(ExceptionMessages.USER_DOES_NOT_EXIST, userId), response);
+        httpAsserts.checkResponseCode(400, response.getStatus());
+        httpAsserts.checkExceptionMessage(String.format(ExceptionMessages.USER_DOES_NOT_EXIST, userId), response);
     }
 
     @Test
@@ -122,9 +119,8 @@ public class EventControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
-        anAssert.checkResponseCode(400, response.getStatus());
-
-        anAssert.checkExceptionMessage(ExceptionMessages.THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS, response);
+        httpAsserts.checkResponseCode(400, response.getStatus());
+        httpAsserts.checkExceptionMessage(ExceptionMessages.THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS, response);
     }
 
     @Description("Get events where required page: {0}, event type: {1}, event data {2}")
@@ -147,12 +143,11 @@ public class EventControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
-        anAssert.checkResponseCode(200, response.getStatus());
-
+        httpAsserts.checkResponseCode(200, response.getStatus());
         Events events = gson.fromJson(response.getContentAsString(), Events.class);
-        anAssert.checkNumberOfEvents(expectedEventsCount, events.getEvents().size());
-        anAssert.checkCurrentPage(expectedCurrentPage, response);
-        anAssert.checkPagesCount(expectedPagesCount, response);
+        eventAsserts.checkNumberOfEvents(expectedEventsCount, events.getEvents().size());
+        httpAsserts.checkCurrentPage(expectedCurrentPage, response);
+        httpAsserts.checkPagesCount(expectedPagesCount, response);
     }
 
     @Step("Creating event {0}")

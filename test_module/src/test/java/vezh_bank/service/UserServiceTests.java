@@ -7,6 +7,7 @@ import core.json.UserConfig;
 import core.json.UserData;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Link;
 import org.junit.jupiter.api.Test;
 import vezh_bank.constants.UserDefault;
 import vezh_bank.extended_tests.ServiceTest;
@@ -16,6 +17,7 @@ import vezh_bank.persistence.entity.UserRole;
 import java.util.List;
 
 @Feature("User service") //TODO: try to user story instead on feature
+@Link("https://github.com/vezhny/vezh-lab/issues/15")
 public class UserServiceTests extends ServiceTest {
 
     @Description("Add user test")

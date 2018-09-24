@@ -38,8 +38,8 @@ public class PaymentTests extends PersistenceTest {
         createPayment(payment);
 
         List<Payment> payments = dataBaseService.getPaymentDao().selectAll();
-        checkPaymentCount(1, payments);
-        checkPayment(paymentName, paymentDescription, minAmount, maxAmount, commission, currency, payments.get(0));
+        anAssert.checkPaymentCount(1, payments);
+        anAssert.checkPayment(paymentName, paymentDescription, minAmount, maxAmount, commission, currency, payments.get(0));
     }
 
     @Description("Select by ID test")
@@ -58,7 +58,7 @@ public class PaymentTests extends PersistenceTest {
         createPayment(payment);
 
         payment = dataBaseService.getPaymentDao().getById(dataBaseService.getPaymentDao().selectAll().get(0).getId());
-        checkPayment(paymentName, paymentDescription, minAmount, maxAmount, commission, currency, payment);
+        anAssert.checkPayment(paymentName, paymentDescription, minAmount, maxAmount, commission, currency, payment);
     }
 
     @Description("Update payment test")
@@ -82,8 +82,8 @@ public class PaymentTests extends PersistenceTest {
         dataBaseService.getPaymentDao().update(payment);
 
         List<Payment> payments = dataBaseService.getPaymentDao().selectAll();
-        checkPaymentCount(1, payments);
-        checkPayment(updatedName, paymentDescription, minAmount, maxAmount, commission, currency, payments.get(0));
+        anAssert.checkPaymentCount(1, payments);
+        anAssert.checkPayment(updatedName, paymentDescription, minAmount, maxAmount, commission, currency, payments.get(0));
     }
 
     @Description("Delete payment test")
@@ -103,7 +103,7 @@ public class PaymentTests extends PersistenceTest {
 
         payment = dataBaseService.getPaymentDao().getById(dataBaseService.getPaymentDao().selectAll().get(0).getId());
         dataBaseService.getPaymentDao().delete(payment);
-        checkPaymentCount(0, dataBaseService.getPaymentDao().selectAll());
+        anAssert.checkPaymentCount(0, dataBaseService.getPaymentDao().selectAll());
     }
 
     @Description("Delete payment by ID test")
@@ -122,7 +122,7 @@ public class PaymentTests extends PersistenceTest {
         createPayment(payment);
 
         dataBaseService.getPaymentDao().delete(dataBaseService.getPaymentDao().selectAll().get(0).getId());
-        checkPaymentCount(0, dataBaseService.getPaymentDao().selectAll());
+        anAssert.checkPaymentCount(0, dataBaseService.getPaymentDao().selectAll());
     }
 
     @Description("Select count test")
@@ -166,7 +166,7 @@ public class PaymentTests extends PersistenceTest {
         createPayment(payment4);
 
         List<Payment> payments = dataBaseService.getPaymentDao().select(currency);
-        checkPaymentCount(expectedPaymentCount, payments);
+        anAssert.checkPaymentCount(expectedPaymentCount, payments);
     }
 
     @Description("Select payment with name \"{0}\" and currency \"{1}\" test")
@@ -194,7 +194,7 @@ public class PaymentTests extends PersistenceTest {
         createPayment(payment4);
 
         List<Payment> payments = dataBaseService.getPaymentDao().select(name, currency);
-        checkPaymentCount(expectedPaymentCount, payments);
+        anAssert.checkPaymentCount(expectedPaymentCount, payments);
     }
 
     @Description("Select payment with all params test. Required page: {0}, rows on page: {1}, name: {2}, currency: {3}")
@@ -235,7 +235,7 @@ public class PaymentTests extends PersistenceTest {
         createPayment(payment8);
 
         List<Payment> payments = dataBaseService.getPaymentDao().select(requiredPage, rowsOnPage, name, currency);
-        checkPaymentCount(expectedPaymentCount, payments);
+        anAssert.checkPaymentCount(expectedPaymentCount, payments);
     }
 
     @Description("Delete payment currency test")
@@ -290,7 +290,7 @@ public class PaymentTests extends PersistenceTest {
         dataBaseService.getCurrencyDao().delete(currency1.getCode());
 
         List<Payment> payments = dataBaseService.getPaymentDao().select(name, currency);
-        checkPaymentCount(expectedPaymentCount, payments);
+        anAssert.checkPaymentCount(expectedPaymentCount, payments);
     }
 
     @Description("Select payments count with name \"{0}\" and currency \"{1}\" test")

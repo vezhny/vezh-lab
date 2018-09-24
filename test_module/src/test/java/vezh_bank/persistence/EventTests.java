@@ -28,8 +28,8 @@ public class EventTests extends PersistenceTest {
         createEvent(new Event(eventType, eventData));
 
         List<Event> events = dataBaseService.getEventDao().selectAll();
-        checkEventsCount(1, events);
-        checkEvent(eventType, eventData, events.get(0));
+        anAssert.checkEventsCount(1, events);
+        anAssert.checkEvent(eventType, eventData, events.get(0));
     }
 
     @Description("Select all events test")
@@ -44,7 +44,7 @@ public class EventTests extends PersistenceTest {
         createEvent(new Event(eventType, eventData2));
 
         List<Event> events = dataBaseService.getEventDao().selectAll();
-        checkEventsCount(2, events);
+        anAssert.checkEventsCount(2, events);
     }
 
     @Description("Select event by ID test")
@@ -57,7 +57,7 @@ public class EventTests extends PersistenceTest {
 
         Event event = dataBaseService.getEventDao().selectAll().get(0);
         event = dataBaseService.getEventDao().getById(event.getId());
-        checkEvent(eventType, eventData, event);
+        anAssert.checkEvent(eventType, eventData, event);
     }
 
     @Description("Select event test. Type: {0}, data: {2}")
@@ -74,7 +74,7 @@ public class EventTests extends PersistenceTest {
         createEvent(new Event(EventType.USER_SIGN_UP, "User ID: 3"));
 
         List<Event> events = dataBaseService.getEventDao().select(eventType, date, data);
-        checkEventsCount(expectedEventCount, events);
+        anAssert.checkEventsCount(expectedEventCount, events);
     }
 
     @Description("Select count test")
@@ -104,7 +104,7 @@ public class EventTests extends PersistenceTest {
 
         List<Event> events = dataBaseService.getEventDao().select(requiredPage, rowsOnPage,
                 type, date, data);
-        checkEventsCount(expectedEventCount, events);
+        anAssert.checkEventsCount(expectedEventCount, events);
     }
 
     @Description("Select events count test. Type: {0}, data: {2}")

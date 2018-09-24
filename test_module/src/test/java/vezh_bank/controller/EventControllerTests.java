@@ -7,7 +7,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
 import io.qameta.allure.Step;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -15,7 +14,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import vezh_bank.constants.ExceptionMessages;
-import vezh_bank.constants.Headers;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.constants.Urls;
 import vezh_bank.controller.providers.events.EventControllerArgumentsProvider;
@@ -43,14 +41,12 @@ public class EventControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
-        checkResponseCode(200, response.getStatus());
+        anAssert.checkResponseCode(200, response.getStatus());
 
         Events events = gson.fromJson(response.getContentAsString(), Events.class);
-        checkNumberOfEvents(3, events.getEvents().size());
-        Assertions.assertEquals(String.valueOf(1), response.getHeader(Headers.CURRENT_PAGE),
-                "Current page");
-        Assertions.assertEquals(String.valueOf(1), response.getHeader(Headers.PAGES_COUNT),
-                "Pages count");
+        anAssert.checkNumberOfEvents(3, events.getEvents().size());
+        anAssert.checkCurrentPage(1, response);
+        anAssert.checkPagesCount(1, response);
     }
 
     @Test
@@ -66,10 +62,9 @@ public class EventControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
-        checkResponseCode(400, response.getStatus());
+        anAssert.checkResponseCode(400, response.getStatus());
 
-        Assertions.assertEquals(ExceptionMessages.USER_ID_MUST_PRESENT,
-                response.getHeader(Headers.ERROR_MESSAGE), "Error message");
+        anAssert.checkExceptionMessage(ExceptionMessages.USER_ID_MUST_PRESENT, response);
     }
 
     @Test
@@ -87,10 +82,9 @@ public class EventControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
-        checkResponseCode(400, response.getStatus());
+        anAssert.checkResponseCode(400, response.getStatus());
 
-        Assertions.assertEquals(String.format(ExceptionMessages.VALUE_CAN_NOT_BE_A_NUMBER, userId),
-                response.getHeader(Headers.ERROR_MESSAGE), "Error message");
+        anAssert.checkExceptionMessage(String.format(ExceptionMessages.VALUE_CAN_NOT_BE_A_NUMBER, userId), response);
     }
 
     @Test
@@ -108,10 +102,9 @@ public class EventControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
-        checkResponseCode(400, response.getStatus());
+        anAssert.checkResponseCode(400, response.getStatus());
 
-        Assertions.assertEquals(String.format(ExceptionMessages.USER_DOES_NOT_EXIST, userId),
-                response.getHeader(Headers.ERROR_MESSAGE), "Error message");
+        anAssert.checkExceptionMessage(String.format(ExceptionMessages.USER_DOES_NOT_EXIST, userId), response);
     }
 
     @Test
@@ -129,10 +122,9 @@ public class EventControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
-        checkResponseCode(400, response.getStatus());
+        anAssert.checkResponseCode(400, response.getStatus());
 
-        Assertions.assertEquals(ExceptionMessages.THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS,
-                response.getHeader(Headers.ERROR_MESSAGE), "Error message");
+        anAssert.checkExceptionMessage(ExceptionMessages.THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS, response);
     }
 
     @Description("Get events where required page: {0}, event type: {1}, event data {2}")
@@ -155,14 +147,12 @@ public class EventControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
-        checkResponseCode(200, response.getStatus());
+        anAssert.checkResponseCode(200, response.getStatus());
 
         Events events = gson.fromJson(response.getContentAsString(), Events.class);
-        checkNumberOfEvents(expectedEventsCount, events.getEvents().size());
-        Assertions.assertEquals(String.valueOf(expectedCurrentPage), response.getHeader(Headers.CURRENT_PAGE),
-                "Current page");
-        Assertions.assertEquals(String.valueOf(expectedPagesCount), response.getHeader(Headers.PAGES_COUNT),
-                "Pages count");
+        anAssert.checkNumberOfEvents(expectedEventsCount, events.getEvents().size());
+        anAssert.checkCurrentPage(expectedCurrentPage, response);
+        anAssert.checkPagesCount(expectedPagesCount, response);
     }
 
     @Step("Creating event {0}")

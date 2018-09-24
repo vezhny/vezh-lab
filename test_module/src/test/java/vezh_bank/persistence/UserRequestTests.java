@@ -39,8 +39,8 @@ public class UserRequestTests extends PersistenceTest {
         dataBaseService.getUserRequestDao().insert(userRequest);
 
         List<UserRequest> userRequests = dataBaseService.getUserRequestDao().selectAll();
-        checkUserRequestsCount(1, userRequests);
-        checkUserRequest(user.getId(), UserRequestStatus.OPEN, data, userRequests.get(0));
+        anAssert.checkUserRequestsCount(1, userRequests);
+        anAssert.checkUserRequest(user.getId(), UserRequestStatus.OPEN, data, userRequests.get(0));
     }
 
     @Description("Select user request by ID test")
@@ -62,7 +62,7 @@ public class UserRequestTests extends PersistenceTest {
         userRequest = dataBaseService.getUserRequestDao().selectAll().get(0);
         userRequest = dataBaseService.getUserRequestDao().getById(userRequest.getId());
 
-        checkUserRequest(user.getId(), UserRequestStatus.OPEN, data, userRequest);
+        anAssert.checkUserRequest(user.getId(), UserRequestStatus.OPEN, data, userRequest);
     }
 
     @Description("Update user request test")
@@ -89,7 +89,7 @@ public class UserRequestTests extends PersistenceTest {
         dataBaseService.getUserRequestDao().update(userRequest);
 
         userRequest = dataBaseService.getUserRequestDao().getById(userRequest.getId());
-        checkUserRequest(user.getId(), userRequestStatus, data, userRequest);
+        anAssert.checkUserRequest(user.getId(), userRequestStatus, data, userRequest);
     }
 
     @Description("Delete user request test")
@@ -113,7 +113,7 @@ public class UserRequestTests extends PersistenceTest {
 
         dataBaseService.getUserRequestDao().delete(userRequest);
 
-        checkUserRequestsCount(0, dataBaseService.getUserRequestDao().selectAll());
+        anAssert.checkUserRequestsCount(0, dataBaseService.getUserRequestDao().selectAll());
     }
 
     @Description("Delete user request by ID test")
@@ -137,7 +137,7 @@ public class UserRequestTests extends PersistenceTest {
 
         dataBaseService.getUserRequestDao().delete(userRequest.getId());
 
-        checkUserRequestsCount(0, dataBaseService.getUserRequestDao().selectAll());
+        anAssert.checkUserRequestsCount(0, dataBaseService.getUserRequestDao().selectAll());
     }
 
     @Description("Select user request with params test. User: {0}, status: {2}, data: {3}")
@@ -181,7 +181,7 @@ public class UserRequestTests extends PersistenceTest {
         List<UserRequest> userRequests = dataBaseService.getUserRequestDao().select(
                 getUserId(user, users), creationDate, status, data);
 
-        checkUserRequestsCount(expectedUserRequestsCount, userRequests);
+        anAssert.checkUserRequestsCount(expectedUserRequestsCount, userRequests);
     }
 
     @Description("Select user request count test")
@@ -267,7 +267,7 @@ public class UserRequestTests extends PersistenceTest {
         List<UserRequest> userRequests = dataBaseService.getUserRequestDao().select(requiredPage, rowsOnPage,
                 getUserId(user, users), creationDate, status, data);
 
-        checkUserRequestsCount(expectedUserRequestsCount, userRequests);
+        anAssert.checkUserRequestsCount(expectedUserRequestsCount, userRequests);
     }
 
     @Description("Select user requests count with params test. User: {0}, status: {2}, data: {3}")
@@ -334,7 +334,7 @@ public class UserRequestTests extends PersistenceTest {
         dataBaseService.getUserDao().delete(user);
 
         List<UserRequest> userRequests = dataBaseService.getUserRequestDao().selectAll();
-        checkUserRequestsCount(1, userRequests);
+        anAssert.checkUserRequestsCount(1, userRequests);
         Assertions.assertEquals(null, userRequests.get(0).getUser());
         Assertions.assertEquals(UserRequestStatus.OPEN.toString(), userRequests.get(0).getStatus());
         Assertions.assertEquals(data, userRequests.get(0).getData());
@@ -367,7 +367,7 @@ public class UserRequestTests extends PersistenceTest {
 
         List<UserRequest> userRequests = dataBaseService.getUserRequestDao().select(users.get(0).getId());
 
-        checkUserRequestsCount(2, userRequests);
+        anAssert.checkUserRequestsCount(2, userRequests);
     }
 
     @Step

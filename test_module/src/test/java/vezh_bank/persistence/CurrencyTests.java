@@ -26,7 +26,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode, currencyValue);
 
         Currency currencyFromDb = dataBaseService.getCurrencyDao().getById(currencyCode);
-        checkCurrency(currencyCode, currencyValue, currencyFromDb);
+        anAssert.checkCurrency(currencyCode, currencyValue, currencyFromDb);
     }
 
     @Description("Update currency test")
@@ -42,7 +42,7 @@ public class CurrencyTests extends PersistenceTest {
         dataBaseService.getCurrencyDao().update(currency);
 
         currency = dataBaseService.getCurrencyDao().getById(currencyCode);
-        checkCurrency(currencyCode, newCurrencyValue, currency);
+        anAssert.checkCurrency(currencyCode, newCurrencyValue, currency);
     }
 
     @Description("Delete currency test")
@@ -53,7 +53,7 @@ public class CurrencyTests extends PersistenceTest {
         dataBaseService.getCurrencyDao().insert(currency);
 
         dataBaseService.getCurrencyDao().delete(currency);
-        checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
+        anAssert.checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
     }
 
     @Description("SelectCurrency by value test")
@@ -65,7 +65,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode, currencyValue);
 
         Currency currency = dataBaseService.getCurrencyDao().getByValue(currencyValue).get(0);
-        checkCurrency(currencyCode, currencyValue, currency);
+        anAssert.checkCurrency(currencyCode, currencyValue, currency);
     }
 
     @Description("Delete currency by code test")
@@ -77,7 +77,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode, currencyValue);
 
         dataBaseService.getCurrencyDao().delete(currencyCode);
-        checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
+        anAssert.checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
     }
 
     @Description("Delete currency by value test")
@@ -89,7 +89,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode, currencyValue);
 
         dataBaseService.getCurrencyDao().delete(currencyValue);
-        checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
+        anAssert.checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
     }
 
     @Description("Currency sorting test")
@@ -104,9 +104,9 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode2, currencyValue2);
 
         List<Currency> currencies = dataBaseService.getCurrencyDao().selectAll();
-        checkCurrenciesCount(2, currencies);
-        checkCurrency(currencyCode2, currencyValue2, currencies.get(0));
-        checkCurrency(currencyCode1, currencyValue1, currencies.get(1));
+        anAssert.checkCurrenciesCount(2, currencies);
+        anAssert.checkCurrency(currencyCode2, currencyValue2, currencies.get(0));
+        anAssert.checkCurrency(currencyCode1, currencyValue1, currencies.get(1));
     }
 
     @Description("Search currency by value test")
@@ -121,7 +121,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode2, currencyValue2);
 
         List<Currency> currencies = dataBaseService.getCurrencyDao().getByValue("RU");
-        checkCurrenciesCount(2, currencies);
+        anAssert.checkCurrenciesCount(2, currencies);
     }
 
     @Description("Search currency where code: {0}, value: {1}")
@@ -137,7 +137,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode2, currencyValue2);
 
         List<Currency> currencies = dataBaseService.getCurrencyDao().get(code, value);
-        checkCurrenciesCount(expectedCurrenciesCount, currencies);
+        anAssert.checkCurrenciesCount(expectedCurrenciesCount, currencies);
     }
 
     @Description("Currency count test")
@@ -163,7 +163,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(853, "BYN");
 
         List<Currency> currencies = dataBaseService.getCurrencyDao().select(requiredPage, rowsOfPage, code, value);
-        checkCurrenciesCount(expectedCurrenciesCount, currencies);
+        anAssert.checkCurrenciesCount(expectedCurrenciesCount, currencies);
     }
 
     @Description("Search currencies count test. Code: {0}, value: {1}")

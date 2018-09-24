@@ -30,8 +30,8 @@ public class TransactionTests extends PersistenceTest {
         createTransaction(new Transaction(transactionType, trxData, transactionStatus));
 
         List<Transaction> transactions = dataBaseService.getTransactionDao().selectAll();
-        checkTransactionCount(1, transactions);
-        checkTransaction(transactionType, trxData, transactionStatus, transactions.get(0));
+        anAssert.checkTransactionCount(1, transactions);
+        anAssert.checkTransaction(transactionType, trxData, transactionStatus, transactions.get(0));
     }
 
     @Description("Select by ID test")
@@ -45,7 +45,7 @@ public class TransactionTests extends PersistenceTest {
 
         Transaction transaction = dataBaseService.getTransactionDao().selectAll().get(0);
         transaction = dataBaseService.getTransactionDao().getById(transaction.getId());
-        checkTransaction(transactionType, trxData, transactionStatus, transaction);
+        anAssert.checkTransaction(transactionType, trxData, transactionStatus, transaction);
     }
 
     @Description("Select with params test. Type: {0}, data: {2}, status: {3}")
@@ -73,7 +73,7 @@ public class TransactionTests extends PersistenceTest {
         createTransaction(transaction8);
 
         List<Transaction> transactions = dataBaseService.getTransactionDao().select(type, dateTime, data, status);
-        checkTransactionCount(expectedTransactionsCount, transactions);
+        anAssert.checkTransactionCount(expectedTransactionsCount, transactions);
     }
 
     @Description("Select with params test. Required page: {0}, rows on page: {1}, type: {2}, data: {4}, status: {5}")
@@ -103,7 +103,7 @@ public class TransactionTests extends PersistenceTest {
 
         List<Transaction> transactions = dataBaseService.getTransactionDao().select(requiredPage, rowsOnPage,
                 type, dateTime, data, status);
-        checkTransactionCount(expectedTransactionsCount, transactions);
+        anAssert.checkTransactionCount(expectedTransactionsCount, transactions);
     }
 
     @Description("Select count test")

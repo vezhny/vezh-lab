@@ -7,14 +7,16 @@ import core.json.UserData;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import vezh_bank.constants.*;
+import vezh_bank.constants.ExceptionMessages;
+import vezh_bank.constants.RequestParams;
+import vezh_bank.constants.Urls;
+import vezh_bank.constants.UserDefault;
 import vezh_bank.controller.providers.users.registration.RegisterUserFailArgumentsProvider;
 import vezh_bank.controller.providers.users.registration.RegisterUserSuccessAgrumentsProvider;
 import vezh_bank.controller.providers.users.registration.RegistrationClientArgumentsProvider;
@@ -34,7 +36,7 @@ public class UserControllerTests extends ControllerTest {
     public void registerUserSuccess() {
         testUtils.logTestStart("Register user success test");
 
-        checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        anAssert.checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
 
         List<UserRole> userRoles = serviceProvider.getDataBaseService().getRoleDao().selectAll();
         String login = "Login";
@@ -64,12 +66,12 @@ public class UserControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpPost(Urls.USERS, params);
 
-        checkResponseCode(200, response.getStatus());
+        anAssert.checkResponseCode(200, response.getStatus());
 
         List<User> users = serviceProvider.getDataBaseService().getUserDao().selectAll();
-        checkNumberOfUsers(1, users.size());
+        anAssert.checkNumberOfUsers(1, users.size());
 
-        checkUser(login, password, roleDTO, new UserConfig(), UserDefault.ATTEMPTS_TO_SIGN_IN,
+        anAssert.checkUser(login, password, roleDTO, new UserConfig(), UserDefault.ATTEMPTS_TO_SIGN_IN,
                 false, null, userData, users.get(0));
     }
 
@@ -78,7 +80,7 @@ public class UserControllerTests extends ControllerTest {
     public void registerUserSuccessWithHousePart() {
         testUtils.logTestStart("Register user success with house part test");
 
-        checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        anAssert.checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
 
         List<UserRole> userRoles = serviceProvider.getDataBaseService().getRoleDao().selectAll();
         String login = "Login";
@@ -111,12 +113,12 @@ public class UserControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpPost(Urls.USERS, params);
 
-        checkResponseCode(200, response.getStatus());
+        anAssert.checkResponseCode(200, response.getStatus());
 
         List<User> users = serviceProvider.getDataBaseService().getUserDao().selectAll();
-        checkNumberOfUsers(1, users.size());
+        anAssert.checkNumberOfUsers(1, users.size());
 
-        checkUser(login, password, roleDTO, new UserConfig(), UserDefault.ATTEMPTS_TO_SIGN_IN,
+        anAssert.checkUser(login, password, roleDTO, new UserConfig(), UserDefault.ATTEMPTS_TO_SIGN_IN,
                 false, null, userData, users.get(0));
     }
 
@@ -125,7 +127,7 @@ public class UserControllerTests extends ControllerTest {
     public void registerUserSuccessWithoutEmail() {
         testUtils.logTestStart("Register user success without email test");
 
-        checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        anAssert.checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
 
         List<UserRole> userRoles = serviceProvider.getDataBaseService().getRoleDao().selectAll();
         String login = "Login";
@@ -154,12 +156,12 @@ public class UserControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpPost(Urls.USERS, params);
 
-        checkResponseCode(200, response.getStatus());
+        anAssert.checkResponseCode(200, response.getStatus());
 
         List<User> users = serviceProvider.getDataBaseService().getUserDao().selectAll();
-        checkNumberOfUsers(1, users.size());
+        anAssert.checkNumberOfUsers(1, users.size());
 
-        checkUser(login, password, roleDTO, new UserConfig(), UserDefault.ATTEMPTS_TO_SIGN_IN,
+        anAssert.checkUser(login, password, roleDTO, new UserConfig(), UserDefault.ATTEMPTS_TO_SIGN_IN,
                 false, null, userData, users.get(0));
     }
 
@@ -173,7 +175,7 @@ public class UserControllerTests extends ControllerTest {
 
         testUtils.logTestStart(description);
 
-        checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        anAssert.checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
 
         UserAddress address = new UserAddress(country, region, city,
                 street, house, room);
@@ -199,11 +201,10 @@ public class UserControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpPost(Urls.USERS, params);
 
-        checkResponseCode(400, response.getStatus());
+        anAssert.checkResponseCode(400, response.getStatus());
 
-        checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
-        Assertions.assertEquals(expectedErrorMessage, response.getHeader(Headers.ERROR_MESSAGE),
-                "Exception message");
+        anAssert.checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        anAssert.checkExceptionMessage(expectedErrorMessage, response);
     }
 
     @Description("{0}")
@@ -212,7 +213,7 @@ public class UserControllerTests extends ControllerTest {
     public void registerUserSuccess(String description, String login, String role, String firstName) {
         testUtils.logTestStart(description);
 
-        checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        anAssert.checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
 
         UserAddress address = new UserAddress("Belarus", "Homiel", "Svetlogorsk",
                 "Lunacharskogo", "30", "213");
@@ -238,9 +239,9 @@ public class UserControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpPost(Urls.USERS, params);
 
-        checkResponseCode(200, response.getStatus());
+        anAssert.checkResponseCode(200, response.getStatus());
 
-        checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        anAssert.checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
     }
 
     @Description("Login in non-unique test")
@@ -248,7 +249,7 @@ public class UserControllerTests extends ControllerTest {
     public void loginIsNonUnique() {
         testUtils.logTestStart("Login in non-unique test");
 
-        checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        anAssert.checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
 
         List<UserRole> userRoles = serviceProvider.getDataBaseService().getRoleDao().selectAll();
         String login = "Login";
@@ -278,15 +279,13 @@ public class UserControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpPost(Urls.USERS, params);
 
-        checkResponseCode(200, response.getStatus());
+        anAssert.checkResponseCode(200, response.getStatus());
 
         response = httpPost(Urls.USERS, params);
 
-        checkResponseCode(400, response.getStatus());
-        Assertions.assertEquals(String.format(ExceptionMessages.USER_WITH_LOGIN_IS_ALREADY_REGISTERED, login),
-                response.getHeader(Headers.ERROR_MESSAGE),
-                "Exception message");
-        checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        anAssert.checkResponseCode(400, response.getStatus());
+        anAssert.checkExceptionMessage(String.format(ExceptionMessages.USER_WITH_LOGIN_IS_ALREADY_REGISTERED, login), response);
+        anAssert.checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
     }
 
     @Description("{0} tries to register client")
@@ -326,9 +325,9 @@ public class UserControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpPost(Urls.USERS, params);
 
-        checkResponseCode(200, response.getStatus());
+        anAssert.checkResponseCode(200, response.getStatus());
 
-        checkNumberOfUsers(2, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        anAssert.checkNumberOfUsers(2, serviceProvider.getDataBaseService().getUserDao().selectCount());
     }
 
     @Description("Client tries to register user")
@@ -366,11 +365,8 @@ public class UserControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpPost(Urls.USERS, params);
 
-        checkResponseCode(400, response.getStatus());
-        Assertions.assertEquals(ExceptionMessages.THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS,
-                response.getHeader(Headers.ERROR_MESSAGE),
-                "Exception message");
-
-        checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        anAssert.checkResponseCode(400, response.getStatus());
+        anAssert.checkExceptionMessage(ExceptionMessages.THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS, response);
+        anAssert.checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
     }
 }

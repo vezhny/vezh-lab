@@ -11,4 +11,10 @@ public class ExceptionMessages {
     //TODO: add static methods for format
     public static final String INVALID_PARAMETER = "Invalid parameter: \"%s\"";
     public static final String USER_WITH_LOGIN_IS_ALREADY_REGISTERED = "User with login \"%s\" already registered";
+    public static final String PARAMETER_IS_NULL = "Parameter \"%s\" is null";
+    public static final String ROLE_IS_UNKNOWN = "Role \"%s\" is unknown";
+    public static final String VALUE_SHOULD_HAVE_LENGTH = "Value \"%s\" should have length [%s, %s], " +
+            "but actual length is \"%s\"";
+    public static final String VALUE_DOES_NOT_MATCH_TO_REGEX = "Value \"%s\" doesn't match regex \"%s\"";
+    public static final String DATE_HAS_INVALID_PATTERN = "Date \"%s\" has invalid pattern";
 }

@@ -40,7 +40,7 @@ public class UserRequestValidator extends Validator {
         checkUserData();
     }
 
-    private void checkUserAccess() throws BadRequestException {
+    private void checkUserAccess() throws BadRequestException { //TODO: user access tests
         if (!isNull(RequestParams.USER_ID)) {
             checkUserId(requestParams.get(RequestParams.USER_ID));
         }
@@ -49,7 +49,7 @@ public class UserRequestValidator extends Validator {
     @Override
     protected void checkUserId(String userId) throws BadRequestException {
         if (isNull(userId)) {
-            throw new BadRequestException(USER_ID_MUST_PRESENT);
+            throw new BadRequestException(format(MISSING_PARAMETER, RequestParams.USER_ID));
         }
         if (!isStringCanBeNumber(userId)) {
             throw new BadRequestException(String.format(VALUE_CAN_NOT_BE_A_NUMBER, userId));
@@ -70,7 +70,7 @@ public class UserRequestValidator extends Validator {
 
         if (!role.equals(Role.CLIENT.toString()) && !role.equals(Role.EMPLOYEE.toString())
                 && !role.equals(Role.ADMIN.toString())) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.ROLE));
+            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.ROLE), format(ROLE_IS_UNKNOWN, role));
         }
     }
 
@@ -82,11 +82,13 @@ public class UserRequestValidator extends Validator {
         int minLength = stringToInt(properties.getProperty(USER_LOGIN_MIN_LENGTH));
         int maxLength = stringToInt(properties.getProperty(USER_LOGIN_MAX_LENGTH));
         if (!valueLengthValid(minLength, maxLength, login)) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.LOGIN));
+            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.LOGIN),
+                    format(VALUE_SHOULD_HAVE_LENGTH, RequestParams.LOGIN, minLength, maxLength, login.length()));
         }
 
         if (!login.matches("\\w+")) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.LOGIN));
+            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.LOGIN),
+                    format(VALUE_DOES_NOT_MATCH_TO_REGEX, login, "\\w+"));
         }
 
         if (!dataBaseService.getUserDao().isLoginUnique(login)) {
@@ -102,7 +104,8 @@ public class UserRequestValidator extends Validator {
         int minLength = stringToInt(properties.getProperty(USER_PASSWORD_MIN_LENGTH));
         int maxLength = stringToInt(properties.getProperty(USER_PASSWORD_MAX_LENGTH));
         if (!valueLengthValid(minLength, maxLength, password)) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.PASSWORD));
+            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.PASSWORD),
+                    format(VALUE_SHOULD_HAVE_LENGTH, RequestParams.PASSWORD, minLength, maxLength, password.length()));
         }
     }
 
@@ -122,10 +125,11 @@ public class UserRequestValidator extends Validator {
                     paramName));
         }
 
-        int minLength = stringToInt(properties.getProperty(USER_NAME_MIN_LENGTH));
+        int minLength = stringToInt(properties.getProperty(USER_NAME_MIN_LENGTH)); // TODO: make it in one place
         int maxLength = stringToInt(properties.getProperty(USER_NAME_MAX_LENGTH));
         if (!valueLengthValid(minLength, maxLength, name)) {
-            throw new BadRequestException(format(INVALID_PARAMETER, paramName));
+            throw new BadRequestException(format(INVALID_PARAMETER, paramName),
+                    format(VALUE_SHOULD_HAVE_LENGTH, paramName, minLength, maxLength, name.length()));
         }
 
         if (!hasLettersOnly(name)) {
@@ -144,7 +148,8 @@ public class UserRequestValidator extends Validator {
                 throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.BIRTH_DATE));
             }
         } catch (DateTimeParseException e) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.BIRTH_DATE));
+            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.BIRTH_DATE),
+                    format(DATE_HAS_INVALID_PATTERN, date));
         }
     }
 
@@ -168,7 +173,8 @@ public class UserRequestValidator extends Validator {
         int minLength = stringToInt(properties.getProperty(USER_ADDRESS_COUNTRY_MIN_LENGTH));
         int maxLength = stringToInt(properties.getProperty(USER_ADDRESS_COUNTRY_MAX_LENGTH));
         if (!valueLengthValid(minLength, maxLength, country)) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.COUNTRY));
+            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.COUNTRY),
+                    format(VALUE_SHOULD_HAVE_LENGTH, RequestParams.COUNTRY, minLength, maxLength, country.length()));
         }
 
         if (!hasLettersOnly(country)) {
@@ -186,7 +192,8 @@ public class UserRequestValidator extends Validator {
         int minLength = stringToInt(properties.getProperty(USER_ADDRESS_REGION_MIN_LENGTH));
         int maxLength = stringToInt(properties.getProperty(USER_ADDRESS_REGION_MAX_LENGTH));
         if (!valueLengthValid(minLength, maxLength, region)) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.REGION));
+            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.REGION),
+                    format(VALUE_SHOULD_HAVE_LENGTH, RequestParams.REGION, minLength, maxLength, region.length()));
         }
 
         if (!hasOnlyLettersAndNumbers(region)) {
@@ -204,7 +211,8 @@ public class UserRequestValidator extends Validator {
         int minLength = stringToInt(properties.getProperty(USER_ADDRESS_CITY_MIN_LENGTH));
         int maxLength = stringToInt(properties.getProperty(USER_ADDRESS_CITY_MAX_LENGTH));
         if (!valueLengthValid(minLength, maxLength, city)) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.CITY));
+            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.CITY),
+                    format(VALUE_SHOULD_HAVE_LENGTH, RequestParams.CITY, minLength, maxLength, city.length()));
         }
 
         if (!hasOnlyLettersAndNumbers(city)) {
@@ -222,7 +230,8 @@ public class UserRequestValidator extends Validator {
         int minLength = stringToInt(properties.getProperty(USER_ADDRESS_STREET_MIN_LENGTH));
         int maxLength = stringToInt(properties.getProperty(USER_ADDRESS_STREET_MAX_LENGTH));
         if (!valueLengthValid(minLength, maxLength, street)) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.STREET));
+            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.STREET),
+                    format(VALUE_SHOULD_HAVE_LENGTH, RequestParams.STREET, minLength, maxLength, street.length()));
         }
     }
 
@@ -232,7 +241,7 @@ public class UserRequestValidator extends Validator {
         }
 
         if (!isStringCanBeNumber(value)) {
-            throw new BadRequestException(format(INVALID_PARAMETER, paramName));
+            throw new BadRequestException(format(INVALID_PARAMETER, paramName), format(VALUE_CAN_NOT_BE_A_NUMBER, value));
         }
 
         if (stringToInt(value) <= 0) {
@@ -259,7 +268,8 @@ public class UserRequestValidator extends Validator {
         int minLength = stringToInt(properties.getProperty(USER_CONTACT_NUMBER_MIN_LENGTH));
         int maxLength = stringToInt(properties.getProperty(USER_CONTACT_NUMBER_MAX_LENGTH));
         if (!valueLengthValid(minLength, maxLength, number.replaceAll("\\+", ""))) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.CONTACT_NUMBER));
+            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.CONTACT_NUMBER),
+                    format(VALUE_SHOULD_HAVE_LENGTH, RequestParams.CONTACT_NUMBER, minLength, maxLength, number.length()));
         }
     }
 

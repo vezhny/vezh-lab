@@ -1,5 +1,6 @@
 package core.handlers;
 
+import core.exceptions.VezhBankException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -40,14 +41,14 @@ public interface RequestHandler<T> {
         return responseEntity;
     }
 
-    default ResponseEntity<T> error(Exception e) {
+    default ResponseEntity<T> error(VezhBankException e) {
         return error(e, HttpStatus.BAD_REQUEST);
     }
 
-    default ResponseEntity<T> error(Exception e, HttpStatus httpStatus) {
+    default ResponseEntity<T> error(VezhBankException e, HttpStatus httpStatus) {
         Logger logger = Logger.getLogger(this.getClass());
 
-        logger.info(e.getMessage());
+        logger.error(e.getDetail());
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.set(Headers.ERROR_MESSAGE, e.getMessage());
         return new ResponseEntity<>(headers, httpStatus);

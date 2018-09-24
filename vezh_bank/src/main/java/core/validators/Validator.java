@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
-import static java.lang.String.format;
 import static vezh_bank.constants.ExceptionMessages.*;
 import static vezh_bank.util.TypeConverter.stringToInt;
 
@@ -83,14 +82,14 @@ public abstract class Validator {
 
     protected void checkUserId(String userId) throws BadRequestException {
         if (isNull(userId)) {
-            throw new BadRequestException(USER_ID_MUST_PRESENT, format(PARAMETER_IS_NULL, RequestParams.USER_ID));
+            throw new BadRequestException(USER_ID_MUST_PRESENT, parameterIsNull(RequestParams.USER_ID));
         }
         if (!isStringCanBeNumber(userId)) {
-            throw new BadRequestException(format(VALUE_CAN_NOT_BE_A_NUMBER, userId));
+            throw new BadRequestException(valueCanNotBeANumber(userId));
         }
         User user = dataBaseService.getUserDao().getById(stringToInt(userId));
         if (isNull(user)) {
-            throw new BadRequestException(format(USER_DOES_NOT_EXIST, userId));
+            throw new BadRequestException(userDoesNotExist(userId));
         }
         if (isClient(user)) {
             throw new BadRequestException(THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS);
@@ -102,8 +101,7 @@ public abstract class Validator {
         int minLength = stringToInt(properties.getProperty(propertyMinLengthName));
         int maxLength = stringToInt(properties.getProperty(propertyMaxLengthName));
         if (!valueLengthValid(minLength, maxLength, value)) {
-            throw new BadRequestException(format(INVALID_PARAMETER, paramName),
-                    format(VALUE_SHOULD_HAVE_LENGTH, RequestParams.LOGIN, minLength, maxLength, value.length()));
+            throw new BadRequestException(valueShouldHaveLength(paramName, minLength, maxLength, value.length()));
         }
     }
 }

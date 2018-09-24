@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Map;
 
-import static java.lang.String.format;
 import static vezh_bank.constants.ExceptionMessages.*;
 import static vezh_bank.constants.Properties.*;
 import static vezh_bank.util.TypeConverter.stringToInt;
@@ -48,35 +47,35 @@ public class UserRequestValidator extends Validator {
 
     private void checkRole(String role) throws BadRequestException {
         if (isNull(role)) {
-            throw new BadRequestException(format(MISSING_PARAMETER, RequestParams.ROLE));
+            throw new BadRequestException(missingParameter(RequestParams.ROLE));
         }
 
         if (!role.equals(Role.CLIENT.toString()) && !role.equals(Role.EMPLOYEE.toString())
                 && !role.equals(Role.ADMIN.toString())) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.ROLE), format(ROLE_IS_UNKNOWN, role));
+            throw new BadRequestException(invalidParameter(RequestParams.ROLE), roleIsUnknown(role));
         }
     }
 
     private void checkLogin(String login) throws BadRequestException {
         if (isNull(login)) {
-            throw new BadRequestException(format(MISSING_PARAMETER, RequestParams.LOGIN));
+            throw new BadRequestException(missingParameter(RequestParams.LOGIN));
         }
 
         checkValueLength(USER_LOGIN_MIN_LENGTH, USER_NAME_MAX_LENGTH, login, RequestParams.LOGIN);
 
         if (!login.matches("\\w+")) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.LOGIN),
-                    format(VALUE_DOES_NOT_MATCH_TO_REGEX, login, "\\w+"));
+            throw new BadRequestException(invalidParameter(RequestParams.LOGIN),
+                    valueDoesNotMatchToRegex(login, "\\w+"));
         }
 
         if (!dataBaseService.getUserDao().isLoginUnique(login)) {
-            throw new BadRequestException(format(USER_WITH_LOGIN_IS_ALREADY_REGISTERED, login));
+            throw new BadRequestException(userWithLoginAlreadyRegistered(login));
         }
     }
 
     private void checkPassword(String password) throws BadRequestException {
         if (isNull(password)) {
-            throw new BadRequestException(format(MISSING_PARAMETER, RequestParams.PASSWORD));
+            throw new BadRequestException(missingParameter(RequestParams.PASSWORD));
         }
 
         checkValueLength(USER_PASSWORD_MIN_LENGTH, USER_PASSWORD_MAX_LENGTH, password, RequestParams.PASSWORD);
@@ -94,30 +93,29 @@ public class UserRequestValidator extends Validator {
 
     private void checkName(String name, String paramName) throws BadRequestException {
         if (isNull(name)) {
-            throw new BadRequestException(format(MISSING_PARAMETER,
-                    paramName));
+            throw new BadRequestException(missingParameter(paramName));
         }
 
         checkValueLength(USER_NAME_MIN_LENGTH, USER_NAME_MAX_LENGTH, name, paramName);
 
         if (!hasLettersOnly(name)) {
-            throw new BadRequestException(format(INVALID_PARAMETER, paramName));
+            throw new BadRequestException(invalidParameter(paramName));
         }
     }
 
     private void checkBirthDate(String date) throws BadRequestException {
         if (isNull(date)) {
-            throw new BadRequestException(format(MISSING_PARAMETER, RequestParams.BIRTH_DATE));
+            throw new BadRequestException(missingParameter(RequestParams.BIRTH_DATE));
         }
         try {
             LocalDate birthDate = LocalDate.parse(date, DateTimeFormatter.ofPattern(DatePatterns.DEFAULT_DATE_PATTERN));
 
             if (Period.between(birthDate, LocalDate.now()).getYears() < 18) {
-                throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.BIRTH_DATE));
+                throw new BadRequestException(invalidParameter(RequestParams.BIRTH_DATE));
             }
         } catch (DateTimeParseException e) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.BIRTH_DATE),
-                    format(DATE_HAS_INVALID_PATTERN, date));
+            throw new BadRequestException(invalidParameter(RequestParams.BIRTH_DATE),
+                    dateHasInvalidPattern(date));
         }
     }
 
@@ -135,13 +133,13 @@ public class UserRequestValidator extends Validator {
         String country = requestParams.get(RequestParams.COUNTRY);
 
         if (isNull(country)) {
-            throw new BadRequestException(format(MISSING_PARAMETER, RequestParams.COUNTRY));
+            throw new BadRequestException(missingParameter(RequestParams.COUNTRY));
         }
 
         checkValueLength(USER_ADDRESS_COUNTRY_MIN_LENGTH, USER_ADDRESS_COUNTRY_MAX_LENGTH, country, RequestParams.COUNTRY);
 
         if (!hasLettersOnly(country)) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.COUNTRY));
+            throw new BadRequestException(invalidParameter(RequestParams.COUNTRY));
         }
     }
 
@@ -149,13 +147,13 @@ public class UserRequestValidator extends Validator {
         String region = requestParams.get(RequestParams.REGION);
 
         if (isNull(region)) {
-            throw new BadRequestException(format(MISSING_PARAMETER, RequestParams.REGION));
+            throw new BadRequestException(missingParameter(RequestParams.REGION));
         }
 
         checkValueLength(USER_ADDRESS_REGION_MIN_LENGTH, USER_ADDRESS_REGION_MAX_LENGTH, region, RequestParams.REGION);
 
         if (!hasOnlyLettersAndNumbers(region)) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.REGION));
+            throw new BadRequestException(invalidParameter(RequestParams.REGION));
         }
     }
 
@@ -163,13 +161,13 @@ public class UserRequestValidator extends Validator {
         String city = requestParams.get(RequestParams.CITY);
 
         if (isNull(city)) {
-            throw new BadRequestException(format(MISSING_PARAMETER, RequestParams.CITY));
+            throw new BadRequestException(missingParameter(RequestParams.CITY));
         }
 
         checkValueLength(USER_ADDRESS_CITY_MIN_LENGTH, USER_ADDRESS_CITY_MAX_LENGTH, city, RequestParams.CITY);
 
         if (!hasOnlyLettersAndNumbers(city)) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.CITY));
+            throw new BadRequestException(invalidParameter(RequestParams.CITY));
         }
     }
 
@@ -177,7 +175,7 @@ public class UserRequestValidator extends Validator {
         String street = requestParams.get(RequestParams.STREET);
 
         if (isNull(street)) {
-            throw new BadRequestException(format(MISSING_PARAMETER, RequestParams.STREET));
+            throw new BadRequestException(missingParameter(RequestParams.STREET));
         }
 
         checkValueLength(USER_ADDRESS_STREET_MIN_LENGTH, USER_ADDRESS_STREET_MAX_LENGTH, street, RequestParams.STREET);
@@ -185,15 +183,15 @@ public class UserRequestValidator extends Validator {
 
     private void checkAddressNumberValue(String value, String paramName) throws BadRequestException {
         if (isNull(value)) {
-            throw new BadRequestException(format(MISSING_PARAMETER, paramName));
+            throw new BadRequestException(missingParameter(paramName));
         }
 
         if (!isStringCanBeNumber(value)) {
-            throw new BadRequestException(format(INVALID_PARAMETER, paramName), format(VALUE_CAN_NOT_BE_A_NUMBER, value));
+            throw new BadRequestException(invalidParameter(paramName), valueCanNotBeANumber(value));
         }
 
         if (stringToInt(value) <= 0) {
-            throw new BadRequestException(format(INVALID_PARAMETER, paramName));
+            throw new BadRequestException(invalidParameter(paramName));
         }
     }
 
@@ -206,11 +204,11 @@ public class UserRequestValidator extends Validator {
 
     private void checkContactNumber(String number) throws BadRequestException {
         if (isNull(number)) {
-            throw new BadRequestException(format(MISSING_PARAMETER, RequestParams.CONTACT_NUMBER));
+            throw new BadRequestException(missingParameter(RequestParams.CONTACT_NUMBER));
         }
 
         if (!number.matches("\\+\\d+")) {
-            throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.CONTACT_NUMBER));
+            throw new BadRequestException(invalidParameter(RequestParams.CONTACT_NUMBER));
         }
 
         checkValueLength(USER_CONTACT_NUMBER_MIN_LENGTH, USER_CONTACT_NUMBER_MAX_LENGTH, number, RequestParams.CONTACT_NUMBER);
@@ -219,7 +217,7 @@ public class UserRequestValidator extends Validator {
     private void checkEmail(String email) throws BadRequestException {
         if (!isNull(email)) {
             if (!email.matches("\\w+@\\w+\\.\\w+")) {
-                throw new BadRequestException(format(INVALID_PARAMETER, RequestParams.EMAIL));
+                throw new BadRequestException(invalidParameter(RequestParams.EMAIL));
             }
         }
     }

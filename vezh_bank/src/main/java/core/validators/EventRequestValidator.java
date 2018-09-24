@@ -7,8 +7,6 @@ import vezh_bank.persistence.DataBaseService;
 import java.util.Map;
 
 public class EventRequestValidator extends Validator {
-    private Map<String, String> requestParams;
-    private DataBaseService dataBaseService;
 
     public EventRequestValidator(Map<String, String> requestParams, DataBaseService dataBaseService) {
         this.requestParams = requestParams;

@@ -22,6 +22,6 @@ public class EncryptorTests extends RootTest {
         String value = "some value";
         String encryptedValue = encryptor.encrypt(value);
 
-        Assertions.assertEquals(value, encryptor.decrypt(encryptedValue));
+        anAssert.check(value, encryptor.decrypt(encryptedValue), "decrypted value");
     }
 }

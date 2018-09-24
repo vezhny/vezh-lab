@@ -138,7 +138,7 @@ public class PaymentTests extends PersistenceTest {
         createPayment(payment1);
         createPayment(payment2);
 
-        Assertions.assertEquals(2, dataBaseService.getPaymentDao().selectCount(), "Number of payments");
+        anAssert.check(2, dataBaseService.getPaymentDao().selectCount(), "Number of payments");
     }
 
     @Description("Select payment with currency \"{0}\" test")
@@ -255,12 +255,12 @@ public class PaymentTests extends PersistenceTest {
 
         dataBaseService.getCurrencyDao().delete(currency);
         payment = dataBaseService.getPaymentDao().getById(dataBaseService.getPaymentDao().selectAll().get(0).getId());
-        Assertions.assertEquals(paymentName, payment.getName(), "Payment name");
-        Assertions.assertEquals(paymentDescription, payment.getDescription(), "Payment description");
-        Assertions.assertEquals(minAmount, payment.getMinAmount(), "Payment min amount");
-        Assertions.assertEquals(maxAmount, payment.getMaxAmount(), "Payment max amount");
-        Assertions.assertEquals(commission, payment.getCommission(), "Payment commission");
-        Assertions.assertNull(payment.getCurrency(), "Payment currency");
+        anAssert.check(paymentName, payment.getName(), "Payment name");
+        anAssert.check(paymentDescription, payment.getDescription(), "Payment description");
+        anAssert.check(minAmount, payment.getMinAmount(), "Payment min amount");
+        anAssert.check(maxAmount, payment.getMaxAmount(), "Payment max amount");
+        anAssert.check(commission, payment.getCommission(), "Payment commission");
+        anAssert.checkNull(payment.getCurrency(), "Payment currency");
     }
 
     @Description("Select payment with deleted currency test")
@@ -318,7 +318,7 @@ public class PaymentTests extends PersistenceTest {
         createPayment(payment4);
 
         int payments = dataBaseService.getPaymentDao().selectCount(name, currency);
-        Assertions.assertEquals(expectedPaymentCount, payments, "Number of payments");
+        anAssert.check(expectedPaymentCount, payments, "Number of payments");
     }
 
 }

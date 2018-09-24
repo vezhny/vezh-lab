@@ -84,7 +84,7 @@ public class EventTests extends PersistenceTest {
         createEvent(new Event(EventType.USER_SIGN_IN, "User ID: 1"));
         createEvent(new Event(EventType.USER_SIGN_IN, "User ID: 1"));
 
-        Assertions.assertEquals(2, dataBaseService.getEventDao().selectCount(), "Events count");
+        anAssert.check(2, dataBaseService.getEventDao().selectCount(), "Events count");
     }
 
     @Description("Select event pages test. Required page: {0}, rows on page: {1}, type: {2}, data: {4}")
@@ -121,7 +121,7 @@ public class EventTests extends PersistenceTest {
         createEvent(new Event(EventType.USER_SIGN_UP, "User ID: 3"));
 
         int events = dataBaseService.getEventDao().selectCount(eventType, date, data);
-        Assertions.assertEquals(expectedEventCount, events, "Number of events");
+        anAssert.check(expectedEventCount, events, "Number of events");
     }
 
 }

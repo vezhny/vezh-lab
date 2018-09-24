@@ -8,6 +8,7 @@ import core.json.UserConfig;
 import core.json.UserData;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.mock.web.MockHttpServletResponse;
 import vezh_bank.constants.Headers;
 import vezh_bank.enums.*;
@@ -18,6 +19,21 @@ import java.util.Collection;
 import java.util.List;
 
 public class Assert {
+
+    @Step("Check {1} is not null")
+    public void checkNotNull(Object value, String message) {
+        Assertions.assertNotNull(value, message);
+    }
+
+    @Step("Check {1} is null")
+    public void checkNull(Object value, String message) {
+        Assertions.assertNull(value, message);
+    }
+
+    @Step("Check exception. Expected {0}")
+    public void checkException(Class expectedExceptionClass, Executable runnable) {
+        Assertions.assertThrows(expectedExceptionClass, runnable);
+    }
 
     @Step("Check {2}. Excepted: {0}. Actual {1}")
     public void check(Object expected, Object actual, String message) {

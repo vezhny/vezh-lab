@@ -22,6 +22,6 @@ public class HousePartTests extends RootTest {
         UserAddress userAddress = new UserAddress("country", "region", "city", "street",
                 house, housePart, "201");
 
-        Assertions.assertEquals("2/3", userAddress.getHouse(), "House part");
+        anAssert.check("2/3", userAddress.getHouse(), "House part");
     }
 }

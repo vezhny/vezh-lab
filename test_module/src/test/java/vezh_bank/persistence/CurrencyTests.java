@@ -147,7 +147,7 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(643, "RUB");
 
         int numberOfCurrencies = dataBaseService.getCurrencyDao().selectCount();
-        Assertions.assertEquals(1, numberOfCurrencies, "Number of currencies");
+        anAssert.check(1, numberOfCurrencies, "Number of currencies");
     }
 
     @Description("Currency page test. Required page: {0}, rows on page: {1}, code: {2}, value: {3}")
@@ -179,6 +179,6 @@ public class CurrencyTests extends PersistenceTest {
         createCurrency(currencyCode2, currencyValue2);
 
         int currencies = dataBaseService.getCurrencyDao().selectCount(code, value);
-        Assertions.assertEquals(expectedCurrenciesCount, currencies, "Number of currencies");
+        anAssert.check(expectedCurrenciesCount, currencies, "Number of currencies");
     }
 }

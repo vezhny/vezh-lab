@@ -123,7 +123,7 @@ public class TransactionTests extends PersistenceTest {
         createTransaction(transaction4);
         createTransaction(transaction5);
 
-        Assertions.assertEquals(5, dataBaseService.getTransactionDao().selectCount(),
+        anAssert.check(5, dataBaseService.getTransactionDao().selectCount(),
                 "Number of transactions");
     }
 
@@ -152,6 +152,6 @@ public class TransactionTests extends PersistenceTest {
         createTransaction(transaction8);
 
         int transactions = dataBaseService.getTransactionDao().selectCount(type, dateTime, data, status);
-        Assertions.assertEquals(expectedTransactionsCount, transactions, "number of transactions");
+        anAssert.check(expectedTransactionsCount, transactions, "number of transactions");
     }
 }

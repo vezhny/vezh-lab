@@ -253,7 +253,7 @@ public class CardTests extends PersistenceTest {
 
         int cards = dataBaseService.getCardDao().selectCount();
 
-        Assertions.assertEquals(6, cards, "Number of cards");
+        anAssert.check(6, cards, "Number of cards");
     }
 
     @Description("Select card where: pan: {0}, holder name: {1}, creation date: {2}, expiry: {3}, currency: {4}" +
@@ -371,7 +371,7 @@ public class CardTests extends PersistenceTest {
 
         int cards = dataBaseService.getCardDao().selectCount(pan, holderName, creationDate, expiry, currency, status);
 
-        Assertions.assertEquals(expectedCardsCount, cards, "Number of cards");
+        anAssert.check(expectedCardsCount, cards, "Number of cards");
     }
 
     @Description("Select cards where required page: {0}, rows on page: {1},  pan: {2}, holder name: {3}, " +
@@ -456,7 +456,7 @@ public class CardTests extends PersistenceTest {
         createCard(card);
 
         dataBaseService.getUserDao().delete(holder);
-        Assertions.assertThrows(EntityNotFoundException.class, () -> dataBaseService.getCardDao().selectAll().get(0)); //TODO this to assert
+        anAssert.checkException(EntityNotFoundException.class, () -> dataBaseService.getCardDao().selectAll().get(0));
     }
 
     @Description("Delete card currency test")
@@ -481,6 +481,6 @@ public class CardTests extends PersistenceTest {
         createCard(card);
 
         dataBaseService.getCurrencyDao().delete(currency);
-        Assertions.assertThrows(EntityNotFoundException.class, () -> dataBaseService.getCardDao().selectAll().get(0));
+        anAssert.checkException(EntityNotFoundException.class, () -> dataBaseService.getCardDao().selectAll().get(0));
     }
 }

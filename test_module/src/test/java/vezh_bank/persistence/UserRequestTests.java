@@ -220,7 +220,7 @@ public class UserRequestTests extends PersistenceTest {
         createUserRequest(userRequest7);
         createUserRequest(userRequest8);
 
-        Assertions.assertEquals(8, dataBaseService.getUserRequestDao().selectCount(),
+        anAssert.check(8, dataBaseService.getUserRequestDao().selectCount(),
                 "User requests count");
     }
 
@@ -311,7 +311,7 @@ public class UserRequestTests extends PersistenceTest {
         int userRequests = dataBaseService.getUserRequestDao().selectCount(getUserId(user, users),
                 creationDate, status, data);
 
-        Assertions.assertEquals(expectedUserRequestsCount, userRequests,
+        anAssert.check(expectedUserRequestsCount, userRequests,
                 "User requests count");
     }
 
@@ -335,9 +335,9 @@ public class UserRequestTests extends PersistenceTest {
 
         List<UserRequest> userRequests = dataBaseService.getUserRequestDao().selectAll();
         anAssert.checkUserRequestsCount(1, userRequests);
-        Assertions.assertEquals(null, userRequests.get(0).getUser());
-        Assertions.assertEquals(UserRequestStatus.OPEN.toString(), userRequests.get(0).getStatus());
-        Assertions.assertEquals(data, userRequests.get(0).getData());
+        anAssert.checkNull(userRequests.get(0).getUser(), "user");
+        anAssert.check(UserRequestStatus.OPEN.toString(), userRequests.get(0).getStatus(), "request status");
+        anAssert.check(data, userRequests.get(0).getData(), "user request data");
     }
 
     @Description("Select user requests with user iD test")

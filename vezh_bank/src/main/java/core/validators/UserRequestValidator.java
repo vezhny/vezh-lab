@@ -6,7 +6,6 @@ import vezh_bank.constants.DatePatterns;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.enums.Role;
 import vezh_bank.persistence.DataBaseService;
-import vezh_bank.persistence.entity.User;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -38,30 +37,31 @@ public class UserRequestValidator extends Validator {
         checkPassword(requestParams.get(RequestParams.PASSWORD));
         checkRole(requestParams.get(RequestParams.ROLE));
         checkUserData();
+        checkUserAccess();
     }
 
-    private void checkUserAccess() throws BadRequestException { //TODO: user access tests
+    private void checkUserAccess() throws BadRequestException {
         if (!isNull(RequestParams.USER_ID)) {
             checkUserId(requestParams.get(RequestParams.USER_ID));
         }
     }
 
-    @Override
-    protected void checkUserId(String userId) throws BadRequestException {
-        if (isNull(userId)) {
-            throw new BadRequestException(format(MISSING_PARAMETER, RequestParams.USER_ID));
-        }
-        if (!isStringCanBeNumber(userId)) {
-            throw new BadRequestException(String.format(VALUE_CAN_NOT_BE_A_NUMBER, userId));
-        }
-        User user = dataBaseService.getUserDao().getById(stringToInt(userId));
-        if (isNull(user)) {
-            throw new BadRequestException(String.format(USER_DOES_NOT_EXIST, userId));
-        }
-        if (!user.getRole().equals(requestParams.get(RequestParams.ROLE))) {
-            throw new BadRequestException(THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS);
-        }
-    }
+//    @Override
+//    protected void checkUserId(String userId) throws BadRequestException {
+//        if (isNull(userId)) {
+//            throw new BadRequestException(format(MISSING_PARAMETER, RequestParams.USER_ID));
+//        }
+//        if (!isStringCanBeNumber(userId)) {
+//            throw new BadRequestException(String.format(VALUE_CAN_NOT_BE_A_NUMBER, userId));
+//        }
+//        User user = dataBaseService.getUserDao().getById(stringToInt(userId));
+//        if (isNull(user)) {
+//            throw new BadRequestException(String.format(USER_DOES_NOT_EXIST, userId));
+//        }
+//        if (!user.getRole().equals(requestParams.get(RequestParams.ROLE))) {
+//            throw new BadRequestException(THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS);
+//        }
+//    }
 
     private void checkRole(String role) throws BadRequestException {
         if (isNull(role)) {

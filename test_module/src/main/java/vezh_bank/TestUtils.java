@@ -35,7 +35,7 @@ public class TestUtils {
     }
 
     @Step("Create user. Role: {1}")
-    private int createUser(DataBaseService dataBaseService, UserRole role) {
+    public int createUser(DataBaseService dataBaseService, UserRole role) {
         User user = new User("Test generated", "password", role,
                 "Test generated", "No config yet", 3);
         dataBaseService.getUserDao().insert(user);

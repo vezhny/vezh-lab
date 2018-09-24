@@ -17,6 +17,8 @@ import org.springframework.util.MultiValueMap;
 import vezh_bank.constants.*;
 import vezh_bank.controller.providers.RegisterUserFailArgumentsProvider;
 import vezh_bank.controller.providers.RegisterUserSuccessAgrumentsProvider;
+import vezh_bank.controller.providers.RegistrationClientArgumentsProvider;
+import vezh_bank.enums.Role;
 import vezh_bank.extended_tests.ControllerTest;
 import vezh_bank.persistence.entity.User;
 import vezh_bank.persistence.entity.UserRole;
@@ -284,6 +286,91 @@ public class UserControllerTests extends ControllerTest {
         Assertions.assertEquals(String.format(ExceptionMessages.USER_WITH_LOGIN_IS_ALREADY_REGISTERED, login),
                 response.getHeader(Headers.ERROR_MESSAGE),
                 "Exception message");
+        checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
+    }
+
+    @Description("{0} tries to register client")
+    @ParameterizedTest
+    @ArgumentsSource(RegistrationClientArgumentsProvider.class)
+    public void clientRegistration(String role) {
+        testUtils.logTestStart(role + " tries to register client");
+
+        UserRole userRole = serviceProvider.getDataBaseService().getRoleDao().get(role);
+        int userId = testUtils.createUser(serviceProvider.getDataBaseService(), userRole);
+
+        String login = "Login";
+        String password = "password";
+        UserRoleDTO roleDTO = new UserRoleDTO(serviceProvider.getDataBaseService().getRoleDao().get(Role.CLIENT.toString()));
+        UserAddress address = new UserAddress("Belarus", "Homiel", "Svetlogorsk",
+                "Lunacharskogo", "30", "213");
+        UserData userData = new UserData("Test", "Test", "Test",
+                "10.11.1992", address, "+375293956223", "vezhny@gmail.com");
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.set(RequestParams.LOGIN, login);
+        params.set(RequestParams.PASSWORD, password);
+        params.set(RequestParams.ROLE, roleDTO.getName());
+        params.set(RequestParams.COUNTRY, address.getCountry());
+        params.set(RequestParams.REGION, address.getRegion());
+        params.set(RequestParams.CITY, address.getCity());
+        params.set(RequestParams.STREET, address.getStreet());
+        params.set(RequestParams.HOUSE, address.getHouse());
+        params.set(RequestParams.ROOM, address.getRoom());
+        params.set(RequestParams.FIRST_NAME, userData.getFirstName());
+        params.set(RequestParams.MIDDLE_NAME, userData.getMiddleName());
+        params.set(RequestParams.PATRONYMIC, userData.getPatronymic());
+        params.set(RequestParams.BIRTH_DATE, userData.getBirthDate());
+        params.set(RequestParams.CONTACT_NUMBER, userData.getContactNumber());
+        params.set(RequestParams.EMAIL, userData.getEmail());
+        params.set(RequestParams.USER_ID, String.valueOf(userId));
+
+        MockHttpServletResponse response = httpPost(Urls.USERS, params);
+
+        checkResponseCode(200, response.getStatus());
+
+        checkNumberOfUsers(2, serviceProvider.getDataBaseService().getUserDao().selectCount());
+    }
+
+    @Description("Client tries to register user")
+    @Test
+    public void clientTriesToRegisterUser() {
+        testUtils.logTestStart("Client tries to register user");
+
+        int userId = testUtils.createClient(serviceProvider.getDataBaseService());
+
+        String login = "Login";
+        String password = "password";
+        UserRoleDTO roleDTO = new UserRoleDTO(serviceProvider.getDataBaseService().getRoleDao().get(Role.CLIENT.toString()));
+        UserAddress address = new UserAddress("Belarus", "Homiel", "Svetlogorsk",
+                "Lunacharskogo", "30", "213");
+        UserData userData = new UserData("Test", "Test", "Test",
+                "10.11.1992", address, "+375293956223", "vezhny@gmail.com");
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.set(RequestParams.LOGIN, login);
+        params.set(RequestParams.PASSWORD, password);
+        params.set(RequestParams.ROLE, roleDTO.getName());
+        params.set(RequestParams.COUNTRY, address.getCountry());
+        params.set(RequestParams.REGION, address.getRegion());
+        params.set(RequestParams.CITY, address.getCity());
+        params.set(RequestParams.STREET, address.getStreet());
+        params.set(RequestParams.HOUSE, address.getHouse());
+        params.set(RequestParams.ROOM, address.getRoom());
+        params.set(RequestParams.FIRST_NAME, userData.getFirstName());
+        params.set(RequestParams.MIDDLE_NAME, userData.getMiddleName());
+        params.set(RequestParams.PATRONYMIC, userData.getPatronymic());
+        params.set(RequestParams.BIRTH_DATE, userData.getBirthDate());
+        params.set(RequestParams.CONTACT_NUMBER, userData.getContactNumber());
+        params.set(RequestParams.EMAIL, userData.getEmail());
+        params.set(RequestParams.USER_ID, String.valueOf(userId));
+
+        MockHttpServletResponse response = httpPost(Urls.USERS, params);
+
+        checkResponseCode(400, response.getStatus());
+        Assertions.assertEquals(ExceptionMessages.THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS,
+                response.getHeader(Headers.ERROR_MESSAGE),
+                "Exception message");
+
         checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
     }
 }

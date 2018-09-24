@@ -37,7 +37,7 @@ public class RegisterUserFailArgumentsProvider implements ArgumentsProvider {
                         "+375293956223", "vezhny@gmail.com", format(INVALID_PARAMETER, LOGIN)),
                 Arguments.of("Login is contains wrong chars", "Vezhny!", "password", "CLIENT", "Belarus", "Homiel", "Svetlogorsk",
                         "Lunacharskogo", "30", "213", "Artsiom", "Vezhnavets", "Vadimovich", "10.11.1992",
-                        "+375293956223", "vezhny@gmail.com", format(INVALID_PARAMETER, LOGIN)), //TODO: create non-unique login test
+                        "+375293956223", "vezhny@gmail.com", format(INVALID_PARAMETER, LOGIN)),
                 Arguments.of("Password is NULL", "Vezhny", null, "CLIENT", "Belarus", "Homiel", "Svetlogorsk",
                         "Lunacharskogo", "30", "213", "Artsiom", "Vezhnavets", "Vadimovich", "10.11.1992",
                         "+375293956223", "vezhny@gmail.com", format(MISSING_PARAMETER, PASSWORD)),

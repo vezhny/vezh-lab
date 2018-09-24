@@ -11,6 +11,7 @@ import vezh_bank.enums.Role;
 import vezh_bank.extended_tests.PersistenceTest;
 import vezh_bank.persistence.entity.UserRole;
 import vezh_bank.persistence.providers.role.RoleArgumentsProvider;
+import vezh_bank.persistence.providers.role.RoleNameArgumentsProvider;
 
 import java.util.List;
 
@@ -35,5 +36,14 @@ public class RoleTests extends PersistenceTest {
         UserRole userRole = dataBaseService.getRoleDao().getById(clientRoleId);
         Assertions.assertEquals(clientRoleId, userRole.getId(), "Role ID");
         Assertions.assertEquals(role.toString(), userRole.getName(), "Role name");
+    }
+
+    @Description("Select role by name test. Name: {0}")
+    @ParameterizedTest
+    @ArgumentsSource(RoleNameArgumentsProvider.class)
+    public void selectRoleByName(String name) {
+        testUtils.logTestStart("Select role with name \"" + name + "\"");
+        UserRole userRole = serviceProvider.getDataBaseService().getRoleDao().get(name);
+        Assertions.assertNotNull(userRole);
     }
 }

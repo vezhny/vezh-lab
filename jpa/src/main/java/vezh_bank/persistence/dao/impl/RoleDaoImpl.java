@@ -54,7 +54,7 @@ public class RoleDaoImpl implements RoleDao {
             return userRole;
         } catch (NoResultException e) {
             logger.info("Role with name \"" + name + "\" not found");
-            return null; //TODO: test fot this
+            return null;
         }//TODO: log params in ""
     }
 }

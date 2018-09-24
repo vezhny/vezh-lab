@@ -8,6 +8,7 @@ import org.springframework.util.MultiValueMap;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 public class ControllerTest extends RootTest {
 
@@ -15,6 +16,16 @@ public class ControllerTest extends RootTest {
     protected MockHttpServletResponse httpGet(String url, MultiValueMap<String, String> params) {
         try {
             return mockMvc.perform(get(url).params(params)).andReturn().getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Step("Http POST to {0}")
+    protected MockHttpServletResponse httpPost(String url, MultiValueMap<String, String> params) {
+        try {
+            return mockMvc.perform(post(url).params(params)).andReturn().getResponse();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -41,15 +41,20 @@ public interface RequestHandler<T> {
     }
 
     default ResponseEntity<T> error(Exception e) {
+        return error(e, HttpStatus.BAD_REQUEST);
+    }
+
+    default ResponseEntity<T> error(Exception e, HttpStatus httpStatus) {
         Logger logger = Logger.getLogger(this.getClass());
 
         logger.info(e.getMessage());
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.set(Headers.ERROR_MESSAGE, e.getMessage());
-        return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(headers, httpStatus);
     }
 
     default void logRequestParams(Logger logger, Map<String, String> requestParams) {
+        logger.info("Request params: ");
         for (Map.Entry entry : requestParams.entrySet()) {
             logger.info(entry.getKey() + ": " + entry.getValue());
         }

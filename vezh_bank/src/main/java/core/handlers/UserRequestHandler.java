@@ -1,7 +1,6 @@
 package core.handlers;
 
 import core.dto.UserDTO;
-import core.dto.UserRoleDTO;
 import core.exceptions.BadRequestException;
 import core.exceptions.ServerErrorException;
 import core.json.UserAddress;
@@ -12,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import vezh_bank.constants.RequestParams;
+import vezh_bank.persistence.entity.UserRole;
 import vezh_bank.util.Logger;
 
 import java.util.Map;
@@ -37,7 +37,7 @@ public class UserRequestHandler implements RequestHandler {
                 return registerUserResponse();
             }
         } catch (ServerErrorException e) {
-            return error(e);
+            return error(e, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (BadRequestException e) {
             return error(e);
         }
@@ -49,7 +49,8 @@ public class UserRequestHandler implements RequestHandler {
         userRequestValidator.checkUserRegistrationParams();
         String login = requestParams.get(RequestParams.LOGIN);
         String password = requestParams.get(RequestParams.PASSWORD);
-        UserRoleDTO roleDTO = new UserRoleDTO(requestParams.get(RequestParams.ROLE));
+        UserRole userRole = serviceProvider.getDataBaseService().getRoleDao().get(requestParams.get(RequestParams.ROLE));
+//        UserRoleDTO roleDTO = new UserRoleDTO(requestParams.get(RequestParams.ROLE));
         String firstName = requestParams.get(RequestParams.FIRST_NAME);
         String middleName = requestParams.get(RequestParams.MIDDLE_NAME);
         String patronymic = requestParams.get(RequestParams.PATRONYMIC);
@@ -66,7 +67,7 @@ public class UserRequestHandler implements RequestHandler {
         String email = requestParams.get(RequestParams.EMAIL);
         UserData userData = new UserData(firstName, middleName, patronymic, birthDate, userAddress,
                 contactNumber, email);
-        UserDTO userDTO = new UserDTO(login, password, roleDTO, userData);
+        UserDTO userDTO = new UserDTO(login, password, userRole, userData);
 
         serviceProvider.getUserService().addUser(userDTO);
         return new ResponseEntity(HttpStatus.OK);

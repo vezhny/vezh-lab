@@ -8,6 +8,7 @@ import vezh_bank.constants.UserDefault;
 import vezh_bank.persistence.entity.Card;
 import vezh_bank.persistence.entity.User;
 import vezh_bank.persistence.entity.UserRequest;
+import vezh_bank.persistence.entity.UserRole;
 import vezh_bank.util.Encryptor;
 
 import java.util.ArrayList;
@@ -49,10 +50,10 @@ public class UserDTO implements BaseDTO<User> {
     @Expose
     private List<UserRequestDTO> userRequests;
 
-    public UserDTO(String login, String password, UserRoleDTO role, UserData data) {
+    public UserDTO(String login, String password, UserRole role, UserData data) {
         this.login = login;
         this.password = ENCRYPTOR.encrypt(password);
-        this.role = role;
+        this.role = new UserRoleDTO(role);
         this.data = data;
         this.config = new UserConfig();
         this.attemptsToSignIn = UserDefault.ATTEMPTS_TO_SIGN_IN;

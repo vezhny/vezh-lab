@@ -13,4 +13,7 @@ public interface RoleDao extends GlobalSelectDao<UserRole> {
     @Transactional
     @Override
     UserRole getById(int id);
+
+    @Transactional
+    UserRole get(String name);
 }

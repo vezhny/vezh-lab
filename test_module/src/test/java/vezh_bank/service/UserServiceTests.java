@@ -32,7 +32,7 @@ public class UserServiceTests extends ServiceTest {
         UserData userData = new UserData("Test", "Test", "Test",
                 "10.11.1992", address, "+375293956223", "vezhny@gmail.com");
         serviceProvider.getUserService().addUser(new UserDTO(login, password,
-                roleDTO, userData));
+                userRoles.get(0), userData));
 
         List<User> users = serviceProvider.getDataBaseService().getUserDao().selectAll();
         checkNumberOfUsers(1, users.size());

@@ -17,12 +17,18 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(Urls.USERS)
-public class UserController {
+public class UserController { //TODO: log start/end operation
     private Logger logger = Logger.getLogger(this.getClass());
 
     @Autowired
     private ServiceProvider serviceProvider;
 
+    /**
+     * Required params: login, password, role, country, region, city, street, house, room, firstName, middleName,
+     * patronymic, contactNumber
+     * @param params
+     * @return
+     */
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addUser(@RequestParam Map<String, String> params) {
         RequestHandler requestHandler = new UserRequestHandler(serviceProvider, params);

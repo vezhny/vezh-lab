@@ -42,4 +42,19 @@ public class RoleDaoImpl implements RoleDao {
             return null;
         }
     }
+
+    @Override
+    public UserRole get(String name) {
+        logger.info("Select role with name \"" + name + "\"");
+        try {
+            UserRole userRole = entityManager.createQuery("SELECT r FROM UserRole r WHERE r.name = :name",
+                    UserRole.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+            return userRole;
+        } catch (NoResultException e) {
+            logger.info("Role with name \"" + name + "\" not found");
+            return null; //TODO: test fot this
+        }//TODO: log params in ""
+    }
 }

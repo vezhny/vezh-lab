@@ -6,7 +6,7 @@ public class ExceptionMessages {
     public static final String USER_DOES_NOT_EXIST = "User with ID \"%s\" doesn't exist";
     public static final String THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS = "This operation is not allowed for clients";
     public static final String MISSING_REQUEST_TYPE_PARAMETER = "Missing request type parameter";
-    public static final String MISSING_PARAMETER = "Missing %s parameter";
+    public static final String MISSING_PARAMETER = "Missing parameter \"%s\"";
     public static final String CAN_NOT_READ_PROPERTIES = "Can't read property file";
     //TODO: add static methods for format
     public static final String INVALID_PARAMETER = "Invalid parameter: \"%s\"";

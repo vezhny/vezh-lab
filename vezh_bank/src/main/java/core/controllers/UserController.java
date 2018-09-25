@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(Urls.USERS)
-public class UserController implements BaseController {
+public class UserController implements BaseController { // TODO: add events after register
     private Logger logger = Logger.getLogger(this.getClass());
 
     @Autowired

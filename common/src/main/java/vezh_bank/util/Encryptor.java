@@ -1,6 +1,8 @@
 package vezh_bank.util;
 
+import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.util.text.StrongTextEncryptor;
+import vezh_bank.constants.ExceptionMessages;
 
 public class Encryptor {
     private StrongTextEncryptor encryptor;
@@ -20,7 +22,13 @@ public class Encryptor {
 
     public String decrypt(String value) {
         logger.info("Decrypting \"" + value + "\"");
-        String decryptedValue = encryptor.decrypt(value);
+        String decryptedValue;
+        try {
+            decryptedValue = encryptor.decrypt(value);
+        } catch (EncryptionOperationNotPossibleException e) {
+            logger.error(ExceptionMessages.unableToDecryptValue(value));
+            decryptedValue = value;
+        }
         logger.info("Decrypted value: " + decryptedValue);
         return decryptedValue;
     }

@@ -4,7 +4,6 @@ import core.dto.UserRoleDTO;
 import core.json.UserConfig;
 import core.json.UserData;
 import io.qameta.allure.Step;
-import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import vezh_bank.persistence.entity.User;
 import vezh_bank.persistence.entity.UserRole;
 import vezh_bank.util.Encryptor;
@@ -31,11 +30,7 @@ public class UserAsserts extends Asserts {
 
         Encryptor encryptor = new Encryptor();
         checkObject(expectedLogin, actualUser.getLogin(), "Login");
-        try {
-            checkObject(expectedPassword, encryptor.decrypt(actualUser.getPassword()), "Password");
-        } catch (EncryptionOperationNotPossibleException e) {
-            checkObject(expectedPassword, actualUser.getPassword(), "Password");
-        }
+        checkObject(expectedPassword, encryptor.decrypt(actualUser.getPassword()), "Password");
         checkObject(expectedRole.getName(), actualUser.getRole(), "Role");
         checkObject(expectedConfig, actualUser.getConfig(), "Config");
         checkObject(expectedAttemptsToSignInLeft, actualUser.getAttemptsToSignIn(), "Attempts to sign in");

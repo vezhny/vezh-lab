@@ -18,6 +18,7 @@ public class ExceptionMessages {
             "but actual length is \"%s\"";
     public static final String VALUE_DOES_NOT_MATCH_TO_REGEX = "Value \"%s\" doesn't match regex \"%s\"";
     public static final String DATE_HAS_INVALID_PATTERN = "Date \"%s\" has invalid pattern";
+    public static final String UNABLE_TO_DECRYPT_VALUE = "Unable to decrypt value \"%s\"";
 
     public static String valueCanNotBeANumber(String value) {
         return format(VALUE_CAN_NOT_BE_A_NUMBER, value);
@@ -57,5 +58,9 @@ public class ExceptionMessages {
 
     public static String dateHasInvalidPattern(String date) {
         return format(DATE_HAS_INVALID_PATTERN, date);
+    }
+
+    public static String unableToDecryptValue(String value) {
+        return format(UNABLE_TO_DECRYPT_VALUE, value);
     }
 }

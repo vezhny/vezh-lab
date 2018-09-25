@@ -1,7 +1,6 @@
 package vezh_bank.special;
 
 import io.qameta.allure.Description;
-import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,7 @@ import vezh_bank.util.Encryptor;
 public class EncryptorTests extends RootTest {
 
     @Description("Encryptor test")
-    @Link("https://github.com/vezhny/vezh-lab/issues/15")
+    @Link(url = "https://github.com/vezhny/vezh-lab/issues/15")
     @Test
     public void encryptorTest() {
         testUtils.logTestStart("Encryptor test");

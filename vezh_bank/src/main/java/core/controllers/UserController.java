@@ -2,9 +2,12 @@ package core.controllers;
 
 import core.handlers.RequestHandler;
 import core.handlers.UserRequestHandler;
+import core.json.Users;
+import core.response.VezhBankResponse;
+import core.response.user.GetUsersResponse;
+import core.response.user.RegisterUserResponse;
 import core.services.ServiceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +35,23 @@ public class UserController implements BaseController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addUser(@RequestParam Map<String, String> params) {
         logStartOperation(logger);
-        RequestHandler requestHandler = new UserRequestHandler(serviceProvider, params);
-        ResponseEntity responseEntity = requestHandler.getResponse(HttpMethod.POST);
+        RequestHandler requestHandler = new UserRequestHandler(params, new RegisterUserResponse(serviceProvider, params));
+        ResponseEntity responseEntity = requestHandler.getResponse();
+        logEndOperation(logger);
+        return responseEntity;
+    }
+
+    /**
+     * Required params: userId
+     * @param params
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity getUsers(@RequestParam Map<String, String> params) {
+        logStartOperation(logger);
+        VezhBankResponse<Users> response = new GetUsersResponse(serviceProvider, params);
+        RequestHandler requestHandler = new UserRequestHandler(params, response);
+        ResponseEntity responseEntity = requestHandler.getResponse();
         logEndOperation(logger);
         return responseEntity;
     }

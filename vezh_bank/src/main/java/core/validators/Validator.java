@@ -80,7 +80,7 @@ public abstract class Validator {
         return true;
     }
 
-    protected void checkUserId(String userId) throws BadRequestException {
+    public void checkUserId(String userId) throws BadRequestException {
         if (isNull(userId)) {
             throw new BadRequestException(USER_ID_MUST_PRESENT, parameterIsNull(RequestParams.USER_ID));
         }

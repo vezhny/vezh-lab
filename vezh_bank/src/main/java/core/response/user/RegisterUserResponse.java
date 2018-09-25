@@ -1,8 +1,10 @@
 package core.response.user;
 
+import core.dto.EventDTO;
 import core.dto.UserDTO;
 import core.exceptions.BadRequestException;
 import core.exceptions.ServerErrorException;
+import core.json.EventData;
 import core.json.UserAddress;
 import core.json.UserData;
 import core.response.VezhBankResponse;
@@ -10,7 +12,9 @@ import core.services.ServiceProvider;
 import core.validators.UserRequestValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import vezh_bank.constants.EventDescriptions;
 import vezh_bank.constants.RequestParams;
+import vezh_bank.enums.EventType;
 import vezh_bank.persistence.entity.UserRole;
 import vezh_bank.util.Logger;
 
@@ -61,6 +65,9 @@ public class RegisterUserResponse implements VezhBankResponse {
         UserDTO userDTO = new UserDTO(login, password, userRole, userData);
 
         serviceProvider.getUserService().addUser(userDTO);
+        EventDTO eventDTO = new EventDTO(EventType.USER_SIGN_UP,
+                new EventData(EventDescriptions.registeredUserWithLogin(login)));
+        serviceProvider.getEventService().addEvent(eventDTO);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

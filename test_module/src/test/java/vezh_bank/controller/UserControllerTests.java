@@ -2,10 +2,7 @@ package vezh_bank.controller;
 
 import core.dto.UserDTO;
 import core.dto.UserRoleDTO;
-import core.json.UserAddress;
-import core.json.UserConfig;
-import core.json.UserData;
-import core.json.Users;
+import core.json.*;
 import io.qameta.allure.Description;
 import io.qameta.allure.Link;
 import io.qameta.allure.Story;
@@ -15,16 +12,15 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import vezh_bank.constants.ExceptionMessages;
-import vezh_bank.constants.RequestParams;
-import vezh_bank.constants.Urls;
-import vezh_bank.constants.UserDefault;
+import vezh_bank.constants.*;
 import vezh_bank.controller.providers.users.get.GetUsersArgumentsProvider;
 import vezh_bank.controller.providers.users.registration.RegisterUserFailArgumentsProvider;
 import vezh_bank.controller.providers.users.registration.RegisterUserSuccessAgrumentsProvider;
 import vezh_bank.controller.providers.users.registration.RegistrationClientArgumentsProvider;
+import vezh_bank.enums.EventType;
 import vezh_bank.enums.Role;
 import vezh_bank.extended_tests.ControllerTest;
+import vezh_bank.persistence.entity.Event;
 import vezh_bank.persistence.entity.User;
 import vezh_bank.persistence.entity.UserRole;
 
@@ -76,6 +72,11 @@ public class UserControllerTests extends ControllerTest {
         userAsserts.checkNumberOfUsers(1, users.size());
         userAsserts.checkUser(login, password, roleDTO, new UserConfig(), UserDefault.ATTEMPTS_TO_SIGN_IN,
                 false, null, userData, users.get(0));
+        eventAsserts.checkNumberOfEvents(1, serviceProvider.getDataBaseService().getEventDao().selectCount());
+        EventType eventType = EventType.USER_SIGN_UP;
+        EventData eventData = new EventData(EventDescriptions.registeredUserWithLogin(login));
+        Event event = serviceProvider.getDataBaseService().getEventDao().selectAll().get(0);
+        eventAsserts.checkEvent(eventType, eventData, event);
     }
 
     @Description("Register user success with house part test")
@@ -122,6 +123,11 @@ public class UserControllerTests extends ControllerTest {
         userAsserts.checkNumberOfUsers(1, users.size());
         userAsserts.checkUser(login, password, roleDTO, new UserConfig(), UserDefault.ATTEMPTS_TO_SIGN_IN,
                 false, null, userData, users.get(0));
+        eventAsserts.checkNumberOfEvents(1, serviceProvider.getDataBaseService().getEventDao().selectCount());
+        EventType eventType = EventType.USER_SIGN_UP;
+        EventData eventData = new EventData(EventDescriptions.registeredUserWithLogin(login));
+        Event event = serviceProvider.getDataBaseService().getEventDao().selectAll().get(0);
+        eventAsserts.checkEvent(eventType, eventData, event);
     }
 
     @Description("Register user success without email test")
@@ -164,6 +170,11 @@ public class UserControllerTests extends ControllerTest {
         userAsserts.checkNumberOfUsers(1, users.size());
         userAsserts.checkUser(login, password, roleDTO, new UserConfig(), UserDefault.ATTEMPTS_TO_SIGN_IN,
                 false, null, userData, users.get(0));
+        eventAsserts.checkNumberOfEvents(1, serviceProvider.getDataBaseService().getEventDao().selectCount());
+        EventType eventType = EventType.USER_SIGN_UP;
+        EventData eventData = new EventData(EventDescriptions.registeredUserWithLogin(login));
+        Event event = serviceProvider.getDataBaseService().getEventDao().selectAll().get(0);
+        eventAsserts.checkEvent(eventType, eventData, event);
     }
 
     @Description("{0}")
@@ -206,6 +217,7 @@ public class UserControllerTests extends ControllerTest {
 
         userAsserts.checkNumberOfUsers(0, serviceProvider.getDataBaseService().getUserDao().selectCount());
         httpAsserts.checkExceptionMessage(expectedErrorMessage, response);
+        eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
     @Description("{0}")
@@ -242,6 +254,11 @@ public class UserControllerTests extends ControllerTest {
 
         httpAsserts.checkResponseCode(200, response.getStatus());
         userAsserts.checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        eventAsserts.checkNumberOfEvents(1, serviceProvider.getDataBaseService().getEventDao().selectCount());
+        EventType eventType = EventType.USER_SIGN_UP;
+        EventData eventData = new EventData(EventDescriptions.registeredUserWithLogin(login));
+        Event event = serviceProvider.getDataBaseService().getEventDao().selectAll().get(0);
+        eventAsserts.checkEvent(eventType, eventData, event);
     }
 
     @Description("Login in non-unique test")
@@ -286,6 +303,11 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkResponseCode(400, response.getStatus());
         httpAsserts.checkExceptionMessage(String.format(ExceptionMessages.USER_WITH_LOGIN_IS_ALREADY_REGISTERED, login), response);
         userAsserts.checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        eventAsserts.checkNumberOfEvents(1, serviceProvider.getDataBaseService().getEventDao().selectCount());
+        EventType eventType = EventType.USER_SIGN_UP;
+        EventData eventData = new EventData(EventDescriptions.registeredUserWithLogin(login));
+        Event event = serviceProvider.getDataBaseService().getEventDao().selectAll().get(0);
+        eventAsserts.checkEvent(eventType, eventData, event);
     }
 
     @Description("{0} tries to register client")
@@ -327,6 +349,7 @@ public class UserControllerTests extends ControllerTest {
 
         httpAsserts.checkResponseCode(200, response.getStatus());
         userAsserts.checkNumberOfUsers(2, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        eventAsserts.checkNumberOfEvents(1, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
     @Description("Client tries to register user")
@@ -367,6 +390,7 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkResponseCode(400, response.getStatus());
         httpAsserts.checkExceptionMessage(ExceptionMessages.THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS, response);
         userAsserts.checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
     @Link(url = "https://github.com/vezhny/vezh-lab/issues/18") //TODO: make all links url

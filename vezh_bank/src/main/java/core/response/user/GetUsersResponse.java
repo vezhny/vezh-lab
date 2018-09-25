@@ -1,9 +1,10 @@
-package core.response;
+package core.response.user;
 
 import core.dto.UserDTO;
 import core.exceptions.BadRequestException;
 import core.exceptions.ServerErrorException;
 import core.json.Users;
+import core.response.VezhBankResponse;
 import core.services.ServiceProvider;
 import core.validators.UserRequestValidator;
 import org.springframework.http.HttpStatus;

@@ -3,9 +3,9 @@ package core.controllers;
 import core.handlers.EventsRequestHandler;
 import core.handlers.RequestHandler;
 import core.json.Events;
+import core.response.event.GetEventsResponse;
 import core.services.ServiceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,8 +34,8 @@ public class EventController implements BaseController {
     public ResponseEntity<Events> getEvents(@RequestParam Map<String, String> params) {
         logStartOperation(logger);
         logger.info("Events GET request");
-        RequestHandler<Events> handler = new EventsRequestHandler(serviceProvider, params);
-        ResponseEntity<Events> responseEntity = handler.getResponse(HttpMethod.GET);
+        RequestHandler<Events> handler = new EventsRequestHandler(params, new GetEventsResponse(serviceProvider, params));
+        ResponseEntity<Events> responseEntity = handler.getResponse();
         logEndOperation(logger);
         return responseEntity;
     }

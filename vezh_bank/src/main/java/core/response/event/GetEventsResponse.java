@@ -26,6 +26,7 @@ public class GetEventsResponse implements VezhBankResponse<Events> {
     public GetEventsResponse(ServiceProvider serviceProvider, Map<String, String> requestParams) {
         this.serviceProvider = serviceProvider;
         this.requestParams = requestParams;
+        eventRequestValidator = new EventRequestValidator(requestParams, serviceProvider.getDataBaseService());
     }
 
     @Override

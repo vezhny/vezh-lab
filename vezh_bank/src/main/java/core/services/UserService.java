@@ -17,7 +17,10 @@ public class UserService {
     }
 
     public void addUser(UserDTO userDTO) {
-        dataBaseService.getUserDao().insert(userDTO.getEntity());
+        User user = new User(userDTO.getLogin(), userDTO.getEncryptedPassword(),
+                userDTO.getRole().getEntity(), userDTO.getData().toString(),
+                userDTO.getConfig().toString(), userDTO.getAttemptsToSignIn());
+        dataBaseService.getUserDao().insert(user);
     }
 
     public List<UserDTO> getUsers(List<User> users) {

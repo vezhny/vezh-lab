@@ -33,9 +33,9 @@ public class RegisterUserResponse implements VezhBankResponse {
             userRequestValidator = new UserRequestValidator(serviceProvider.getDataBaseService(), requestParams);
             userRequestValidator.checkUserRegistrationParams();
         } catch (ServerErrorException e) {
-            error(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            return error(e, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (BadRequestException e) {
-            error(e);
+            return error(e);
         }
         logger.info("User registration");
 

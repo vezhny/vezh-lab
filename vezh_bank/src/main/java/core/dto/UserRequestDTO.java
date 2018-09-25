@@ -26,6 +26,8 @@ public class UserRequestDTO implements BaseDTO<UserRequest> {
     @Expose
     private UserRequestData data;
 
+    private transient UserRequest userRequest;
+
     public UserRequestDTO(UserDTO user, String detail) {
         this.user = user;
         this.date = new SimpleDateFormat(DatePatterns.DEFAULT_DATE_PATTERN).format(new Date());
@@ -39,6 +41,7 @@ public class UserRequestDTO implements BaseDTO<UserRequest> {
         this.date = userRequest.getDate();
         this.status = UserRequestStatus.valueOf(userRequest.getStatus());
         this.data = new Gson().fromJson(userRequest.getData(), UserRequestData.class);
+        this.userRequest = userRequest;
     }
 
     public void setStatus(UserRequestStatus status) {
@@ -67,7 +70,6 @@ public class UserRequestDTO implements BaseDTO<UserRequest> {
 
     @Override
     public UserRequest getEntity() {
-        UserRequest userRequest = new UserRequest(user.getEntity(), data.toString());
         return userRequest;
     }
 }

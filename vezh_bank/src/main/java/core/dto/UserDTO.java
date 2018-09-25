@@ -111,6 +111,10 @@ public class UserDTO implements BaseDTO<User> {
         return ENCRYPTOR.decrypt(password);
     }
 
+    public String getEncryptedPassword() {
+        return this.password;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }

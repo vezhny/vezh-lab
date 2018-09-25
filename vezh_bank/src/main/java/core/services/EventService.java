@@ -17,7 +17,8 @@ public class EventService {
     }
 
     public void addEvent(EventDTO eventDTO) {
-        dataBaseService.getEventDao().insert(eventDTO.getEntity());
+        Event event = new Event(eventDTO.getType(), eventDTO.getEventData().toString());
+        dataBaseService.getEventDao().insert(event);
     }
 
     public List<EventDTO> getEvents(List<Event> events) {

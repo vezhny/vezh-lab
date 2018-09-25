@@ -40,7 +40,7 @@ public class UserRequestValidator extends Validator {
     }
 
     private void checkUserAccess() throws BadRequestException {
-        if (!isNull(RequestParams.USER_ID)) {
+        if (!isNull(requestParams.get(RequestParams.USER_ID))) {
             checkUserId(requestParams.get(RequestParams.USER_ID));
         }
     }
@@ -211,7 +211,8 @@ public class UserRequestValidator extends Validator {
             throw new BadRequestException(invalidParameter(RequestParams.CONTACT_NUMBER));
         }
 
-        checkValueLength(USER_CONTACT_NUMBER_MIN_LENGTH, USER_CONTACT_NUMBER_MAX_LENGTH, number, RequestParams.CONTACT_NUMBER);
+        checkValueLength(USER_CONTACT_NUMBER_MIN_LENGTH, USER_CONTACT_NUMBER_MAX_LENGTH,
+                number.replaceAll("\\+", ""), RequestParams.CONTACT_NUMBER);
     }
 
     private void checkEmail(String email) throws BadRequestException {

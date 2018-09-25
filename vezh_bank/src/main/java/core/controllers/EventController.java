@@ -35,7 +35,8 @@ public class EventController implements BaseController {
         logStartOperation(logger);
         logger.info("Events GET request");
         RequestHandler<Events> handler = new EventsRequestHandler(serviceProvider, params);
+        ResponseEntity<Events> responseEntity = handler.getResponse(HttpMethod.GET);
         logEndOperation(logger);
-        return handler.getResponse(HttpMethod.GET);
+        return responseEntity;
     }
 }

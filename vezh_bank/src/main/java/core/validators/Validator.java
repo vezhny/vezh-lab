@@ -101,7 +101,8 @@ public abstract class Validator {
         int minLength = stringToInt(properties.getProperty(propertyMinLengthName));
         int maxLength = stringToInt(properties.getProperty(propertyMaxLengthName));
         if (!valueLengthValid(minLength, maxLength, value)) {
-            throw new BadRequestException(valueShouldHaveLength(paramName, minLength, maxLength, value.length()));
+            throw new BadRequestException(invalidParameter(paramName),
+                    valueShouldHaveLength(paramName, minLength, maxLength, value.length()));
         }
     }
 }

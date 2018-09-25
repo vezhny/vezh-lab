@@ -33,7 +33,8 @@ public class UserController implements BaseController {
     public ResponseEntity addUser(@RequestParam Map<String, String> params) {
         logStartOperation(logger);
         RequestHandler requestHandler = new UserRequestHandler(serviceProvider, params);
+        ResponseEntity responseEntity = requestHandler.getResponse(HttpMethod.POST);
         logEndOperation(logger);
-        return requestHandler.getResponse(HttpMethod.POST);
+        return responseEntity;
     }
 }

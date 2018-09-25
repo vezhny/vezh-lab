@@ -1,7 +1,6 @@
 package vezh_bank.persistence;
 
 import io.qameta.allure.Description;
-import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
@@ -371,7 +370,7 @@ public class CardTests extends PersistenceTest {
 
         int cards = dataBaseService.getCardDao().selectCount(pan, holderName, creationDate, expiry, currency, status);
 
-        cardAsserts.checkNumber(6, cards, "Number of cards");
+        cardAsserts.checkNumber(expectedCardsCount, cards, "Number of cards");
     }
 
     @Description("Select cards where required page: {0}, rows on page: {1},  pan: {2}, holder name: {3}, " +

@@ -4,8 +4,8 @@ import core.dto.UserRoleDTO;
 import core.json.UserAddress;
 import core.json.UserConfig;
 import core.json.UserData;
+import core.json.Users;
 import io.qameta.allure.Description;
-import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
@@ -26,6 +26,7 @@ import vezh_bank.extended_tests.ControllerTest;
 import vezh_bank.persistence.entity.User;
 import vezh_bank.persistence.entity.UserRole;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Story("User controller")
@@ -364,5 +365,36 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkResponseCode(400, response.getStatus());
         httpAsserts.checkExceptionMessage(ExceptionMessages.THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS, response);
         userAsserts.checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
+    }
+
+    @Link(url = "https://github.com/vezhny/vezh-lab/issues/18") //TODO: make all links url
+    @Description("Get all users test")
+    @Test
+    public void getAllUsers() throws UnsupportedEncodingException {
+        testUtils.logTestStart("Get all users test");
+
+        int userId = testUtils.createNotAClient(serviceProvider.getDataBaseService());
+
+        testUtils.createClient(serviceProvider.getDataBaseService());
+        testUtils.createClient(serviceProvider.getDataBaseService());
+        testUtils.createClient(serviceProvider.getDataBaseService());
+        testUtils.createUser(serviceProvider.getDataBaseService(),
+                serviceProvider.getDataBaseService().getRoleDao().get(Role.ADMIN.toString()));
+        testUtils.createUser(serviceProvider.getDataBaseService(),
+                serviceProvider.getDataBaseService().getRoleDao().get(Role.ADMIN.toString()));
+        testUtils.createUser(serviceProvider.getDataBaseService(),
+                serviceProvider.getDataBaseService().getRoleDao().get(Role.EMPLOYEE.toString()));
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.set(RequestParams.USER_ID, String.valueOf(userId));
+
+        MockHttpServletResponse response = httpGet(Urls.USERS, params);
+
+        httpAsserts.checkResponseCode(200, response.getStatus());
+
+        Users users = gson.fromJson(response.getContentAsString(), Users.class);
+        userAsserts.checkNumberOfUsers(7, users.getUsers().size());
+        httpAsserts.checkCurrentPage(1, response);
+        httpAsserts.checkPagesCount(1, response);
     }
 }

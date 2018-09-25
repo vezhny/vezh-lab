@@ -5,6 +5,7 @@ import core.exceptions.BadRequestException;
 import core.exceptions.ServerErrorException;
 import core.json.UserAddress;
 import core.json.UserData;
+import core.response.VezhBankResponse;
 import core.services.ServiceProvider;
 import core.validators.UserRequestValidator;
 import org.springframework.http.HttpMethod;
@@ -22,10 +23,16 @@ public class UserRequestHandler implements RequestHandler {
     private ServiceProvider serviceProvider;
     private Map<String, String> requestParams;
     private UserRequestValidator userRequestValidator;
+    private VezhBankResponse vezhBankResponse;
 
     public UserRequestHandler(ServiceProvider serviceProvider, Map<String, String> requestParams) {
         this.serviceProvider = serviceProvider;
         this.requestParams = requestParams;
+    }
+
+    public UserRequestHandler(Map<String, String> requestParams, VezhBankResponse vezhBankResponse) {
+        this.requestParams = requestParams;
+        this.vezhBankResponse = vezhBankResponse;
     }
 
     @Override
@@ -36,6 +43,9 @@ public class UserRequestHandler implements RequestHandler {
             if (HttpMethod.POST.equals(httpMethod)) {
                 return registerUserResponse();
             }
+            if (HttpMethod.GET.equals(httpMethod)) {
+
+            }
         } catch (ServerErrorException e) {
             return error(e, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (BadRequestException e) {
@@ -44,13 +54,18 @@ public class UserRequestHandler implements RequestHandler {
         return null;
     }
 
+    @Override
+    public ResponseEntity getResponse() {
+        logRequestParams(logger, requestParams);
+        return vezhBankResponse.build();
+    }
+
     private ResponseEntity registerUserResponse() throws BadRequestException {
         logger.info("User registration");
         userRequestValidator.checkUserRegistrationParams();
         String login = requestParams.get(RequestParams.LOGIN);
         String password = requestParams.get(RequestParams.PASSWORD);
         UserRole userRole = serviceProvider.getDataBaseService().getRoleDao().get(requestParams.get(RequestParams.ROLE));
-//        UserRoleDTO roleDTO = new UserRoleDTO(requestParams.get(RequestParams.ROLE));
         String firstName = requestParams.get(RequestParams.FIRST_NAME);
         String middleName = requestParams.get(RequestParams.MIDDLE_NAME);
         String patronymic = requestParams.get(RequestParams.PATRONYMIC);

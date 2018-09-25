@@ -1,20 +1,28 @@
-package core.handlers;
+package core.response;
 
 import core.exceptions.VezhBankException;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import vezh_bank.constants.Headers;
 import vezh_bank.util.Logger;
 
-import java.util.Map;
+public interface VezhBankResponse<T> {
+    ResponseEntity<T> build();
 
-public interface RequestHandler<T> {
+    default ResponseEntity<T> error(VezhBankException e) {
+        return error(e, HttpStatus.BAD_REQUEST);
+    }
 
-    ResponseEntity<T> getResponse(HttpMethod httpMethod);
-    ResponseEntity<T> getResponse();
+    default ResponseEntity<T> error(VezhBankException e, HttpStatus httpStatus) {
+        Logger logger = Logger.getLogger(this.getClass());
+
+        logger.error(e.getDetail());
+        MultiValueMap<String, String> headers = new HttpHeaders();
+        headers.set(Headers.ERROR_MESSAGE, e.getMessage());
+        return new ResponseEntity<>(headers, httpStatus);
+    }
 
     default int setRequiredPage(int requiredPage, int pagesCount) {
         Logger logger = Logger.getLogger(this.getClass());
@@ -40,25 +48,5 @@ public interface RequestHandler<T> {
 
         logger.info("Response status: " + HttpStatus.OK.name());
         return responseEntity;
-    }
-
-    default ResponseEntity<T> error(VezhBankException e) {
-        return error(e, HttpStatus.BAD_REQUEST);
-    }
-
-    default ResponseEntity<T> error(VezhBankException e, HttpStatus httpStatus) {
-        Logger logger = Logger.getLogger(this.getClass());
-
-        logger.error(e.getDetail());
-        MultiValueMap<String, String> headers = new HttpHeaders();
-        headers.set(Headers.ERROR_MESSAGE, e.getMessage());
-        return new ResponseEntity<>(headers, httpStatus);
-    }
-
-    default void logRequestParams(Logger logger, Map<String, String> requestParams) {
-        logger.info("Request params: ");
-        for (Map.Entry entry : requestParams.entrySet()) {
-            logger.info(entry.getKey() + ": " + entry.getValue());
-        }
     }
 }

@@ -39,10 +39,11 @@ public class TestUtils {
 
     @Step("Create user. Role: {1}")
     public int createUser(DataBaseService dataBaseService, UserRole role) {
+        logger.info("Creating " + role.getName());
         UserAddress address = new UserAddress("", "", "", "", "", "", "");
         UserData userData = new UserData("Test", "Test", "Test",
                 "10.10.1000", address, "Test", "");
-        User user = new User("Test generated", "password", role,
+        User user = new User(String.valueOf(System.currentTimeMillis()), "password", role,
                 userData.toString(), new UserConfig().toString(), 3);
         dataBaseService.getUserDao().insert(user);
         return dataBaseService.getUserDao().selectAll().get(0).getId();

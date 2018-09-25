@@ -2,6 +2,9 @@ package core.controllers;
 
 import core.handlers.RequestHandler;
 import core.handlers.UserRequestHandler;
+import core.json.Users;
+import core.response.GetUsersResponse;
+import core.response.VezhBankResponse;
 import core.services.ServiceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -35,6 +38,21 @@ public class UserController implements BaseController {
         RequestHandler requestHandler = new UserRequestHandler(serviceProvider, params);
         ResponseEntity responseEntity = requestHandler.getResponse(HttpMethod.POST);
         logEndOperation(logger);
+        return responseEntity;
+    }
+
+    /**
+     * Required params: userId
+     * @param params
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity getUsers(@RequestParam Map<String, String> params) {
+        logStartOperation(logger);
+        VezhBankResponse<Users> response = new GetUsersResponse(serviceProvider, params);
+        RequestHandler requestHandler = new UserRequestHandler(params, response);
+        ResponseEntity responseEntity = requestHandler.getResponse();
+        logEndOperation(logger); //TODO: log response
         return responseEntity;
     }
 }

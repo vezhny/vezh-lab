@@ -23,5 +23,7 @@ public class RequestParams {
     public static final String ROOM = "room";
     public static final String STREET = "street";
     public static final String USER_ID = "userId";
+    public static final String BLOCKED = "blocked";
+    public static final String USER_DATA = "userData";
 
 }

@@ -50,6 +50,8 @@ public class UserDTO implements BaseDTO<User> {
     @Expose
     private List<UserRequestDTO> userRequests;
 
+    private transient User user;
+
     public UserDTO(String login, String password, UserRole role, UserData data) {
         this.login = login;
         this.password = ENCRYPTOR.encrypt(password);
@@ -74,6 +76,7 @@ public class UserDTO implements BaseDTO<User> {
         this.data = gson.fromJson(user.getData(), UserData.class);
         this.cards = convertCards(user.getCards());
         this.userRequests = convertRequests(user.getUserRequests());
+        this.user = user;
     }
 
     private List<CardDTO> convertCards(List<Card> cards) {
@@ -178,7 +181,6 @@ public class UserDTO implements BaseDTO<User> {
 
     @Override
     public User getEntity() {
-        User user = new User(login, password, role.getEntity(), data.toString(), config.toString(), attemptsToSignIn);
         return user;
     }
 

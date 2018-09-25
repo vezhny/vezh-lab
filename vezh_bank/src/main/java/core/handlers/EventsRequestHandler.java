@@ -62,4 +62,9 @@ public class EventsRequestHandler implements RequestHandler<Events> {
         ResponseEntity<Events> response = getResponseEntity(eventsResponse, requiredPage, pagesCount);
         return response;
     }
+
+    @Override
+    public ResponseEntity<Events> getResponse() {
+        return null;
+    }
 }

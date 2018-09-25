@@ -46,7 +46,7 @@ public interface VezhBankResponse<T> {
 
         ResponseEntity<T> responseEntity = new ResponseEntity<T>(t, headers, HttpStatus.OK);
 
-        logger.info("Response status: " + HttpStatus.OK.name());
+        logger.info(responseEntity.toString());
         return responseEntity;
     }
 }

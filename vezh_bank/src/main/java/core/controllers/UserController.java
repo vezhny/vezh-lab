@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(Urls.USERS)
-public class UserController implements BaseController { // TODO: add events after register
+public class UserController implements BaseController {
     private Logger logger = Logger.getLogger(this.getClass());
 
     @Autowired
@@ -52,7 +52,7 @@ public class UserController implements BaseController { // TODO: add events afte
         VezhBankResponse<Users> response = new GetUsersResponse(serviceProvider, params);
         RequestHandler requestHandler = new UserRequestHandler(params, response);
         ResponseEntity responseEntity = requestHandler.getResponse();
-        logEndOperation(logger); //TODO: log response
+        logEndOperation(logger);
         return responseEntity;
     }
 }

@@ -22,7 +22,7 @@ import java.util.List;
 import static vezh_bank.constants.UserDefault.ATTEMPTS_TO_SIGN_IN;
 
 @Story("Card persistence")
-@Link("https://github.com/vezhny/vezh-lab/issues/5")
+@Link(url = "https://github.com/vezhny/vezh-lab/issues/5")
 public class CardTests extends PersistenceTest {
 
     @Description("Insert card test")

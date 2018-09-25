@@ -2,7 +2,6 @@ package vezh_bank.special;
 
 import core.json.UserAddress;
 import io.qameta.allure.Description;
-import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,7 @@ import vezh_bank.extended_tests.RootTest;
 public class HousePartTests extends RootTest {
 
     @Description("House part test")
-    @Link("https://github.com/vezhny/vezh-lab/issues/15")
+    @Link(url = "https://github.com/vezhny/vezh-lab/issues/15")
     @Test
     public void housePart() {
         testUtils.logTestStart("House part test");

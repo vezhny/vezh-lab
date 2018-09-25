@@ -1,7 +1,6 @@
 package vezh_bank.persistence;
 
 import io.qameta.allure.Description;
-import io.qameta.allure.Feature;
 import io.qameta.allure.Link;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import vezh_bank.persistence.providers.role.RoleNameArgumentsProvider;
 import java.util.List;
 
 @Story("Role persistence")
-@Link("https://github.com/vezhny/vezh-lab/issues/5")
+@Link(url = "https://github.com/vezhny/vezh-lab/issues/5")
 public class RoleTests extends PersistenceTest {
 
     @Description("Select all roles")

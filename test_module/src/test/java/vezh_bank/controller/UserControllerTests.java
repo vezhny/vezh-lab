@@ -28,7 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Story("User controller")
-@Link("https://github.com/vezhny/vezh-lab/issues/15")
+@Link(url = "https://github.com/vezhny/vezh-lab/issues/15")
 public class UserControllerTests extends ControllerTest {
 
     @Description("Register user success test")
@@ -393,7 +393,7 @@ public class UserControllerTests extends ControllerTest {
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/18") //TODO: make all links url
+    @Link(url = "https://github.com/vezhny/vezh-lab/issues/18")
     @Description("Get all users test")
     @Test
     public void getAllUsers() throws UnsupportedEncodingException {

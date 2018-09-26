@@ -32,7 +32,8 @@ public class UserRequestValidator extends Validator {
             throw new BadRequestException(missingParameter(RequestParams.DELETING_USER_ID));
         }
         if (!isStringCanBeNumber(userId)) {
-            throw new BadRequestException(valueCanNotBeANumber(userId));
+            throw new BadRequestException(invalidParameter(RequestParams.DELETING_USER_ID),
+                    valueCanNotBeANumber(userId));
         }
         User user = dataBaseService.getUserDao().getById(stringToInt(userId));
         if (isNull(user)) {

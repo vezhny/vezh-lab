@@ -578,7 +578,7 @@ public class UserControllerTests extends ControllerTest {
     @Disabled("https://github.com/vezhny/vezh-lab/issues/21")
     @Description("{0} tries to delete user")
     @ParameterizedTest
-    @ArgumentsSource(RegistrationClientArgumentsProvider.class)
+//    @ArgumentsSource(RegistrationClientArgumentsProvider.class)
     public void userWithoutAccessTriesToDeleteUser(String accessorRole) {
         testUtils.logTestStart(accessorRole + " tries to delete user");
 
@@ -789,7 +789,7 @@ public class UserControllerTests extends ControllerTest {
                 serviceProvider.getDataBaseService().getUserDao().getById(victimId),
                 serviceProvider.getDataBaseService().getCurrencyDao().getById(currency));
 
-        userAsserts.checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        userAsserts.checkNumberOfUsers(2, serviceProvider.getDataBaseService().getUserDao().selectCount());
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -800,7 +800,7 @@ public class UserControllerTests extends ControllerTest {
 
         httpAsserts.checkResponseCode(400, response.getStatus());
 
-        userAsserts.checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        userAsserts.checkNumberOfUsers(2, serviceProvider.getDataBaseService().getUserDao().selectCount());
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
         httpAsserts.checkExceptionMessage(ExceptionMessages.userHasGotCards(victim.getLogin(), 1), response);
     }

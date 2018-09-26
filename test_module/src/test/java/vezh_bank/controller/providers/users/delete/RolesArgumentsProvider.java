@@ -11,9 +11,9 @@ public class RolesArgumentsProvider implements ArgumentsProvider {
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
         return Stream.of(
-                Arguments.of(Role.ADMIN.toString(), Role.CLIENT.toString()), // TODO: only admin has access to users
-                Arguments.of(Role.ADMIN.toString(), Role.EMPLOYEE.toString()),
-                Arguments.of(Role.ADMIN.toString(), Role.ADMIN.toString())
+                Arguments.of(Role.CLIENT.toString()), // TODO: only admin has access to users
+                Arguments.of(Role.EMPLOYEE.toString()),
+                Arguments.of(Role.ADMIN.toString())
         );
     }
 }

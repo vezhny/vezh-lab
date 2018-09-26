@@ -52,7 +52,7 @@ public abstract class Validator {
 
     protected boolean isStringCanBeNumber(String value) {
         try {
-            Integer.parseInt(value);
+            Long.parseLong(value);
             return true;
         } catch (NumberFormatException e) {
             return false;
@@ -85,7 +85,7 @@ public abstract class Validator {
             throw new BadRequestException(missingParameter(RequestParams.USER_ID));
         }
         if (!isStringCanBeNumber(userId)) {
-            throw new BadRequestException(valueCanNotBeANumber(userId));
+            throw new BadRequestException(invalidParameter(userId), valueCanNotBeANumber(userId));
         }
         User user = dataBaseService.getUserDao().getById(stringToInt(userId));
         if (isNull(user)) {

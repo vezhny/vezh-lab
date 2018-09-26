@@ -453,7 +453,7 @@ public class UserControllerTests extends ControllerTest {
         MockHttpServletResponse response = httpGet(Urls.USERS, params);
 
         httpAsserts.checkResponseCode(400, response.getStatus());
-        httpAsserts.checkExceptionMessage(String.format(ExceptionMessages.VALUE_CAN_NOT_BE_A_NUMBER, userId), response);
+        httpAsserts.checkExceptionMessage(ExceptionMessages.invalidParameter(RequestParams.USER_ID), response);
     }
 
     @Link(url = "https://github.com/vezhny/vezh-lab/issues/18")
@@ -709,8 +709,9 @@ public class UserControllerTests extends ControllerTest {
         userAsserts.checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
 
+        String deleterId = String.valueOf(System.currentTimeMillis());
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.set(RequestParams.USER_ID, String.valueOf(System.currentTimeMillis()));
+        params.set(RequestParams.USER_ID, deleterId);
         params.set(RequestParams.DELETING_USER_ID, String.valueOf(victimId));
 
         MockHttpServletResponse response = httpDelete(Urls.USERS, params);
@@ -719,7 +720,7 @@ public class UserControllerTests extends ControllerTest {
 
         userAsserts.checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
-        httpAsserts.checkExceptionMessage(ExceptionMessages.userDoesNotExist(RequestParams.USER_ID), response);
+        httpAsserts.checkExceptionMessage(ExceptionMessages.userDoesNotExist(deleterId), response);
     }
 
     @Link(url = "https://github.com/vezhny/vezh-lab/issues/20")
@@ -794,7 +795,7 @@ public class UserControllerTests extends ControllerTest {
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.set(RequestParams.USER_ID, String.valueOf(deleterId));
-        params.set(RequestParams.DELETING_USER_ID, String.valueOf(deleterId));
+        params.set(RequestParams.DELETING_USER_ID, String.valueOf(victimId));
 
         MockHttpServletResponse response = httpDelete(Urls.USERS, params);
 

@@ -45,10 +45,11 @@ public class TestUtils {
         UserAddress address = new UserAddress("", "", "", "", "", "", "");
         UserData userData = new UserData("Test", "Test", "Test",
                 "10.10.1000", address, "Test", "");
-        User user = new User(String.valueOf(System.currentTimeMillis()), "password", role,
+        String login = String.valueOf(System.currentTimeMillis());
+        User user = new User(login, "password", role,
                 userData.toString(), new UserConfig().toString(), 3);
         dataBaseService.getUserDao().insert(user);
-        return dataBaseService.getUserDao().selectAll().get(0).getId();
+        return dataBaseService.getUserDao().select(login, role.getName(), null, null).get(0).getId();
     }
 
     @Step("Create card. Holder: {1}. Currency: {2}")

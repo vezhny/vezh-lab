@@ -63,7 +63,7 @@ public class EventControllerTests extends ControllerTest {
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
         httpAsserts.checkResponseCode(400, response.getStatus());
-        httpAsserts.checkExceptionMessage(ExceptionMessages.USER_ID_MUST_PRESENT, response);
+        httpAsserts.checkExceptionMessage(ExceptionMessages.missingParameter(RequestParams.USER_ID), response);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class EventControllerTests extends ControllerTest {
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
         httpAsserts.checkResponseCode(400, response.getStatus());
-        httpAsserts.checkExceptionMessage(String.format(ExceptionMessages.VALUE_CAN_NOT_BE_A_NUMBER, userId), response);
+        httpAsserts.checkExceptionMessage(ExceptionMessages.invalidParameter(RequestParams.USER_ID), response);
     }
 
     @Test

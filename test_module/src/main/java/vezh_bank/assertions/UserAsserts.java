@@ -1,5 +1,6 @@
 package vezh_bank.assertions;
 
+import core.dto.UserDTO;
 import core.dto.UserRoleDTO;
 import core.json.UserConfig;
 import core.json.UserData;
@@ -37,6 +38,14 @@ public class UserAsserts extends Asserts {
         checkObject(expectedBlocked, actualUser.isBlocked(), "Blocked");
         checkObject(expectedLastSignInDate, actualUser.getLastSignIn(), "Last sign in");
         checkObject(expectedData, actualUser.getData(), "Data");
+    }
+
+    @Step("Check user")
+    public void checkUser(User expectedUser, User actualUser) {
+        UserDTO userDTO = new UserDTO(expectedUser);
+        checkUser(userDTO.getLogin(), userDTO.getPassword(), userDTO.getRole(),
+                userDTO.getConfig(), userDTO.getAttemptsToSignIn(), userDTO.isBlocked(),
+                userDTO.getLastSignIn(), userDTO.getData(), actualUser);
     }
 
     public void checkUsersCount(int expectedCount, List<User> users) {

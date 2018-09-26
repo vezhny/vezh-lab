@@ -26,10 +26,10 @@ public class UserRequestValidator extends Validator {
         loadProperties();
     }
 
-    public void checkDeletingUser() throws BadRequestException {
+    public void checkDeletingUser() throws BadRequestException { // TODO: improve user is check
         String userId = requestParams.get(RequestParams.DELETING_USER_ID);
         if (isNull(userId)) {
-            throw new BadRequestException(USER_ID_MUST_PRESENT, parameterIsNull(RequestParams.USER_ID));
+            throw new BadRequestException(missingParameter(RequestParams.DELETING_USER_ID));
         }
         if (!isStringCanBeNumber(userId)) {
             throw new BadRequestException(valueCanNotBeANumber(userId));

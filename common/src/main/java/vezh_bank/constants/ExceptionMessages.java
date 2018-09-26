@@ -21,6 +21,7 @@ public class ExceptionMessages {
     public static final String UNABLE_TO_DECRYPT_VALUE = "Unable to decrypt value \"%s\"";
     public static final String USER_HAS_GOT_CARDS = "User \"%s\" has got %s of cards";
     public static final String YOU_CAN_NOT_DELETE_YOURSELF = "You can't delete yourself";
+    public static final String ACCESS_DENIED = "Access denied";
 
     public static String valueCanNotBeANumber(String value) {
         return format(VALUE_CAN_NOT_BE_A_NUMBER, value);

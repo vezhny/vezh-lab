@@ -82,7 +82,7 @@ public abstract class Validator {
 
     public void checkUserId(String userId) throws BadRequestException {
         if (isNull(userId)) {
-            throw new BadRequestException(USER_ID_MUST_PRESENT, parameterIsNull(RequestParams.USER_ID));
+            throw new BadRequestException(missingParameter(RequestParams.USER_ID));
         }
         if (!isStringCanBeNumber(userId)) {
             throw new BadRequestException(valueCanNotBeANumber(userId));

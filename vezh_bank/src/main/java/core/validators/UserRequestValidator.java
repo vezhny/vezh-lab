@@ -6,6 +6,7 @@ import vezh_bank.constants.DatePatterns;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.enums.Role;
 import vezh_bank.persistence.DataBaseService;
+import vezh_bank.persistence.entity.User;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -25,9 +26,23 @@ public class UserRequestValidator extends Validator {
         loadProperties();
     }
 
-    public void checkRequestTypePresents() throws BadRequestException {
-        if (isNull(requestParams.get(RequestParams.REQUEST_TYPE))) {
-            throw new BadRequestException(MISSING_REQUEST_TYPE_PARAMETER);
+    public void checkDeletingUser() throws BadRequestException {
+        String userId = requestParams.get(RequestParams.DELETING_USER_ID);
+        if (isNull(userId)) {
+            throw new BadRequestException(USER_ID_MUST_PRESENT, parameterIsNull(RequestParams.USER_ID));
+        }
+        if (!isStringCanBeNumber(userId)) {
+            throw new BadRequestException(valueCanNotBeANumber(userId));
+        }
+        User user = dataBaseService.getUserDao().getById(stringToInt(userId));
+        if (isNull(user)) {
+            throw new BadRequestException(userDoesNotExist(userId));
+        }
+        if (userId.equals(requestParams.get(RequestParams.USER_ID))) {
+            throw new BadRequestException(YOU_CAN_NOT_DELETE_YOURSELF);
+        }
+        if (user.getCards().size() > 0) {
+            throw new BadRequestException(userHasGotCards(user.getLogin(), user.getCards().size()));
         }
     }
 

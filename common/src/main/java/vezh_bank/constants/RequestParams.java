@@ -2,9 +2,11 @@ package vezh_bank.constants;
 
 public class RequestParams {
     public static final String BIRTH_DATE = "birthDate";
+    public static final String BLOCKED = "blocked";
     public static final String CITY = "city";
     public static final String CONTACT_NUMBER = "contactNumber";
     public static final String COUNTRY = "country";
+    public static final String DELETING_USER_ID = "deletingUserId";
     public static final String EMAIL = "email";
     public static final String EVENT_DATA = "eventData";
     public static final String EVENT_DATE = "eventDate";
@@ -23,7 +25,5 @@ public class RequestParams {
     public static final String ROOM = "room";
     public static final String STREET = "street";
     public static final String USER_ID = "userId";
-    public static final String BLOCKED = "blocked";
     public static final String USER_DATA = "userData";
-
 }

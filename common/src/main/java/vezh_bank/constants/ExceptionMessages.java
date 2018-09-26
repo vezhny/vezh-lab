@@ -19,6 +19,8 @@ public class ExceptionMessages {
     public static final String VALUE_DOES_NOT_MATCH_TO_REGEX = "Value \"%s\" doesn't match regex \"%s\"";
     public static final String DATE_HAS_INVALID_PATTERN = "Date \"%s\" has invalid pattern";
     public static final String UNABLE_TO_DECRYPT_VALUE = "Unable to decrypt value \"%s\"";
+    public static final String USER_HAS_GOT_CARDS = "User \"%s\" has got %s of cards";
+    public static final String YOU_CAN_NOT_DELETE_YOURSELF = "You can't delete yourself";
 
     public static String valueCanNotBeANumber(String value) {
         return format(VALUE_CAN_NOT_BE_A_NUMBER, value);
@@ -62,5 +64,9 @@ public class ExceptionMessages {
 
     public static String unableToDecryptValue(String value) {
         return format(UNABLE_TO_DECRYPT_VALUE, value);
+    }
+
+    public static String userHasGotCards(String user, int numberOfCards) {
+        return format(USER_HAS_GOT_CARDS, user, numberOfCards);
     }
 }

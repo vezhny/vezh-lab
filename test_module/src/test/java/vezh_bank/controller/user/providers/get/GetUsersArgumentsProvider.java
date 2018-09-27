@@ -1,4 +1,4 @@
-package vezh_bank.controller.providers.users.get;
+package vezh_bank.controller.user.providers.get;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;

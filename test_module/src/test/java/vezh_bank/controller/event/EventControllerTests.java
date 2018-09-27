@@ -16,7 +16,7 @@ import org.springframework.util.MultiValueMap;
 import vezh_bank.constants.ExceptionMessages;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.constants.Urls;
-import vezh_bank.controller.providers.events.EventControllerArgumentsProvider;
+import vezh_bank.controller.event.providers.EventControllerArgumentsProvider;
 import vezh_bank.enums.EventType;
 import vezh_bank.extended_tests.ControllerTest;
 

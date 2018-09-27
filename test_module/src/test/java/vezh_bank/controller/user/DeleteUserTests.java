@@ -5,7 +5,6 @@ import core.json.EventData;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -16,7 +15,8 @@ import vezh_bank.constants.EventDescriptions;
 import vezh_bank.constants.ExceptionMessages;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.constants.Urls;
-import vezh_bank.controller.providers.users.delete.RolesArgumentsProvider;
+import vezh_bank.controller.user.providers.delete.ClientAndEmployeeArguments;
+import vezh_bank.controller.user.providers.delete.RolesArgumentsProvider;
 import vezh_bank.enums.EventType;
 import vezh_bank.enums.Role;
 import vezh_bank.extended_tests.ControllerTest;
@@ -66,15 +66,14 @@ public class DeleteUserTests extends ControllerTest {
                         victimUser.getLogin(), victimRole)), events.get(0));
     }
 
-    @Disabled("https://github.com/vezhny/vezh-lab/issues/21")
     @Description("{0} tries to delete user")
     @ParameterizedTest
-//    @ArgumentsSource(UserRegistrationArgumentsProvider.class)
+    @ArgumentsSource(ClientAndEmployeeArguments.class)
     public void userWithoutAccessTriesToDeleteUser(String accessorRole) {
         testUtils.logTestStart(accessorRole + " tries to delete user");
 
         int deleterId = testUtils.createUser(serviceProvider.getDataBaseService(),
-                serviceProvider.getDataBaseService().getRoleDao().get(Role.ADMIN.toString()));
+                serviceProvider.getDataBaseService().getRoleDao().get(accessorRole));
         int victimId = testUtils.createClient(serviceProvider.getDataBaseService());
 
         userAsserts.checkNumberOfUsers(2, serviceProvider.getDataBaseService().getUserDao().selectCount());

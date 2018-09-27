@@ -16,7 +16,7 @@ import org.springframework.util.MultiValueMap;
 import vezh_bank.constants.ExceptionMessages;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.constants.Urls;
-import vezh_bank.controller.providers.users.get.GetUsersArgumentsProvider;
+import vezh_bank.controller.user.providers.get.GetUsersArgumentsProvider;
 import vezh_bank.enums.Role;
 import vezh_bank.extended_tests.ControllerTest;
 import vezh_bank.persistence.entity.UserRole;

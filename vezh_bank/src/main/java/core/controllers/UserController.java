@@ -7,6 +7,7 @@ import core.response.VezhBankResponse;
 import core.response.user.DeleteUserResponse;
 import core.response.user.GetUsersResponse;
 import core.response.user.RegisterUserResponse;
+import core.response.user.UserUniqueResponse;
 import core.services.ServiceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -57,11 +58,31 @@ public class UserController implements BaseController {
         return responseEntity;
     }
 
+    /**
+     * Required params: userId, deletingUserId
+     * @param params
+     * @return
+     */
     @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity deleteUser(@RequestParam Map<String, String> params) {
         logStartOperation(logger);
         VezhBankResponse response = new DeleteUserResponse(serviceProvider, params);
         RequestHandler requestHandler = new UserRequestHandler(params, response);
+        ResponseEntity responseEntity = requestHandler.getResponse();
+        logEndOperation(logger);
+        return responseEntity;
+    }
+
+    /**
+     * Required params: login
+     * @param login
+     * @return
+     */
+    @RequestMapping(value = Urls.IS_UNIQUE, method = RequestMethod.GET)
+    public ResponseEntity isUserUnique(@RequestParam(name = "login") String login) {
+        logStartOperation(logger);
+        VezhBankResponse response = new UserUniqueResponse(serviceProvider, login);
+        RequestHandler requestHandler = new UserRequestHandler(login, response);
         ResponseEntity responseEntity = requestHandler.getResponse();
         logEndOperation(logger);
         return responseEntity;

@@ -27,6 +27,11 @@ public class UserRequestValidator extends Validator {
         loadProperties();
     }
 
+    public UserRequestValidator(DataBaseService dataBaseService) throws ServerErrorException {
+        this.dataBaseService = dataBaseService;
+        loadProperties();
+    }
+
     public void checkDeletingUser() throws BadRequestException {
         String userId = requestParams.get(RequestParams.DELETING_USER_ID);
         checkUserId(userId, UserAccess.ANY, RequestParams.DELETING_USER_ID);
@@ -65,7 +70,7 @@ public class UserRequestValidator extends Validator {
         }
     }
 
-    private void checkLogin(String login) throws BadRequestException {
+    public void checkLogin(String login) throws BadRequestException {
         if (isNull(login)) {
             throw new BadRequestException(missingParameter(RequestParams.LOGIN));
         }

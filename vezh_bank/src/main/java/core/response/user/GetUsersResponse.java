@@ -40,6 +40,7 @@ public class GetUsersResponse implements VezhBankResponse<Users> {
         } catch (BadRequestException e) {
             return error(e);
         }
+        logger.info("Get users");
 
         User userEntity = serviceProvider.getDataBaseService().getUserDao()
                 .getById(TypeConverter.stringToInt(requestParams.get(RequestParams.USER_ID)));

@@ -42,6 +42,7 @@ public class DeleteUserResponse implements VezhBankResponse {
         } catch (BadRequestException e) {
             return error(e);
         }
+        logger.info("Delete user");
 
         User deletingUser = serviceProvider.getDataBaseService().getUserDao()
                 .getById(stringToInt(requestParams.get(RequestParams.DELETING_USER_ID)));

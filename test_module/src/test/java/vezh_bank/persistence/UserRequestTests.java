@@ -1,7 +1,6 @@
 package vezh_bank.persistence;
 
 import io.qameta.allure.Description;
-import io.qameta.allure.Link;
 import io.qameta.allure.Step;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,6 @@ import vezh_bank.persistence.providers.user_request.SelectRequestWirhPageArgumen
 import java.util.List;
 
 @Story("User request persistence")
-@Link(url = "https://github.com/vezhny/vezh-lab/issues/5")
 public class UserRequestTests extends PersistenceTest {
 
     @Description("Insert user request test")

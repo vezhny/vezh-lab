@@ -1,7 +1,6 @@
 package vezh_bank.persistence;
 
 import io.qameta.allure.Description;
-import io.qameta.allure.Link;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,7 +15,6 @@ import vezh_bank.persistence.providers.transaction.SelectTransactionArgumentsPro
 import java.util.List;
 
 @Story("Transaction persistence")
-@Link(url = "https://github.com/vezhny/vezh-lab/issues/5")
 public class TransactionTests extends PersistenceTest {
 
     @Description("Insert transaction test")

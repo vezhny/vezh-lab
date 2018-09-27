@@ -3,7 +3,6 @@ package vezh_bank.service;
 import core.dto.EventDTO;
 import core.json.EventData;
 import io.qameta.allure.Description;
-import io.qameta.allure.Link;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import vezh_bank.enums.EventType;
@@ -13,7 +12,6 @@ import vezh_bank.persistence.entity.Event;
 import java.util.List;
 
 @Story("Event service")
-@Link(url = "https://github.com/vezhny/vezh-lab/issues/11")
 public class EventServiceTests extends ServiceTest {
 
     @Description("Add event test")

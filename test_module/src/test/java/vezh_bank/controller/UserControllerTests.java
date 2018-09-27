@@ -4,7 +4,6 @@ import core.dto.UserDTO;
 import core.dto.UserRoleDTO;
 import core.json.*;
 import io.qameta.allure.Description;
-import io.qameta.allure.Link;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Story("User controller")
-@Link(url = "https://github.com/vezhny/vezh-lab/issues/15")
 public class UserControllerTests extends ControllerTest {
 
     @Description("Register user success test")
@@ -356,7 +354,6 @@ public class UserControllerTests extends ControllerTest {
         eventAsserts.checkNumberOfEvents(expectedEventsCount, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/18")
     @Description("Get all users test")
     @Test
     public void getAllUsers() throws UnsupportedEncodingException {
@@ -388,7 +385,6 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkPagesCount(1, response);
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/18")
     @Description("Get users when user id absent")
     @Test
     public void getUsersAbsentUserId() {
@@ -402,7 +398,6 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.missingParameter(RequestParams.USER_ID), response);
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/18")
     @Description("Get users when user id can't be a number")
     @Test
     public void getUsersUserIdCanNotBeNumber() {
@@ -418,7 +413,6 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.invalidParameter(RequestParams.USER_ID), response);
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/18")
     @Description("Get users when user doesn't exist")
     @Test
     public void getUsersUserDoesNotExist() {
@@ -434,7 +428,6 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(String.format(ExceptionMessages.USER_DOES_NOT_EXIST, userId), response);
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/18")
     @Description("Get users when user is client")
     @Test
     public void getUsersUserIsClient() {
@@ -450,7 +443,6 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.ACCESS_DENIED, response);
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/18") //TODO: try to add name to links
     @Description("Get users parametrized")
     @ArgumentsSource(GetUsersArgumentsProvider.class)
     @ParameterizedTest
@@ -503,7 +495,7 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkPagesCount(expectedNumberOfPages, response);
     }
 
-    @Link(name = "Issue", url = "https://github.com/vezhny/vezh-lab/issues/20") // TODO: split those tests to different classes
+    // TODO: split those tests to different classes
     @Description("Delete user success")
     @ArgumentsSource(RolesArgumentsProvider.class)
     @ParameterizedTest
@@ -541,7 +533,6 @@ public class UserControllerTests extends ControllerTest {
                         victimUser.getLogin(), victimRole)), events.get(0));
     }
 
-    @Link(name = "Issue", url = "https://github.com/vezhny/vezh-lab/issues/20")
     @Disabled("https://github.com/vezhny/vezh-lab/issues/21")
     @Description("{0} tries to delete user")
     @ParameterizedTest
@@ -569,7 +560,6 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.ACCESS_DENIED, response);
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/20")
     @Description("Delete user when user id absent")
     @Test
     public void deleteUsersAbsentUserId() {
@@ -592,7 +582,6 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.missingParameter(RequestParams.USER_ID), response);
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/20")
     @Description("Delete user when victim's user id absent")
     @Test
     public void deleteUsersAbsentVictimUserId() {
@@ -616,7 +605,6 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.missingParameter(RequestParams.DELETING_USER_ID), response);
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/20")
     @Description("Delete user when user id can't be a number")
     @Test
     public void deleteUsersUserIdCanNotBeNumber() {
@@ -640,7 +628,6 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.invalidParameter(RequestParams.USER_ID), response);
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/20")
     @Description("Delete user when victim's user id can't be a number")
     @Test
     public void deleteUsersVictimUserIdCanNotBeNumber() {
@@ -665,7 +652,6 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.invalidParameter(RequestParams.DELETING_USER_ID), response);
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/20")
     @Description("Delete user when user doesn't exist")
     @Test
     public void deleteUsersUserDoesNotExist() {
@@ -690,7 +676,6 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.userDoesNotExist(deleterId), response);
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/20")
     @Description("Delete user when victim doesn't exist")
     @Test
     public void deleteUsersVictimDoesNotExist() {
@@ -716,7 +701,6 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.userDoesNotExist(victimId), response);
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/20")
     @Description("Delete user when victim is the same")
     @Test
     public void deleteUsersVictimIdIsTheSame() {
@@ -741,7 +725,6 @@ public class UserControllerTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.YOU_CAN_NOT_DELETE_YOURSELF, response);
     }
 
-    @Link(url = "https://github.com/vezhny/vezh-lab/issues/20")
     @Description("Delete user when victim has cards")
     @Test
     public void deleteUsersVictimHasCards() {

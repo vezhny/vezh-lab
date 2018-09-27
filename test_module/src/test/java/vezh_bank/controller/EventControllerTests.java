@@ -4,7 +4,6 @@ import core.dto.EventDTO;
 import core.json.EventData;
 import core.json.Events;
 import io.qameta.allure.Description;
-import io.qameta.allure.Link;
 import io.qameta.allure.Step;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,6 @@ import vezh_bank.extended_tests.ControllerTest;
 
 import java.io.UnsupportedEncodingException;
 
-@Link(url = "https://github.com/vezhny/vezh-lab/issues/11")
 @Story("Event controller")
 public class EventControllerTests extends ControllerTest {
 

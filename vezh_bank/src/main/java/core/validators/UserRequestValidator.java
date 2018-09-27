@@ -27,19 +27,11 @@ public class UserRequestValidator extends Validator {
         loadProperties();
     }
 
-    public void checkDeletingUser() throws BadRequestException { // TODO: improve user is check
+    public void checkDeletingUser() throws BadRequestException {
         String userId = requestParams.get(RequestParams.DELETING_USER_ID);
-        if (isNull(userId)) {
-            throw new BadRequestException(missingParameter(RequestParams.DELETING_USER_ID));
-        }
-        if (!isStringCanBeNumber(userId)) {
-            throw new BadRequestException(invalidParameter(RequestParams.DELETING_USER_ID),
-                    valueCanNotBeANumber(userId));
-        }
+        checkUserId(userId, UserAccess.ANY);
+
         User user = dataBaseService.getUserDao().getById(stringToInt(userId));
-        if (isNull(user)) {
-            throw new BadRequestException(userDoesNotExist(userId));
-        }
         if (userId.equals(requestParams.get(RequestParams.USER_ID))) {
             throw new BadRequestException(YOU_CAN_NOT_DELETE_YOURSELF);
         }

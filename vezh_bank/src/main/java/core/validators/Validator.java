@@ -4,6 +4,7 @@ import core.exceptions.BadRequestException;
 import core.exceptions.ServerErrorException;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.enums.Role;
+import vezh_bank.enums.UserAccess;
 import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.User;
 
@@ -80,7 +81,7 @@ public abstract class Validator {
         return true;
     }
 
-    public void checkUserId(String userId) throws BadRequestException {
+    public void checkUserId(String userId, UserAccess access) throws BadRequestException {
         if (isNull(userId)) {
             throw new BadRequestException(missingParameter(RequestParams.USER_ID));
         }
@@ -91,8 +92,26 @@ public abstract class Validator {
         if (isNull(user)) {
             throw new BadRequestException(userDoesNotExist(userId));
         }
-        if (isClient(user)) {
-            throw new BadRequestException(THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS);
+        if (!access.equals(UserAccess.ANY)) {
+            checkUserAccess(user, access);
+        }
+    }
+
+    private void checkUserAccess(User user, UserAccess access) throws BadRequestException {
+        switch (access) {
+            case EMPLOYEE_ONLY: {
+                if (user.getRole().equals(Role.CLIENT.toString())) {
+                    throw new BadRequestException(ACCESS_DENIED,
+                            userTriedToDoOperationWithAccess(user.getLogin(), user.getRole(), access));
+                }
+                break;
+            }
+            case ADMIN_ONLY: {
+                if (!user.getRole().equals(Role.ADMIN.toString())) {
+                    throw new BadRequestException(ACCESS_DENIED,
+                            userTriedToDoOperationWithAccess(user.getLogin(), user.getRole(), access));
+                }
+            }
         }
     }
 

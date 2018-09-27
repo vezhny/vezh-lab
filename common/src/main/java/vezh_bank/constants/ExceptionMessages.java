@@ -1,5 +1,7 @@
 package vezh_bank.constants;
 
+import vezh_bank.enums.UserAccess;
+
 import static java.lang.String.format;
 
 public class ExceptionMessages {
@@ -22,6 +24,8 @@ public class ExceptionMessages {
     public static final String USER_HAS_GOT_CARDS = "User \"%s\" has got %s of cards";
     public static final String YOU_CAN_NOT_DELETE_YOURSELF = "You can't delete yourself";
     public static final String ACCESS_DENIED = "Access denied";
+    public static final String USER_TRIED_TO_DO_OPERATON_WITH_ACCESS = "\"%s\" (%s) tried to do " +
+            "operation with access \"%s\"";
 
     public static String valueCanNotBeANumber(String value) {
         return format(VALUE_CAN_NOT_BE_A_NUMBER, value);
@@ -69,5 +73,9 @@ public class ExceptionMessages {
 
     public static String userHasGotCards(String user, int numberOfCards) {
         return format(USER_HAS_GOT_CARDS, user, numberOfCards);
+    }
+
+    public static String userTriedToDoOperationWithAccess(String login, String role, UserAccess access) {
+        return format(USER_TRIED_TO_DO_OPERATON_WITH_ACCESS, login, role, access.toString());
     }
 }

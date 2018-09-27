@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import vezh_bank.constants.EventDescriptions;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.enums.EventType;
+import vezh_bank.enums.UserAccess;
 import vezh_bank.persistence.entity.User;
 import vezh_bank.util.Logger;
 
@@ -34,7 +35,7 @@ public class DeleteUserResponse implements VezhBankResponse {
     public ResponseEntity build() {
         try {
             userRequestValidator = new UserRequestValidator(serviceProvider.getDataBaseService(), requestParams);
-            userRequestValidator.checkUserId(requestParams.get(RequestParams.USER_ID));
+            userRequestValidator.checkUserId(requestParams.get(RequestParams.USER_ID), UserAccess.ADMIN_ONLY);
             userRequestValidator.checkDeletingUser();
         } catch (ServerErrorException e) {
             return error(e, HttpStatus.INTERNAL_SERVER_ERROR);

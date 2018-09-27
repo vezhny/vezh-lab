@@ -1,9 +1,10 @@
-package vezh_bank.controller;
+package vezh_bank.controller.event;
 
 import core.dto.EventDTO;
 import core.json.EventData;
 import core.json.Events;
 import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
 import io.qameta.allure.Step;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,8 @@ import vezh_bank.extended_tests.ControllerTest;
 
 import java.io.UnsupportedEncodingException;
 
-@Story("Event controller")
+@Epic("Event controller")
+@Story("Get events")
 public class EventControllerTests extends ControllerTest {
 
     @Test

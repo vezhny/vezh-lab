@@ -29,7 +29,7 @@ public class UserRequestValidator extends Validator {
 
     public void checkDeletingUser() throws BadRequestException {
         String userId = requestParams.get(RequestParams.DELETING_USER_ID);
-        checkUserId(userId, UserAccess.ANY);
+        checkUserId(userId, UserAccess.ANY, RequestParams.DELETING_USER_ID);
 
         User user = dataBaseService.getUserDao().getById(stringToInt(userId));
         if (userId.equals(requestParams.get(RequestParams.USER_ID))) {

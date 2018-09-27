@@ -82,11 +82,15 @@ public abstract class Validator {
     }
 
     public void checkUserId(String userId, UserAccess access) throws BadRequestException {
+        checkUserId(userId, access, RequestParams.USER_ID);
+    }
+
+    public void checkUserId(String userId, UserAccess access, String userIdFieldName) throws BadRequestException {
         if (isNull(userId)) {
-            throw new BadRequestException(missingParameter(RequestParams.USER_ID));
+            throw new BadRequestException(missingParameter(userIdFieldName));
         }
         if (!isStringCanBeNumber(userId)) {
-            throw new BadRequestException(invalidParameter(RequestParams.USER_ID), valueCanNotBeANumber(userId));
+            throw new BadRequestException(invalidParameter(userIdFieldName), valueCanNotBeANumber(userId));
         }
         User user = dataBaseService.getUserDao().getById(stringToInt(userId));
         if (isNull(user)) {

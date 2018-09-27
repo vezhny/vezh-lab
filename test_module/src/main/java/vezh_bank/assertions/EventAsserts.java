@@ -3,7 +3,6 @@ package vezh_bank.assertions;
 import core.dto.EventDTO;
 import core.json.EventData;
 import io.qameta.allure.Step;
-import org.junit.jupiter.api.Assertions;
 import vezh_bank.enums.EventType;
 import vezh_bank.persistence.entity.Event;
 
@@ -24,6 +23,11 @@ public class EventAsserts extends Asserts {
 
     public void checkEvent(EventType expectedEventType, EventData expectedEventData, Event actualEvent) {
         checkEvent(expectedEventType, expectedEventData.toString(), actualEvent);
+    }
+
+    public void checkEvent(Event expectedEvent, Event actualEvent) {
+        EventDTO eventDTO = new EventDTO(expectedEvent);
+        checkEvent(eventDTO.getType(), eventDTO.getEventData(), actualEvent);
     }
 
     @Step("Check number of events. Expected {0}. Actual {1}")

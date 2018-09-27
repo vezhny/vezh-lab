@@ -26,7 +26,7 @@ public class UserService {
     public List<UserDTO> getUsers(List<User> users) {
         List<UserDTO> userDTOS = new ArrayList<>();
         for (User user : users) {
-            userDTOS.add(new UserDTO(user));
+            userDTOS.add(new UserDTO(user, dataBaseService.getRoleDao().get(user.getRole())));
         }
         return userDTOS;
     }

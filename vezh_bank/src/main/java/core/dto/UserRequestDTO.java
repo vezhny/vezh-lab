@@ -35,9 +35,9 @@ public class UserRequestDTO implements BaseDTO<UserRequest> {
         this.data = new UserRequestData(user.getId(), detail);
     }
 
-    public UserRequestDTO(UserRequest userRequest) {
+    public UserRequestDTO(UserRequest userRequest, UserDTO userDTO) {
         this.id = userRequest.getId();
-        this.user = new UserDTO(userRequest.getUser());
+        this.user = userDTO;
         this.date = userRequest.getDate();
         this.status = UserRequestStatus.valueOf(userRequest.getStatus());
         this.data = new Gson().fromJson(userRequest.getData(), UserRequestData.class);

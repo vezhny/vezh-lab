@@ -51,10 +51,10 @@ public class CardDTO implements BaseDTO<Card> {
         this.status = CardStatus.ACTIVE;
     }
 
-    public CardDTO(Card card) {
+    public CardDTO(Card card, UserDTO userDTO) {
         this.id = card.getId();
         this.pan = card.getPan();
-        this.holder = new UserDTO(card.getHolder());
+        this.holder = userDTO;
         this.expiry = card.getExpiry();
         this.currency = new CurrencyDTO(card.getCurrency());
         this.amount = card.getAmount();

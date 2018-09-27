@@ -4,6 +4,7 @@ import core.handlers.RequestHandler;
 import core.handlers.UserRequestHandler;
 import core.json.Users;
 import core.response.VezhBankResponse;
+import core.response.user.DeleteUserResponse;
 import core.response.user.GetUsersResponse;
 import core.response.user.RegisterUserResponse;
 import core.services.ServiceProvider;
@@ -50,6 +51,16 @@ public class UserController implements BaseController {
     public ResponseEntity getUsers(@RequestParam Map<String, String> params) {
         logStartOperation(logger);
         VezhBankResponse<Users> response = new GetUsersResponse(serviceProvider, params);
+        RequestHandler requestHandler = new UserRequestHandler(params, response);
+        ResponseEntity responseEntity = requestHandler.getResponse();
+        logEndOperation(logger);
+        return responseEntity;
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public ResponseEntity deleteUser(@RequestParam Map<String, String> params) {
+        logStartOperation(logger);
+        VezhBankResponse response = new DeleteUserResponse(serviceProvider, params);
         RequestHandler requestHandler = new UserRequestHandler(params, response);
         ResponseEntity responseEntity = requestHandler.getResponse();
         logEndOperation(logger);

@@ -6,7 +6,6 @@ import core.json.UserAddress;
 import core.json.UserConfig;
 import core.json.UserData;
 import io.qameta.allure.Description;
-import io.qameta.allure.Link;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import vezh_bank.constants.UserDefault;
@@ -17,7 +16,6 @@ import vezh_bank.persistence.entity.UserRole;
 import java.util.List;
 
 @Story("User service")
-@Link(url = "https://github.com/vezhny/vezh-lab/issues/15")
 public class UserServiceTests extends ServiceTest {
 
     @Description("Add user test")

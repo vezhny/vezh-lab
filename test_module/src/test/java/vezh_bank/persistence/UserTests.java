@@ -1,7 +1,6 @@
 package vezh_bank.persistence;
 
 import io.qameta.allure.Description;
-import io.qameta.allure.Link;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,7 +17,6 @@ import java.util.List;
 import static vezh_bank.constants.UserDefault.ATTEMPTS_TO_SIGN_IN;
 
 @Story("User persistence")
-@Link(url = "https://github.com/vezhny/vezh-lab/issues/5")
 public class UserTests extends PersistenceTest {
 
     @Description("Insert user test")

@@ -1,10 +1,10 @@
-package vezh_bank.controller;
+package vezh_bank.controller.event;
 
 import core.dto.EventDTO;
 import core.json.EventData;
 import core.json.Events;
 import io.qameta.allure.Description;
-import io.qameta.allure.Link;
+import io.qameta.allure.Epic;
 import io.qameta.allure.Step;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
@@ -16,14 +16,14 @@ import org.springframework.util.MultiValueMap;
 import vezh_bank.constants.ExceptionMessages;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.constants.Urls;
-import vezh_bank.controller.providers.events.EventControllerArgumentsProvider;
+import vezh_bank.controller.event.providers.EventControllerArgumentsProvider;
 import vezh_bank.enums.EventType;
 import vezh_bank.extended_tests.ControllerTest;
 
 import java.io.UnsupportedEncodingException;
 
-@Link(url = "https://github.com/vezhny/vezh-lab/issues/11")
-@Story("Event controller")
+@Epic("Event controller")
+@Story("Get events")
 public class EventControllerTests extends ControllerTest {
 
     @Test
@@ -63,7 +63,7 @@ public class EventControllerTests extends ControllerTest {
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
         httpAsserts.checkResponseCode(400, response.getStatus());
-        httpAsserts.checkExceptionMessage(ExceptionMessages.USER_ID_MUST_PRESENT, response);
+        httpAsserts.checkExceptionMessage(ExceptionMessages.missingParameter(RequestParams.USER_ID), response);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class EventControllerTests extends ControllerTest {
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
         httpAsserts.checkResponseCode(400, response.getStatus());
-        httpAsserts.checkExceptionMessage(String.format(ExceptionMessages.VALUE_CAN_NOT_BE_A_NUMBER, userId), response);
+        httpAsserts.checkExceptionMessage(ExceptionMessages.invalidParameter(RequestParams.USER_ID), response);
     }
 
     @Test
@@ -120,7 +120,7 @@ public class EventControllerTests extends ControllerTest {
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
         httpAsserts.checkResponseCode(400, response.getStatus());
-        httpAsserts.checkExceptionMessage(ExceptionMessages.THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS, response);
+        httpAsserts.checkExceptionMessage(ExceptionMessages.ACCESS_DENIED, response);
     }
 
     @Description("Get events where required page: {0}, event type: {1}, event data {2}")

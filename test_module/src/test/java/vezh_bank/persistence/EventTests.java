@@ -1,7 +1,6 @@
 package vezh_bank.persistence;
 
 import io.qameta.allure.Description;
-import io.qameta.allure.Link;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,7 +14,6 @@ import vezh_bank.persistence.providers.event.SelectEventArgumentsProvider;
 import java.util.List;
 
 @Story("Event persistence")
-@Link(url = "https://github.com/vezhny/vezh-lab/issues/5")
 public class EventTests extends PersistenceTest {
 
     @Description("Insert event test")

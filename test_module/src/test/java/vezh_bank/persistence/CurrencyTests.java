@@ -1,7 +1,6 @@
 package vezh_bank.persistence;
 
 import io.qameta.allure.Description;
-import io.qameta.allure.Link;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,7 +12,6 @@ import vezh_bank.persistence.providers.currency.CurrencySearchArgumentsProvider;
 import java.util.List;
 
 @Story("Currency persistence")
-@Link(url = "https://github.com/vezhny/vezh-lab/issues/5")
 public class CurrencyTests extends PersistenceTest {
 
     @Description("Insert currency test")

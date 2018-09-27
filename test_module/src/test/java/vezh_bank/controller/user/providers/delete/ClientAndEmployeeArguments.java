@@ -1,4 +1,4 @@
-package vezh_bank.controller.providers.users.registration;
+package vezh_bank.controller.user.providers.delete;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
@@ -7,11 +7,11 @@ import vezh_bank.enums.Role;
 
 import java.util.stream.Stream;
 
-public class RegistrationClientArgumentsProvider implements ArgumentsProvider {
+public class ClientAndEmployeeArguments implements ArgumentsProvider {
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
         return Stream.of(
-                Arguments.of(Role.ADMIN.toString()),
+                Arguments.of(Role.CLIENT.toString()),
                 Arguments.of(Role.EMPLOYEE.toString())
         );
     }

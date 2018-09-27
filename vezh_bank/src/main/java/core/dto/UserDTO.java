@@ -63,12 +63,12 @@ public class UserDTO implements BaseDTO<User> {
         this.userRequests = new ArrayList<>();
     }
 
-    public UserDTO(User user) {
+    public UserDTO(User user, UserRole role) {
         Gson gson = new Gson();
         this.id = user.getId();
         this.login = user.getLogin();
         this.password = user.getPassword();
-        this.role = new UserRoleDTO(user.getRole());
+        this.role = new UserRoleDTO(role);
         this.config = gson.fromJson(user.getConfig(), UserConfig.class);
         this.attemptsToSignIn = user.getAttemptsToSignIn();
         this.blocked = user.isBlocked();
@@ -82,7 +82,7 @@ public class UserDTO implements BaseDTO<User> {
     private List<CardDTO> convertCards(List<Card> cards) {
         List<CardDTO> cardDTOS = new ArrayList<>();
         for (Card card : cards) {
-            cardDTOS.add(new CardDTO(card));
+            cardDTOS.add(new CardDTO(card, this));
         }
         return cardDTOS;
     }
@@ -90,7 +90,7 @@ public class UserDTO implements BaseDTO<User> {
     private List<UserRequestDTO> convertRequests(List<UserRequest> userRequests) {
         List<UserRequestDTO> userRequestDTOS = new ArrayList<>();
         for (UserRequest userRequest : userRequests) {
-            userRequestDTOS.add(new UserRequestDTO(userRequest));
+            userRequestDTOS.add(new UserRequestDTO(userRequest, this));
         }
         return userRequestDTOS;
     }

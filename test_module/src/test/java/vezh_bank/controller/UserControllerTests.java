@@ -437,7 +437,7 @@ public class UserControllerTests extends ControllerTest {
         MockHttpServletResponse response = httpGet(Urls.USERS, params);
 
         httpAsserts.checkResponseCode(400, response.getStatus());
-        httpAsserts.checkExceptionMessage(ExceptionMessages.USER_ID_MUST_PRESENT, response);
+        httpAsserts.checkExceptionMessage(ExceptionMessages.missingParameter(RequestParams.USER_ID), response);
     }
 
     @Link(url = "https://github.com/vezhny/vezh-lab/issues/18")
@@ -551,6 +551,7 @@ public class UserControllerTests extends ControllerTest {
                 serviceProvider.getDataBaseService().getRoleDao().get(Role.ADMIN.toString()));
         int victimId = testUtils.createUser(serviceProvider.getDataBaseService(),
                 serviceProvider.getDataBaseService().getRoleDao().get(victimRole));
+        User victimUser = serviceProvider.getDataBaseService().getUserDao().getById(victimId);
 
         userAsserts.checkNumberOfUsers(2, serviceProvider.getDataBaseService().getUserDao().selectCount());
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
@@ -565,13 +566,16 @@ public class UserControllerTests extends ControllerTest {
 
         List<User> users = serviceProvider.getDataBaseService().getUserDao().selectAll();
         userAsserts.checkNumberOfUsers(1, users.size());
-        userAsserts.checkUser(serviceProvider.getDataBaseService().getUserDao().getById(deleterId), users.get(0));
+
+        User expectedUserEntity = serviceProvider.getDataBaseService().getUserDao().getById(deleterId);
+        UserDTO expectedUser = new UserDTO(expectedUserEntity, serviceProvider.getDataBaseService().getRoleDao().get(expectedUserEntity.getRole()));
+        userAsserts.checkUser(expectedUser, users.get(0));
 
         List<Event> events = serviceProvider.getDataBaseService().getEventDao().selectAll();
         eventAsserts.checkNumberOfEvents(1, events.size());
         eventAsserts.checkEvent(EventType.USER_DELETE,
-                new EventData(EventDescriptions.userDeletedUser(String.valueOf(deleterId), Role.ADMIN.toString(),
-                        String.valueOf(victimId), victimRole)), events.get(0));
+                new EventData(EventDescriptions.userDeletedUser(expectedUser.getLogin(), Role.ADMIN.toString(),
+                        victimUser.getLogin(), victimRole)), events.get(0));
     }
 
     @Link(name = "Issue", url = "https://github.com/vezhny/vezh-lab/issues/20")

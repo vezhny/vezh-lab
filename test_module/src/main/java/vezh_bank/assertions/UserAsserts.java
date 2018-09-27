@@ -41,11 +41,10 @@ public class UserAsserts extends Asserts {
     }
 
     @Step("Check user")
-    public void checkUser(User expectedUser, User actualUser) {
-        UserDTO userDTO = new UserDTO(expectedUser);
-        checkUser(userDTO.getLogin(), userDTO.getPassword(), userDTO.getRole(),
-                userDTO.getConfig(), userDTO.getAttemptsToSignIn(), userDTO.isBlocked(),
-                userDTO.getLastSignIn(), userDTO.getData(), actualUser);
+    public void checkUser(UserDTO expectedUser, User actualUser) {
+        checkUser(expectedUser.getLogin(), expectedUser.getPassword(), expectedUser.getRole(),
+                expectedUser.getConfig(), expectedUser.getAttemptsToSignIn(), expectedUser.isBlocked(),
+                expectedUser.getLastSignIn(), expectedUser.getData(), actualUser);
     }
 
     public void checkUsersCount(int expectedCount, List<User> users) {

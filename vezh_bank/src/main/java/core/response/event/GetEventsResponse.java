@@ -10,6 +10,7 @@ import core.validators.EventRequestValidator;
 import org.springframework.http.ResponseEntity;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.persistence.entity.Event;
+import vezh_bank.persistence.entity.User;
 import vezh_bank.util.Logger;
 import vezh_bank.util.PageCounter;
 import vezh_bank.util.TypeConverter;
@@ -37,8 +38,9 @@ public class GetEventsResponse implements VezhBankResponse<Events> {
             return error(e);
         }
 
-        UserDTO user = new UserDTO(serviceProvider.getDataBaseService().getUserDao()
-                .getById(TypeConverter.stringToInt(requestParams.get(RequestParams.USER_ID))));
+        User userEntity = serviceProvider.getDataBaseService().getUserDao()
+                .getById(TypeConverter.stringToInt(requestParams.get(RequestParams.USER_ID)));
+        UserDTO user = new UserDTO(userEntity, serviceProvider.getDataBaseService().getRoleDao().get(userEntity.getRole()));
         int rowsOnPage = user.getConfig().getEventsOnPage();
         logger.info("Rows on page: " + rowsOnPage);
 

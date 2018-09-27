@@ -39,8 +39,10 @@ public class GetUsersResponse implements VezhBankResponse<Users> {
         } catch (BadRequestException e) {
             return error(e);
         }
-        UserDTO user = new UserDTO(serviceProvider.getDataBaseService().getUserDao()
-                .getById(TypeConverter.stringToInt(requestParams.get(RequestParams.USER_ID))));
+
+        User userEntity = serviceProvider.getDataBaseService().getUserDao()
+                .getById(TypeConverter.stringToInt(requestParams.get(RequestParams.USER_ID)));
+        UserDTO user = new UserDTO(userEntity, serviceProvider.getDataBaseService().getRoleDao().get(userEntity.getRole()));
         int rowsOnPage = user.getConfig().getUsersOnPage();
         logger.info("Rows on page: " + rowsOnPage);
 

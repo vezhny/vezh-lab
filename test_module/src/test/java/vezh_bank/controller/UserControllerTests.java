@@ -18,7 +18,7 @@ import vezh_bank.controller.providers.users.delete.RolesArgumentsProvider;
 import vezh_bank.controller.providers.users.get.GetUsersArgumentsProvider;
 import vezh_bank.controller.providers.users.registration.RegisterUserFailArgumentsProvider;
 import vezh_bank.controller.providers.users.registration.RegisterUserSuccessAgrumentsProvider;
-import vezh_bank.controller.providers.users.registration.RegistrationClientArgumentsProvider;
+import vezh_bank.controller.providers.users.registration.UserRegistrationArgumentsProvider;
 import vezh_bank.enums.EventType;
 import vezh_bank.enums.Role;
 import vezh_bank.extended_tests.ControllerTest;
@@ -312,18 +312,19 @@ public class UserControllerTests extends ControllerTest {
         eventAsserts.checkEvent(eventType, eventData, event);
     }
 
-    @Description("{0} tries to register client")
+    @Description("{0} tries to register {1}")
     @ParameterizedTest
-    @ArgumentsSource(RegistrationClientArgumentsProvider.class)
-    public void clientRegistration(String role) {
-        testUtils.logTestStart(role + " tries to register client");
+    @ArgumentsSource(UserRegistrationArgumentsProvider.class)
+    public void clientRegistration(String registratorRole, String newUserRole, int expectedResponseCode,
+                                   String expectedExceptionMessage, int expectedUsersCount, int expectedEventsCount) {
+        testUtils.logTestStart(registratorRole + " tries to register " + newUserRole);
 
-        UserRole userRole = serviceProvider.getDataBaseService().getRoleDao().get(role);
+        UserRole userRole = serviceProvider.getDataBaseService().getRoleDao().get(registratorRole);
         int userId = testUtils.createUser(serviceProvider.getDataBaseService(), userRole);
 
         String login = "Login";
         String password = "password";
-        UserRoleDTO roleDTO = new UserRoleDTO(serviceProvider.getDataBaseService().getRoleDao().get(Role.CLIENT.toString()));
+        UserRoleDTO roleDTO = new UserRoleDTO(serviceProvider.getDataBaseService().getRoleDao().get(newUserRole));
         UserAddress address = new UserAddress("Belarus", "Homiel", "Svetlogorsk",
                 "Lunacharskogo", "30", "213");
         UserData userData = new UserData("Test", "Test", "Test",
@@ -349,50 +350,10 @@ public class UserControllerTests extends ControllerTest {
 
         MockHttpServletResponse response = httpPost(Urls.USERS, params);
 
-        httpAsserts.checkResponseCode(200, response.getStatus());
-        userAsserts.checkNumberOfUsers(2, serviceProvider.getDataBaseService().getUserDao().selectCount());
-        eventAsserts.checkNumberOfEvents(1, serviceProvider.getDataBaseService().getEventDao().selectCount());
-    }
-
-    @Description("Client tries to register user")
-    @Test
-    public void clientTriesToRegisterUser() {
-        testUtils.logTestStart("Client tries to register user");
-
-        int userId = testUtils.createClient(serviceProvider.getDataBaseService());
-
-        String login = "Login";
-        String password = "password";
-        UserRoleDTO roleDTO = new UserRoleDTO(serviceProvider.getDataBaseService().getRoleDao().get(Role.CLIENT.toString()));
-        UserAddress address = new UserAddress("Belarus", "Homiel", "Svetlogorsk",
-                "Lunacharskogo", "30", "213");
-        UserData userData = new UserData("Test", "Test", "Test",
-                "10.11.1992", address, "+375293956223", "vezhny@gmail.com");
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.set(RequestParams.LOGIN, login);
-        params.set(RequestParams.PASSWORD, password);
-        params.set(RequestParams.ROLE, roleDTO.getName());
-        params.set(RequestParams.COUNTRY, address.getCountry());
-        params.set(RequestParams.REGION, address.getRegion());
-        params.set(RequestParams.CITY, address.getCity());
-        params.set(RequestParams.STREET, address.getStreet());
-        params.set(RequestParams.HOUSE, address.getHouse());
-        params.set(RequestParams.ROOM, address.getRoom());
-        params.set(RequestParams.FIRST_NAME, userData.getFirstName());
-        params.set(RequestParams.MIDDLE_NAME, userData.getMiddleName());
-        params.set(RequestParams.PATRONYMIC, userData.getPatronymic());
-        params.set(RequestParams.BIRTH_DATE, userData.getBirthDate());
-        params.set(RequestParams.CONTACT_NUMBER, userData.getContactNumber());
-        params.set(RequestParams.EMAIL, userData.getEmail());
-        params.set(RequestParams.USER_ID, String.valueOf(userId));
-
-        MockHttpServletResponse response = httpPost(Urls.USERS, params);
-
-        httpAsserts.checkResponseCode(400, response.getStatus());
-        httpAsserts.checkExceptionMessage(ExceptionMessages.THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS, response);
-        userAsserts.checkNumberOfUsers(1, serviceProvider.getDataBaseService().getUserDao().selectCount());
-        eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
+        httpAsserts.checkResponseCode(expectedResponseCode, response.getStatus());
+        httpAsserts.checkExceptionMessage(expectedExceptionMessage, response);
+        userAsserts.checkNumberOfUsers(expectedUsersCount, serviceProvider.getDataBaseService().getUserDao().selectCount());
+        eventAsserts.checkNumberOfEvents(expectedEventsCount, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
     @Link(url = "https://github.com/vezhny/vezh-lab/issues/18")
@@ -401,7 +362,8 @@ public class UserControllerTests extends ControllerTest {
     public void getAllUsers() throws UnsupportedEncodingException {
         testUtils.logTestStart("Get all users test");
 
-        int userId = testUtils.createNotAClient(serviceProvider.getDataBaseService());
+        int userId = testUtils.createUser(serviceProvider.getDataBaseService(),
+                serviceProvider.getDataBaseService().getRoleDao().get(Role.ADMIN.toString()));
 
         testUtils.createClient(serviceProvider.getDataBaseService());
         testUtils.createClient(serviceProvider.getDataBaseService());
@@ -485,7 +447,7 @@ public class UserControllerTests extends ControllerTest {
         MockHttpServletResponse response = httpGet(Urls.USERS, params);
 
         httpAsserts.checkResponseCode(400, response.getStatus());
-        httpAsserts.checkExceptionMessage(ExceptionMessages.THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS, response);
+        httpAsserts.checkExceptionMessage(ExceptionMessages.ACCESS_DENIED, response);
     }
 
     @Link(url = "https://github.com/vezhny/vezh-lab/issues/18") //TODO: try to add name to links
@@ -495,7 +457,8 @@ public class UserControllerTests extends ControllerTest {
     public void getUsers(int requiredPage, String login, String role, String blocked, String data,
                          int expectedUsersCount, int expectedCurrentPage, int expectedNumberOfPages) throws UnsupportedEncodingException {
         testUtils.logTestStart("Get users parametrized test");
-        int userId = testUtils.createNotAClient(serviceProvider.getDataBaseService());
+        int userId = testUtils.createUser(serviceProvider.getDataBaseService(),
+                serviceProvider.getDataBaseService().getRoleDao().get(Role.ADMIN.toString()));
 
         List<UserRole> userRoles = serviceProvider.getDataBaseService().getRoleDao().selectAll();
 
@@ -582,7 +545,7 @@ public class UserControllerTests extends ControllerTest {
     @Disabled("https://github.com/vezhny/vezh-lab/issues/21")
     @Description("{0} tries to delete user")
     @ParameterizedTest
-//    @ArgumentsSource(RegistrationClientArgumentsProvider.class)
+//    @ArgumentsSource(UserRegistrationArgumentsProvider.class)
     public void userWithoutAccessTriesToDeleteUser(String accessorRole) {
         testUtils.logTestStart(accessorRole + " tries to delete user");
 

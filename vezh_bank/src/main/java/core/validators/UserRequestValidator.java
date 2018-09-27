@@ -5,6 +5,7 @@ import core.exceptions.ServerErrorException;
 import vezh_bank.constants.DatePatterns;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.enums.Role;
+import vezh_bank.enums.UserAccess;
 import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.User;
 
@@ -57,7 +58,7 @@ public class UserRequestValidator extends Validator {
 
     private void checkUserAccess() throws BadRequestException {
         if (!isNull(requestParams.get(RequestParams.USER_ID))) {
-            checkUserId(requestParams.get(RequestParams.USER_ID));
+            checkUserId(requestParams.get(RequestParams.USER_ID), UserAccess.ADMIN_ONLY);
         }
     }
 

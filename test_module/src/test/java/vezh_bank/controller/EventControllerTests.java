@@ -120,7 +120,7 @@ public class EventControllerTests extends ControllerTest {
         MockHttpServletResponse response = httpGet(Urls.EVENTS, params);
 
         httpAsserts.checkResponseCode(400, response.getStatus());
-        httpAsserts.checkExceptionMessage(ExceptionMessages.THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS, response);
+        httpAsserts.checkExceptionMessage(ExceptionMessages.ACCESS_DENIED, response);
     }
 
     @Description("Get events where required page: {0}, event type: {1}, event data {2}")

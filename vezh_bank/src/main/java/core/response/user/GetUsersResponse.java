@@ -10,6 +10,7 @@ import core.validators.UserRequestValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import vezh_bank.constants.RequestParams;
+import vezh_bank.enums.UserAccess;
 import vezh_bank.persistence.entity.User;
 import vezh_bank.util.Logger;
 import vezh_bank.util.PageCounter;
@@ -33,7 +34,7 @@ public class GetUsersResponse implements VezhBankResponse<Users> {
     public ResponseEntity<Users> build() {
         try {
             userRequestValidator = new UserRequestValidator(serviceProvider.getDataBaseService(), requestParams);
-            userRequestValidator.checkUserId(requestParams.get(RequestParams.USER_ID));
+            userRequestValidator.checkUserId(requestParams.get(RequestParams.USER_ID), UserAccess.ADMIN_ONLY);
         } catch (ServerErrorException e) {
             return error(e, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (BadRequestException e) {

@@ -27,7 +27,8 @@ public class UserRequestValidator extends Validator {
         loadProperties();
     }
 
-    public UserRequestValidator() throws ServerErrorException {
+    public UserRequestValidator(DataBaseService dataBaseService) throws ServerErrorException {
+        this.dataBaseService = dataBaseService;
         loadProperties();
     }
 

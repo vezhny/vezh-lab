@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import vezh_bank.util.Logger;
 
-public class UserUniqueResponse implements VezhBankResponse<Boolean> {
+public class UserUniqueResponse implements VezhBankResponse {
     private Logger logger = Logger.getLogger(this.getClass());
     private ServiceProvider serviceProvider;
     private String login;
@@ -21,20 +21,16 @@ public class UserUniqueResponse implements VezhBankResponse<Boolean> {
     }
 
     @Override
-    public ResponseEntity<Boolean> build() {
+    public ResponseEntity build() {
+        logger.info("Is user unique");
         try {
-            userRequestValidator = new UserRequestValidator();
+            userRequestValidator = new UserRequestValidator(serviceProvider.getDataBaseService());
             userRequestValidator.checkLogin(login);
         } catch (ServerErrorException e) {
             return error(e, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (BadRequestException e) {
             return error(e);
         }
-
-        logger.info("Is user unique");
-
-        boolean isUserUnique = serviceProvider.getDataBaseService().getUserDao().isLoginUnique(login);
-        ResponseEntity<Boolean> response = new ResponseEntity<>(isUserUnique, HttpStatus.OK);
-        return response;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

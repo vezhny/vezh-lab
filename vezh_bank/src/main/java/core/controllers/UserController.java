@@ -79,9 +79,9 @@ public class UserController implements BaseController {
      * @return
      */
     @RequestMapping(value = Urls.IS_UNIQUE, method = RequestMethod.GET)
-    public ResponseEntity<Boolean> isUserUnique(@RequestParam(name = "login") String login) {
+    public ResponseEntity isUserUnique(@RequestParam(name = "login") String login) {
         logStartOperation(logger);
-        VezhBankResponse<Boolean> response = new UserUniqueResponse(serviceProvider, login);
+        VezhBankResponse response = new UserUniqueResponse(serviceProvider, login);
         RequestHandler requestHandler = new UserRequestHandler(login, response);
         ResponseEntity responseEntity = requestHandler.getResponse();
         logEndOperation(logger);

@@ -15,6 +15,6 @@ public class EventRequestValidator extends Validator {
     }
 
     public void checkRequestParams() throws BadRequestException {
-        checkUserId(requestParams.get(RequestParams.USER_ID), UserAccess.ANY);
+        checkUserId(requestParams.get(RequestParams.USER_ID), UserAccess.EMPLOYEE_ONLY);
     }
 }

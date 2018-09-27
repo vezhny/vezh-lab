@@ -19,8 +19,8 @@ public class UserRegistrationArgumentsProvider implements ArgumentsProvider {
                 Arguments.of(Role.CLIENT.toString(), Role.EMPLOYEE.toString(), 400, ACCESS_DENIED, 1, 0),
                 Arguments.of(Role.EMPLOYEE.toString(), Role.EMPLOYEE.toString(), 400, ACCESS_DENIED, 1, 0),
                 Arguments.of(Role.ADMIN.toString(), Role.EMPLOYEE.toString(), 200, null, 2, 1),
-                Arguments.of(Role.CLIENT.toString(), Role.ADMIN.toString(), 200, null, 2, 1),
-                Arguments.of(Role.EMPLOYEE.toString(), Role.ADMIN.toString(), 200, null, 2, 1),
+                Arguments.of(Role.CLIENT.toString(), Role.ADMIN.toString(), 400, ACCESS_DENIED, 1, 0),
+                Arguments.of(Role.EMPLOYEE.toString(), Role.ADMIN.toString(), 400, ACCESS_DENIED, 1, 0),
                 Arguments.of(Role.ADMIN.toString(), Role.ADMIN.toString(), 200, null, 2, 1)
         );
     }

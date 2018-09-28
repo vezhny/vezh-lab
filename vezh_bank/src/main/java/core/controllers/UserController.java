@@ -2,9 +2,6 @@ package core.controllers;
 
 import core.handlers.RequestHandler;
 import core.handlers.UserRequestHandler;
-import core.json.Users;
-import core.response.VezhBankResponse;
-import core.response.user.*;
 import core.services.ServiceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import vezh_bank.constants.Urls;
+import vezh_bank.enums.RequestType;
 import vezh_bank.util.Logger;
 
 import java.util.Map;
@@ -34,7 +32,7 @@ public class UserController implements BaseController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addUser(@RequestParam Map<String, String> params) {
         logStartOperation(logger);
-        RequestHandler requestHandler = new UserRequestHandler(params, new RegisterUserResponse(serviceProvider, params));
+        RequestHandler requestHandler = new UserRequestHandler(params, serviceProvider, RequestType.REGISTER_USER);
         ResponseEntity responseEntity = requestHandler.getResponse();
         logEndOperation(logger);
         return responseEntity;
@@ -48,8 +46,7 @@ public class UserController implements BaseController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity getUsers(@RequestParam Map<String, String> params) {
         logStartOperation(logger);
-        VezhBankResponse<Users> response = new GetUsersResponse(serviceProvider, params);
-        RequestHandler requestHandler = new UserRequestHandler(params, response);
+        RequestHandler requestHandler = new UserRequestHandler(params, serviceProvider, RequestType.GET_USERS);
         ResponseEntity responseEntity = requestHandler.getResponse();
         logEndOperation(logger);
         return responseEntity;
@@ -63,8 +60,7 @@ public class UserController implements BaseController {
     @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity deleteUser(@RequestParam Map<String, String> params) {
         logStartOperation(logger);
-        VezhBankResponse response = new DeleteUserResponse(serviceProvider, params);
-        RequestHandler requestHandler = new UserRequestHandler(params, response);
+        RequestHandler requestHandler = new UserRequestHandler(params, serviceProvider, RequestType.DELETE_USER);
         ResponseEntity responseEntity = requestHandler.getResponse();
         logEndOperation(logger);
         return responseEntity;
@@ -78,8 +74,7 @@ public class UserController implements BaseController {
     @RequestMapping(value = Urls.IS_UNIQUE, method = RequestMethod.GET)
     public ResponseEntity isUserUnique(@RequestParam(name = "login") String login) {
         logStartOperation(logger);
-        VezhBankResponse response = new UserUniqueResponse(serviceProvider, login);
-        RequestHandler requestHandler = new UserRequestHandler(login, response);
+        RequestHandler requestHandler = new UserRequestHandler(login, serviceProvider, RequestType.IS_USER_UNIQUE);
         ResponseEntity responseEntity = requestHandler.getResponse();
         logEndOperation(logger);
         return responseEntity;
@@ -95,8 +90,7 @@ public class UserController implements BaseController {
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity updateUser(@RequestParam Map<String, String> params) {
         logStartOperation(logger);
-        VezhBankResponse response = new UpdateUserResponse(serviceProvider, params);
-        RequestHandler requestHandler = new UserRequestHandler(params, response); //TODO: refactor this shit
+        RequestHandler requestHandler = new UserRequestHandler(params, serviceProvider, RequestType.UPDATE_USER);
         ResponseEntity responseEntity = requestHandler.getResponse();
         logEndOperation(logger);
         return responseEntity;

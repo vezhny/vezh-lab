@@ -4,10 +4,7 @@ import core.handlers.RequestHandler;
 import core.handlers.UserRequestHandler;
 import core.json.Users;
 import core.response.VezhBankResponse;
-import core.response.user.DeleteUserResponse;
-import core.response.user.GetUsersResponse;
-import core.response.user.RegisterUserResponse;
-import core.response.user.UserUniqueResponse;
+import core.response.user.*;
 import core.services.ServiceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -83,6 +80,23 @@ public class UserController implements BaseController {
         logStartOperation(logger);
         VezhBankResponse response = new UserUniqueResponse(serviceProvider, login);
         RequestHandler requestHandler = new UserRequestHandler(login, response);
+        ResponseEntity responseEntity = requestHandler.getResponse();
+        logEndOperation(logger);
+        return responseEntity;
+    }
+
+    /**
+     * Required params: userId, updatingUserId, password, country, region, city, street, house, room, firstName, middleName,
+     * patronymic, contactNumber, cardsOnPage, currenciesOnPage, eventsOnPage, paymentsOnPage, transactionsOnPage,
+     * usersOnPage, userRequestsOnPage
+     * @param params
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResponseEntity updateUser(@RequestParam Map<String, String> params) {
+        logStartOperation(logger);
+        VezhBankResponse response = new UpdateUserResponse(serviceProvider, params);
+        RequestHandler requestHandler = new UserRequestHandler(params, response); //TODO: refactor this shit
         ResponseEntity responseEntity = requestHandler.getResponse();
         logEndOperation(logger);
         return responseEntity;

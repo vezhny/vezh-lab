@@ -32,6 +32,46 @@ public class UserRequestValidator extends Validator {
         loadProperties();
     }
 
+    public void checkUpdateUserParams() throws BadRequestException {
+        checkUserId(requestParams.get(RequestParams.USER_ID), UserAccess.ANY);
+        checkUserId(requestParams.get(RequestParams.UPDATING_USER_ID), UserAccess.ANY);
+        checkPassword(requestParams.get(RequestParams.PASSWORD));
+        checkUserData();
+        checkUserConfig();
+        User updater = dataBaseService.getUserDao().getById(stringToInt(requestParams.get(RequestParams.USER_ID)));
+        User victim = dataBaseService.getUserDao().getById(stringToInt(requestParams.get(RequestParams.UPDATING_USER_ID)));
+        if (!updater.getRole().equals(Role.ADMIN.toString()) && updater.getId() != victim.getId()) {
+            throw new BadRequestException(ACCESS_DENIED, userTriedToDoOperationWithAccess(updater.getLogin(),
+                    updater.getRole(), UserAccess.ADMIN_ONLY));
+        }
+    }
+
+    private void checkUserConfig() throws BadRequestException {
+        checkConfigParam(requestParams.get(RequestParams.CARDS_ON_PAGE), RequestParams.CARDS_ON_PAGE);
+        checkConfigParam(requestParams.get(RequestParams.CURRENCIES_ON_PAGE), RequestParams.CURRENCIES_ON_PAGE);
+        checkConfigParam(requestParams.get(RequestParams.EVENTS_ON_PAGE), RequestParams.EVENTS_ON_PAGE);
+        checkConfigParam(requestParams.get(RequestParams.PAYMENTS_ON_PAGE), RequestParams.PAYMENTS_ON_PAGE);
+        checkConfigParam(requestParams.get(RequestParams.TRANSACTIONS_ON_PAGE), RequestParams.TRANSACTIONS_ON_PAGE);
+        checkConfigParam(requestParams.get(RequestParams.USERS_ON_PAGE), RequestParams.USERS_ON_PAGE);
+        checkConfigParam(requestParams.get(RequestParams.USER_REQUESTS_ON_PAGE), RequestParams.USER_REQUESTS_ON_PAGE);
+    }
+
+    private void checkConfigParam(String param, String paramName) throws BadRequestException {
+        if (isNull(param)) {
+            throw new BadRequestException(missingParameter(paramName));
+        }
+        if (!isStringCanBeNumber(param)) {
+            throw new BadRequestException(invalidParameter(paramName), valueCanNotBeANumber(param));
+        }
+        int number = stringToInt(param);
+        int minRowsCount = stringToInt(USER_ROWS_MIN_COUNT);
+        int maxRowsCount = stringToInt(USER_ROWS_MAX_COUNT);
+        if (number < minRowsCount || number > maxRowsCount) {
+            throw new BadRequestException(invalidParameter(paramName),
+                    valueShouldBeInRange(paramName, minRowsCount, maxRowsCount));
+        }
+    }
+
     public void checkDeletingUser() throws BadRequestException {
         String userId = requestParams.get(RequestParams.DELETING_USER_ID);
         checkUserId(userId, UserAccess.ANY, RequestParams.DELETING_USER_ID);

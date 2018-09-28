@@ -36,6 +36,17 @@ public class UserConfig {
         setUsersOnPage(UserDefault.ROWS_ON_PAGE);
     }
 
+    public UserConfig(int cardsOnPage, int currenciesOnPage, int eventsOnPage, int paymentsOnPage,
+                      int transactionsOnPage, int userRequestsOnPage, int usersOnPage) {
+        this.cardsOnPage = cardsOnPage;
+        this.currenciesOnPage = currenciesOnPage;
+        this.eventsOnPage = eventsOnPage;
+        this.paymentsOnPage = paymentsOnPage;
+        this.transactionsOnPage = transactionsOnPage;
+        this.userRequestsOnPage = userRequestsOnPage;
+        this.usersOnPage = usersOnPage;
+    }
+
     public int getCardsOnPage() {
         return cardsOnPage;
     }

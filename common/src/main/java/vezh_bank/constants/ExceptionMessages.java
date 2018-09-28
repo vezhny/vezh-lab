@@ -26,6 +26,7 @@ public class ExceptionMessages {
     public static final String ACCESS_DENIED = "Access denied";
     public static final String USER_TRIED_TO_DO_OPERATON_WITH_ACCESS = "\"%s\" (%s) tried to do " +
             "operation with access \"%s\"";
+    public static final String VALUE_SHOULD_BE_IN_RANGE = "Value \"%s\" should be in range [%s, %s]";
 
     public static String valueCanNotBeANumber(String value) {
         return format(VALUE_CAN_NOT_BE_A_NUMBER, value);
@@ -77,5 +78,9 @@ public class ExceptionMessages {
 
     public static String userTriedToDoOperationWithAccess(String login, String role, UserAccess access) {
         return format(USER_TRIED_TO_DO_OPERATON_WITH_ACCESS, login, role, access.toString());
+    }
+
+    public static String valueShouldBeInRange(String paramName, int minValue, int maxValue) {
+        return format(VALUE_SHOULD_BE_IN_RANGE, paramName, minValue, maxValue);
     }
 }

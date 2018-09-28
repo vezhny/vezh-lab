@@ -34,7 +34,16 @@ public class UserRequestValidator extends Validator {
 
     public void checkUpdateUserParams() throws BadRequestException {
         checkUserId(requestParams.get(RequestParams.USER_ID), UserAccess.ANY);
-        checkUserId(requestParams.get(RequestParams.UPDATING_USER_ID), UserAccess.ANY);
+        try {
+            checkUserId(requestParams.get(RequestParams.UPDATING_USER_ID), UserAccess.ANY);
+        } catch (BadRequestException e) {
+            if (e.getMessage().contains(RequestParams.USER_ID)){
+                throw new BadRequestException(e.getMessage().replaceAll(RequestParams.USER_ID,
+                        RequestParams.UPDATING_USER_ID), e.getDetail().replaceAll(RequestParams.USER_ID,
+                        RequestParams.UPDATING_USER_ID));
+            }
+            throw new BadRequestException(e.getMessage(), e.getDetail());
+        }
         checkPassword(requestParams.get(RequestParams.PASSWORD));
         checkUserData();
         checkUserConfig();

@@ -17,6 +17,7 @@ import vezh_bank.constants.EventDescriptions;
 import vezh_bank.constants.ExceptionMessages;
 import vezh_bank.constants.RequestParams;
 import vezh_bank.constants.Urls;
+import vezh_bank.controller.user.providers.delete.ClientAndEmployeeArguments;
 import vezh_bank.controller.user.providers.update.OneRoleArgumentsProvider;
 import vezh_bank.controller.user.providers.update.RequestParamsArgumentsProvider;
 import vezh_bank.enums.EventType;
@@ -718,7 +719,7 @@ public class UpdateUserTests extends ControllerTest {
     @Feature("User access validation")
     @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/29", url = "https://github.com/vezhny/vezh-lab/issues/29")
     @Description("User doesn't has access")
-    @ArgumentsSource(OneRoleArgumentsProvider.class)
+    @ArgumentsSource(ClientAndEmployeeArguments.class)
     @ParameterizedTest
     public void userDoesNotHaveAccess(Role role) {
         testUtils.logTestStart("User doesn't has access");

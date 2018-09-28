@@ -27,6 +27,9 @@ public class ExceptionMessages {
     public static final String USER_TRIED_TO_DO_OPERATON_WITH_ACCESS = "\"%s\" (%s) tried to do " +
             "operation with access \"%s\"";
     public static final String VALUE_SHOULD_BE_IN_RANGE = "Value \"%s\" should be in range [%s, %s]";
+    public static final String INVALID_LOGIN_OR_PASSWORD = "Invalid login or password";
+    public static final String USER_IS_BLOCKED = "User is blocked";
+    public static final String USER_WITH_LOGIN_IS_BLOCKED = "User \"%s\" is blocked";
 
     public static String valueCanNotBeANumber(String value) {
         return format(VALUE_CAN_NOT_BE_A_NUMBER, value);
@@ -82,5 +85,9 @@ public class ExceptionMessages {
 
     public static String valueShouldBeInRange(String paramName, int minValue, int maxValue) {
         return format(VALUE_SHOULD_BE_IN_RANGE, paramName, minValue, maxValue);
+    }
+
+    public static String userIsBlocked(String login) {
+        return format(USER_WITH_LOGIN_IS_BLOCKED, login);
     }
 }

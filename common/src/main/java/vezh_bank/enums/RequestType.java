@@ -6,5 +6,6 @@ public enum RequestType {
     UPDATE_USER,
     GET_USERS,
     IS_USER_UNIQUE,
-    GET_EVENTS
+    GET_EVENTS,
+    USER_SIGN_IN
 }

@@ -1,6 +1,7 @@
 package core.validators;
 
 import core.exceptions.BadRequestException;
+import core.exceptions.FailedAuthorizationException;
 import core.exceptions.ServerErrorException;
 import vezh_bank.constants.DatePatterns;
 import vezh_bank.constants.RequestParams;
@@ -30,6 +31,15 @@ public class UserRequestValidator extends Validator {
     public UserRequestValidator(DataBaseService dataBaseService) throws ServerErrorException {
         this.dataBaseService = dataBaseService;
         loadProperties();
+    }
+
+    public void checkUserSignInParams() throws FailedAuthorizationException {
+        try {
+            checkLogin(requestParams.get(RequestParams.LOGIN), false);
+            checkPassword(requestParams.get(RequestParams.PASSWORD));
+        } catch (BadRequestException e) {
+            throw new FailedAuthorizationException(INVALID_LOGIN_OR_PASSWORD);
+        }
     }
 
     public void checkUpdateUserParams() throws BadRequestException {
@@ -120,6 +130,10 @@ public class UserRequestValidator extends Validator {
     }
 
     public void checkLogin(String login) throws BadRequestException {
+        checkLogin(login, true);
+    }
+
+    private void checkLogin(String login, boolean shouldBeUnique) throws BadRequestException {
         if (isNull(login)) {
             throw new BadRequestException(missingParameter(RequestParams.LOGIN));
         }
@@ -131,7 +145,7 @@ public class UserRequestValidator extends Validator {
                     valueDoesNotMatchToRegex(login, "\\w+"));
         }
 
-        if (!dataBaseService.getUserDao().isLoginUnique(login)) {
+        if (shouldBeUnique && !dataBaseService.getUserDao().isLoginUnique(login)) {
             throw new BadRequestException(userWithLoginAlreadyRegistered(login));
         }
     }

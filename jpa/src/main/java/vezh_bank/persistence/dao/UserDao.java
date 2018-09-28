@@ -48,4 +48,7 @@ public interface UserDao extends GlobalDao<User> {
 
     @Transactional
     boolean isLoginUnique(String login);
+
+    @Transactional
+    User select(String login);
 }

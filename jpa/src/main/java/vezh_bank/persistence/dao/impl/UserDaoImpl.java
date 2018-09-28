@@ -158,19 +158,25 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean isLoginUnique(String login) {
         logger.info("Checking if login " + login + " unique");
+        if (select(login) == null) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public User select(String login) { // TODO: test
+        logger.info("Select user with login: " + login);
         User user;
         try {
             user = entityManager.createQuery("SELECT u FROM User u WHERE u.login = :login", User.class)
                     .setParameter("login", login)
                     .getSingleResult();
-            logger.info("Found user with login " + login);
+            logger.info("Found user with login \"" + login + "\"");
         } catch (NoResultException e) {
-            logger.info("User with login " + login + " not found");
+            logger.info("User with login \"" + login + "\" not found");
             user = null;
         }
-        if (user == null) {
-            return true;
-        }
-        return false;
+        return user;
     }
 }

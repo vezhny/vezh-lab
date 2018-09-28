@@ -1,7 +1,6 @@
 package vezh_bank.persistence;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -16,9 +15,13 @@ import java.util.List;
 
 import static vezh_bank.constants.UserDefault.ATTEMPTS_TO_SIGN_IN;
 
+@Epic("Persistence")
 @Story("User persistence")
+@Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/5", url = "https://github.com/vezhny/vezh-lab/issues/5")
+@Severity(SeverityLevel.BLOCKER)
 public class UserTests extends PersistenceTest {
 
+    @Feature("Insert entity")
     @Description("Insert user test")
     @Test
     public void insertUserTest() {
@@ -38,6 +41,7 @@ public class UserTests extends PersistenceTest {
                 null, data, users.get(0));
     }
 
+    @Feature("Select entity")
     @Description("Select user by ID test")
     @Test
     public void selectByIdUserTest() {
@@ -57,6 +61,7 @@ public class UserTests extends PersistenceTest {
                 null, data, user);
     }
 
+    @Feature("Update entity")
     @Description("Update user test")
     @Test
     public void updateTest() {
@@ -81,6 +86,7 @@ public class UserTests extends PersistenceTest {
                 null, newData, users.get(0));
     }
 
+    @Feature("Delete entity")
     @Description("Delete user test")
     @Test
     public void deleteTest() {
@@ -99,6 +105,7 @@ public class UserTests extends PersistenceTest {
         userAsserts.checkUsersCount(0, dataBaseService.getUserDao().selectAll());
     }
 
+    @Feature("Delete entity")
     @Description("Delete user by id test")
     @Test
     public void deleteByIdTest() {
@@ -117,6 +124,7 @@ public class UserTests extends PersistenceTest {
         userAsserts.checkUsersCount(0, dataBaseService.getUserDao().selectAll());
     }
 
+    @Feature("Select entity")
     @Description("Select user count test")
     @Test
     public void selectCountTest() {
@@ -133,6 +141,7 @@ public class UserTests extends PersistenceTest {
         asserts.checkNumber(1, dataBaseService.getUserDao().selectCount(), "Number of users");
     }
 
+    @Feature("Select entity")
     @Description("Select user with params test. Login: {0}, role: {1}, blocked: {2}, data: {3}")
     @ParameterizedTest
     @ArgumentsSource(SelectUserArgumentsProvider.class)
@@ -177,6 +186,7 @@ public class UserTests extends PersistenceTest {
         userAsserts.checkUsersCount(expectedUsersCount, users);
     }
 
+    @Feature("Select entity")
     @Description("Select user with pages test. Required page: {0}, rows on page: {1}, login: {2}, role: {3}, " +
             "blocked: {4}, data: {5}")
     @ParameterizedTest
@@ -224,6 +234,7 @@ public class UserTests extends PersistenceTest {
         userAsserts.checkUsersCount(expectedUsersCount, users);
     }
 
+    @Feature("Select entity")
     @Description("Select user count with params test. Login: {0}, role: {1}, blocked: {2}, data: {3}")
     @ParameterizedTest
     @ArgumentsSource(SelectUserArgumentsProvider.class)
@@ -269,6 +280,7 @@ public class UserTests extends PersistenceTest {
         asserts.checkNumber(expectedUsersCount, users, "Number of users");
     }
 
+    @Feature("Select entity")
     @Description("Get user requests test")
     @Test
     public void getUserRequestsTest() {
@@ -288,6 +300,7 @@ public class UserTests extends PersistenceTest {
         userRequestAsserts.checkUserRequest(user.getId(), UserRequestStatus.OPEN, userRequest.getData(), user.getUserRequests().get(0));
     }
 
+    @Feature("Delete entity")
     @Description("Delete user request test")
     @Test
     public void deleteUserRequestTest() {
@@ -308,6 +321,7 @@ public class UserTests extends PersistenceTest {
         asserts.checkNumber(0, user.getUserRequests().size(), "User requests count");
     }
 
+    @Feature("Select entity")
     @Description("Get cards test")
     @Test
     public void getCardsTest() {
@@ -331,6 +345,7 @@ public class UserTests extends PersistenceTest {
                 user.getCards().get(0));
     }
 
+    @Feature("Delete entity")
     @Description("Delete card test")
     @Test
     public void deleteCardTest() {
@@ -354,6 +369,7 @@ public class UserTests extends PersistenceTest {
         asserts.checkNumber(0, user.getCards().size(), "Cards count");
     }
 
+    @Feature("Select entity")
     @Description("Unique user test")
     @Test
     public void uniqueUserTest() {
@@ -370,6 +386,7 @@ public class UserTests extends PersistenceTest {
         asserts.checkObject(true, dataBaseService.getUserDao().isLoginUnique(anotherLogin), "Login unique");
     }
 
+    @Feature("Select entity")
     @Description("Not unique user test")
     @Test
     public void notUniqueUserTest() {

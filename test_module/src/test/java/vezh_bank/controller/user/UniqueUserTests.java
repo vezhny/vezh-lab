@@ -1,8 +1,6 @@
 package vezh_bank.controller.user;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -18,8 +16,11 @@ import vezh_bank.persistence.entity.User;
 
 @Epic("User controller")
 @Story("Unique user")
+@Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/27", url = "https://github.com/vezhny/vezh-lab/issues/27")
 public class UniqueUserTests extends ControllerTest {
 
+    @Severity(SeverityLevel.BLOCKER)
+    @Feature("Unique user")
     @Description("User is unique")
     @Test
     public void userIsUnique() {
@@ -35,6 +36,8 @@ public class UniqueUserTests extends ControllerTest {
         httpAsserts.checkResponseCode(200, response.getStatus());
     }
 
+    @Severity(SeverityLevel.BLOCKER)
+    @Feature("Unique user")
     @Description("User is not unique")
     @Test
     public void userIsNotUnique() {
@@ -52,6 +55,8 @@ public class UniqueUserTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.userWithLoginAlreadyRegistered(user.getLogin()), response);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("Request params validation")
     @Description("Login param testing")
     @ArgumentsSource(UniqueUserLoginArgumentsProvider.class)
     @ParameterizedTest

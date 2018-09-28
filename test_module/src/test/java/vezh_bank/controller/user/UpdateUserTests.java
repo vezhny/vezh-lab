@@ -33,10 +33,11 @@ import static vezh_bank.util.TypeConverter.stringToInt;
 
 @Epic("Controller tests")
 @Story("Update user")
+@Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/29", url = "https://github.com/vezhny/vezh-lab/issues/29")
 public class UpdateUserTests extends ControllerTest {
 
-    @Feature("Update user success") // TODO: experimental
-    @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/29", url = "https://github.com/vezhny/vezh-lab/issues/29")
+    @Severity(SeverityLevel.BLOCKER)
+    @Feature("Update user success")
     @Description("Update user success test")
     @Test
     public void updateUser() {
@@ -115,8 +116,8 @@ public class UpdateUserTests extends ControllerTest {
                 admin.getRole(), client.getLogin(), client.getRole())), events.get(0));
     }
 
+    @Severity(SeverityLevel.MINOR)
     @Feature("User Id validation")
-    @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/29", url = "https://github.com/vezhny/vezh-lab/issues/29")
     @Description("User ID is absent")
     @Test
     public void userIdIsAbsent() {
@@ -179,8 +180,8 @@ public class UpdateUserTests extends ControllerTest {
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
+    @Severity(SeverityLevel.MINOR)
     @Feature("User Id validation")
-    @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/29", url = "https://github.com/vezhny/vezh-lab/issues/29")
     @Description("Updating user ID is absent")
     @Test
     public void updatingUserIdIsAbsent() {
@@ -243,8 +244,8 @@ public class UpdateUserTests extends ControllerTest {
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
-    @Feature("User Id validation") //TODO: use severity
-    @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/29", url = "https://github.com/vezhny/vezh-lab/issues/29")
+    @Severity(SeverityLevel.MINOR)
+    @Feature("User Id validation")
     @Description("User ID is empty")
     @Test
     public void userIdIsEmpty() {
@@ -308,8 +309,8 @@ public class UpdateUserTests extends ControllerTest {
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
+    @Severity(SeverityLevel.MINOR)
     @Feature("User Id validation")
-    @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/29", url = "https://github.com/vezhny/vezh-lab/issues/29")
     @Description("Updating user ID is empty")
     @Test
     public void updatingUserIdIsEmpty() {
@@ -373,8 +374,8 @@ public class UpdateUserTests extends ControllerTest {
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
+    @Severity(SeverityLevel.MINOR)
     @Feature("User Id validation")
-    @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/29", url = "https://github.com/vezhny/vezh-lab/issues/29")
     @Description("User ID can't be a number")
     @Test
     public void userIdCantBeANumber() {
@@ -438,8 +439,8 @@ public class UpdateUserTests extends ControllerTest {
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
+    @Severity(SeverityLevel.MINOR)
     @Feature("User Id validation")
-    @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/29", url = "https://github.com/vezhny/vezh-lab/issues/29")
     @Description("Updating user ID can't be a number")
     @Test
     public void updatingUserIdCantBeANumber() {
@@ -503,8 +504,8 @@ public class UpdateUserTests extends ControllerTest {
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
+    @Severity(SeverityLevel.MINOR)
     @Feature("User Id validation")
-    @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/29", url = "https://github.com/vezhny/vezh-lab/issues/29")
     @Description("User ID doesn't exist")
     @Test
     public void userIdDoesNotExist() {
@@ -569,8 +570,8 @@ public class UpdateUserTests extends ControllerTest {
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
+    @Severity(SeverityLevel.MINOR)
     @Feature("User Id validation")
-    @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/29", url = "https://github.com/vezhny/vezh-lab/issues/29")
     @Description("Updating user ID doesn't exist")
     @Test
     public void updatingUserIdDoesNotExist() {
@@ -635,8 +636,8 @@ public class UpdateUserTests extends ControllerTest {
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
+    @Severity(SeverityLevel.MINOR)
     @Feature("User access validation")
-    @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/29", url = "https://github.com/vezhny/vezh-lab/issues/29")
     @Description("User Ids are same")
     @ArgumentsSource(OneRoleArgumentsProvider.class)
     @ParameterizedTest
@@ -716,8 +717,8 @@ public class UpdateUserTests extends ControllerTest {
                 admin.getRole(), admin.getLogin(), admin.getRole())), events.get(0));
     }
 
+    @Severity(SeverityLevel.MINOR)
     @Feature("User access validation")
-    @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/29", url = "https://github.com/vezhny/vezh-lab/issues/29")
     @Description("User doesn't has access")
     @ArgumentsSource(ClientAndEmployeeArguments.class)
     @ParameterizedTest
@@ -782,8 +783,8 @@ public class UpdateUserTests extends ControllerTest {
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
+    @Severity(SeverityLevel.MINOR)
     @Feature("Update request params validation")
-    @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/29", url = "https://github.com/vezhny/vezh-lab/issues/29")
     @Description("Request params parametrized test")
     @ArgumentsSource(RequestParamsArgumentsProvider.class)
     @ParameterizedTest

@@ -1,7 +1,6 @@
 package vezh_bank.persistence;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -13,9 +12,13 @@ import vezh_bank.persistence.providers.role.RoleNameArgumentsProvider;
 
 import java.util.List;
 
+@Epic("Persistence")
 @Story("Role persistence")
+@Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/5", url = "https://github.com/vezhny/vezh-lab/issues/5")
+@Severity(SeverityLevel.BLOCKER)
 public class RoleTests extends PersistenceTest {
 
+    @Feature("Select entity")
     @Description("Select all roles")
     @Test
     public void selectAllRoles() {
@@ -24,6 +27,7 @@ public class RoleTests extends PersistenceTest {
         asserts.checkObject(3, roles.size(), "Roles count");
     }
 
+    @Feature("Select entity")
     @Description("Select role by id test. ID: {0}")
     @ParameterizedTest
     @ArgumentsSource(RoleArgumentsProvider.class)
@@ -35,6 +39,7 @@ public class RoleTests extends PersistenceTest {
         asserts.checkObject(role.toString(), userRole.getName(), "Role name");
     }
 
+    @Feature("Select entity")
     @Description("Select role by name test. Name: {0}")
     @ParameterizedTest
     @ArgumentsSource(RoleNameArgumentsProvider.class)

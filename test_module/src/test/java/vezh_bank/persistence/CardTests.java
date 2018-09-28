@@ -1,7 +1,6 @@
 package vezh_bank.persistence;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -20,9 +19,13 @@ import java.util.List;
 
 import static vezh_bank.constants.UserDefault.ATTEMPTS_TO_SIGN_IN;
 
+@Epic("Persistence")
 @Story("Card persistence")
+@Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/5", url = "https://github.com/vezhny/vezh-lab/issues/5")
+@Severity(SeverityLevel.BLOCKER)
 public class CardTests extends PersistenceTest {
 
+    @Feature("Insert entity")
     @Description("Insert card test")
     @Test
     public void insertTest() {
@@ -49,6 +52,7 @@ public class CardTests extends PersistenceTest {
         cardAsserts.checkCard(pan, holder, cvc, expiry, currency, CardStatus.ACTIVE, new BigDecimal("0.00"), cards.get(0));
     }
 
+    @Feature("Select entity")
     @Description("Select card with ID test")
     @Test
     public void selectTest() {
@@ -76,6 +80,7 @@ public class CardTests extends PersistenceTest {
         cardAsserts.checkCard(pan, holder, cvc, expiry, currency, CardStatus.ACTIVE, new BigDecimal("0.00"), card);
     }
 
+    @Feature("Update entity")
     @Description("Update card test")
     @Test
     public void updateTest() {
@@ -107,6 +112,7 @@ public class CardTests extends PersistenceTest {
         cardAsserts.checkCard(pan, holder, cvc, expiry, currency, CardStatus.ACTIVE, newAmount, card);
     }
 
+    @Feature("Delete entity")
     @Description("Delete card test")
     @Test
     public void deleteTest() {
@@ -135,6 +141,7 @@ public class CardTests extends PersistenceTest {
         cardAsserts.checkCardsCount(0, dataBaseService.getCardDao().selectAll());
     }
 
+    @Feature("Delete entity")
     @Description("Delete card by ID test")
     @Test
     public void deleteByIdTest() {
@@ -163,6 +170,7 @@ public class CardTests extends PersistenceTest {
         cardAsserts.checkCardsCount(0, dataBaseService.getCardDao().selectAll());
     }
 
+    @Feature("Select entity")
     @Description("Select cards with holder test")
     @Test
     public void selectByHolderTest() {
@@ -208,6 +216,7 @@ public class CardTests extends PersistenceTest {
         cardAsserts.checkCardsCount(3, cards);
     }
 
+    @Feature("Select entity")
     @Description("Select cards count test")
     @Test
     public void selectCountTest() {
@@ -253,6 +262,7 @@ public class CardTests extends PersistenceTest {
         cardAsserts.checkNumber(6, cards, "Number of cards");
     }
 
+    @Feature("Select entity")
     @Description("Select card where: pan: {0}, holder name: {1}, creation date: {2}, expiry: {3}, currency: {4}" +
             ", status: {5}")
     @ParameterizedTest
@@ -312,6 +322,7 @@ public class CardTests extends PersistenceTest {
         cardAsserts.checkCardsCount(expectedCardsCount, cards);
     }
 
+    @Feature("Select entity")
     @Description("Select cards count where pan: {0}, holder name: {1}, creation date: {2}, expiry: {3}, currency: {4} " +
             ", status: {5}")
     @ParameterizedTest
@@ -371,6 +382,7 @@ public class CardTests extends PersistenceTest {
         cardAsserts.checkNumber(expectedCardsCount, cards, "Number of cards");
     }
 
+    @Feature("Select entity")
     @Description("Select cards where required page: {0}, rows on page: {1},  pan: {2}, holder name: {3}, " +
             "creation date: {4}, expiry: {5}, currency: {6}, status: {7}")
     @ParameterizedTest
@@ -431,6 +443,7 @@ public class CardTests extends PersistenceTest {
         cardAsserts.checkCardsCount(expectedCardsCount, cards);
     }
 
+    @Feature("Delete entity")
     @Description("Delete card holder test")
     @Test
     public void deleteCardHolderTest() {
@@ -456,6 +469,7 @@ public class CardTests extends PersistenceTest {
         asserts.checkException(EntityNotFoundException.class, () -> dataBaseService.getCardDao().selectAll().get(0));
     }
 
+    @Feature("Delete entity")
     @Description("Delete card currency test")
     @Test
     public void deleteCardCurrencyTest() {

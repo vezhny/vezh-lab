@@ -2,9 +2,7 @@ package vezh_bank.controller.user;
 
 import core.dto.UserDTO;
 import core.json.EventData;
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -27,8 +25,11 @@ import java.util.List;
 
 @Epic("User controller")
 @Story("Delete users")
+@Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/20", url = "https://github.com/vezhny/vezh-lab/issues/20")
 public class DeleteUserTests extends ControllerTest {
 
+    @Severity(SeverityLevel.BLOCKER)
+    @Feature("Delete user")
     @Description("Delete user success")
     @ArgumentsSource(RolesArgumentsProvider.class)
     @ParameterizedTest
@@ -66,6 +67,9 @@ public class DeleteUserTests extends ControllerTest {
                         victimUser.getLogin(), victimRole)), events.get(0));
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("User access validation")
+    @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/21", url = "https://github.com/vezhny/vezh-lab/issues/21")
     @Description("{0} tries to delete user")
     @ParameterizedTest
     @ArgumentsSource(ClientAndEmployeeArguments.class)
@@ -92,6 +96,8 @@ public class DeleteUserTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.ACCESS_DENIED, response);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("User id validation")
     @Description("Delete user when user id absent")
     @Test
     public void deleteUsersAbsentUserId() {
@@ -114,6 +120,8 @@ public class DeleteUserTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.missingParameter(RequestParams.USER_ID), response);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("User id validation")
     @Description("Delete user when victim's user id absent")
     @Test
     public void deleteUsersAbsentVictimUserId() {
@@ -137,6 +145,8 @@ public class DeleteUserTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.missingParameter(RequestParams.DELETING_USER_ID), response);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("User id validation")
     @Description("Delete user when user id can't be a number")
     @Test
     public void deleteUsersUserIdCanNotBeNumber() {
@@ -160,6 +170,8 @@ public class DeleteUserTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.invalidParameter(RequestParams.USER_ID), response);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("User id validation")
     @Description("Delete user when victim's user id can't be a number")
     @Test
     public void deleteUsersVictimUserIdCanNotBeNumber() {
@@ -184,6 +196,8 @@ public class DeleteUserTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.invalidParameter(RequestParams.DELETING_USER_ID), response);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("User id validation")
     @Description("Delete user when user doesn't exist")
     @Test
     public void deleteUsersUserDoesNotExist() {
@@ -208,6 +222,8 @@ public class DeleteUserTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.userDoesNotExist(deleterId), response);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("User id validation")
     @Description("Delete user when victim doesn't exist")
     @Test
     public void deleteUsersVictimDoesNotExist() {
@@ -233,6 +249,8 @@ public class DeleteUserTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.userDoesNotExist(victimId), response);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("User id validation")
     @Description("Delete user when victim is the same")
     @Test
     public void deleteUsersVictimIdIsTheSame() {
@@ -257,6 +275,8 @@ public class DeleteUserTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.YOU_CAN_NOT_DELETE_YOURSELF, response);
     }
 
+    @Severity(SeverityLevel.CRITICAL)
+    @Feature("Blocking operation")
     @Description("Delete user when victim has cards")
     @Test
     public void deleteUsersVictimHasCards() {

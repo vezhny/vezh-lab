@@ -5,9 +5,7 @@ import core.json.EventData;
 import core.json.UserAddress;
 import core.json.UserConfig;
 import core.json.UserData;
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -28,8 +26,11 @@ import java.util.List;
 
 @Epic("User controller")
 @Story("Register user")
+@Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/15", url = "https://github.com/vezhny/vezh-lab/issues/15")
 public class UserRegistrationTests extends ControllerTest {
 
+    @Severity(SeverityLevel.BLOCKER)
+    @Feature("User registration")
     @Description("Register user success test")
     @Test
     public void registerUserSuccess() {
@@ -78,6 +79,8 @@ public class UserRegistrationTests extends ControllerTest {
         eventAsserts.checkEvent(eventType, eventData, event);
     }
 
+    @Severity(SeverityLevel.CRITICAL)
+    @Feature("User registration")
     @Description("Register user success with house part test")
     @Test
     public void registerUserSuccessWithHousePart() {
@@ -129,6 +132,8 @@ public class UserRegistrationTests extends ControllerTest {
         eventAsserts.checkEvent(eventType, eventData, event);
     }
 
+    @Severity(SeverityLevel.NORMAL)
+    @Feature("User registration")
     @Description("Register user success without email test")
     @Test
     public void registerUserSuccessWithoutEmail() {
@@ -176,6 +181,8 @@ public class UserRegistrationTests extends ControllerTest {
         eventAsserts.checkEvent(eventType, eventData, event);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("Request params validation")
     @Description("{0}")
     @ParameterizedTest
     @ArgumentsSource(RegisterUserFailArgumentsProvider.class)
@@ -219,6 +226,8 @@ public class UserRegistrationTests extends ControllerTest {
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("Request params validation")
     @Description("{0}")
     @ParameterizedTest
     @ArgumentsSource(RegisterUserSuccessAgrumentsProvider.class)
@@ -260,6 +269,8 @@ public class UserRegistrationTests extends ControllerTest {
         eventAsserts.checkEvent(eventType, eventData, event);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("Request params validation")
     @Description("Login in non-unique test")
     @Test
     public void loginIsNonUnique() {
@@ -309,6 +320,9 @@ public class UserRegistrationTests extends ControllerTest {
         eventAsserts.checkEvent(eventType, eventData, event);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("User access validation")
+    @Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/21", url = "https://github.com/vezhny/vezh-lab/issues/21")
     @Description("{0} tries to register {1}")
     @ParameterizedTest
     @ArgumentsSource(UserRegistrationArgumentsProvider.class)

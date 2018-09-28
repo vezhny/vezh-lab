@@ -5,8 +5,7 @@ import core.dto.UserRoleDTO;
 import core.json.UserAddress;
 import core.json.UserConfig;
 import core.json.UserData;
-import io.qameta.allure.Description;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import vezh_bank.constants.UserDefault;
 import vezh_bank.extended_tests.ServiceTest;
@@ -15,9 +14,13 @@ import vezh_bank.persistence.entity.UserRole;
 
 import java.util.List;
 
+@Epic("Service")
 @Story("User service")
+@Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/15", url = "https://github.com/vezhny/vezh-lab/issues/15")
 public class UserServiceTests extends ServiceTest {
 
+    @Severity(SeverityLevel.NORMAL)
+    @Feature("Insert entity")
     @Description("Add user test")
     @Test
     public void addUser() {

@@ -33,4 +33,10 @@ public class HttpAsserts extends Asserts {
         checkObject(expected, response.getHeader(Headers.ERROR_MESSAGE),
                 "Exception message");
     }
+
+    @Step("Check if exception message contains string \"{0}\"")
+    public void checkExceptionMessageContains(String string, MockHttpServletResponse response) {
+        checkTrue(response.getHeader(Headers.ERROR_MESSAGE).contains(string),
+                "Exception message doesn't contain \"" + string + "\"");
+    }
 }

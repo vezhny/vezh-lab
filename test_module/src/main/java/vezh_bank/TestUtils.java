@@ -1,9 +1,11 @@
 package vezh_bank;
 
 
+import core.dto.UserDTO;
 import core.json.UserAddress;
 import core.json.UserConfig;
 import core.json.UserData;
+import core.services.ServiceProvider;
 import io.qameta.allure.Step;
 import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.Card;
@@ -50,6 +52,14 @@ public class TestUtils {
                 userData.toString(), new UserConfig().toString(), 3);
         dataBaseService.getUserDao().insert(user);
         return dataBaseService.getUserDao().select(login, role.getName(), null, null).get(0).getId();
+    }
+
+    @Step("Create user: {0}")
+    public User createUser(UserDTO userDTO, ServiceProvider serviceProvider) {
+        logger.info("Creating: " + userDTO.toString());
+        serviceProvider.getUserService().addUser(userDTO);
+        return serviceProvider.getDataBaseService().getUserDao().select(userDTO.getLogin(), userDTO.getRole().getName(),
+                null, null).get(0);
     }
 
     @Step("Create card. Holder: {1}. Currency: {2}")

@@ -4,9 +4,7 @@ import core.dto.UserDTO;
 import core.json.UserAddress;
 import core.json.UserData;
 import core.json.Users;
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -26,8 +24,11 @@ import java.util.List;
 
 @Epic("User controller")
 @Story("Get users")
+@Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/18", url = "https://github.com/vezhny/vezh-lab/issues/18")
 public class GetUsersTests extends ControllerTest {
 
+    @Severity(SeverityLevel.BLOCKER)
+    @Feature("Get users")
     @Description("Get all users test")
     @Test
     public void getAllUsers() throws UnsupportedEncodingException {
@@ -59,6 +60,8 @@ public class GetUsersTests extends ControllerTest {
         httpAsserts.checkPagesCount(1, response);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("User id validation")
     @Description("Get users when user id absent")
     @Test
     public void getUsersAbsentUserId() {
@@ -72,6 +75,8 @@ public class GetUsersTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.missingParameter(RequestParams.USER_ID), response);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("User id validation")
     @Description("Get users when user id can't be a number")
     @Test
     public void getUsersUserIdCanNotBeNumber() {
@@ -87,6 +92,8 @@ public class GetUsersTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.invalidParameter(RequestParams.USER_ID), response);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("User id validation")
     @Description("Get users when user doesn't exist")
     @Test
     public void getUsersUserDoesNotExist() {
@@ -102,6 +109,8 @@ public class GetUsersTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(String.format(ExceptionMessages.USER_DOES_NOT_EXIST, userId), response);
     }
 
+    @Severity(SeverityLevel.MINOR)
+    @Feature("User id validation")
     @Description("Get users when user is client")
     @Test
     public void getUsersUserIsClient() {
@@ -117,6 +126,8 @@ public class GetUsersTests extends ControllerTest {
         httpAsserts.checkExceptionMessage(ExceptionMessages.ACCESS_DENIED, response);
     }
 
+    @Severity(SeverityLevel.CRITICAL)
+    @Feature("Get users")
     @Description("Get users parametrized")
     @ArgumentsSource(GetUsersArgumentsProvider.class)
     @ParameterizedTest

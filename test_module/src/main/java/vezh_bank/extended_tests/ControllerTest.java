@@ -37,4 +37,14 @@ public class ControllerTest extends RootTest {
         }
         return null;
     }
+
+    @Step("Http PUT to {0}")
+    protected MockHttpServletResponse httpPut(String url, MultiValueMap<String, String> params) {
+        try {
+            return mockMvc.perform(put(url).params(params)).andReturn().getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -1,9 +1,12 @@
 package core.services;
 
 import core.dto.UserDTO;
+import core.json.UserConfig;
+import core.json.UserData;
 import org.springframework.stereotype.Service;
 import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.User;
+import vezh_bank.util.Encryptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,4 +34,15 @@ public class UserService {
         return userDTOS;
     }
 
+    public void updateUser(User user, String password, UserData userData, UserConfig userConfig, int attemptsToSignIn,
+                           String lastSignIn, boolean blocking) {
+        Encryptor encryptor = new Encryptor();
+        user.setPassword(encryptor.encrypt(password));
+        user.setData(userData.toString());
+        user.setConfig(userConfig.toString());
+        user.setAttemptsToSignIn(attemptsToSignIn);
+        user.setLastSignIn(lastSignIn);
+        user.setBlocked(blocking);
+        dataBaseService.getUserDao().update(user);
+    }
 }

@@ -17,4 +17,6 @@ public class Properties {
     public static final String USER_LOGIN_MAX_LENGTH = "user.login.maxLength";
     public static final String USER_PASSWORD_MIN_LENGTH = "user.password.minLength";
     public static final String USER_PASSWORD_MAX_LENGTH = "user.password.maxLength";
+    public static final String USER_ROWS_MIN_COUNT = "user.rows.count.min";
+    public static final String USER_ROWS_MAX_COUNT = "user.rows.count.max";
 }

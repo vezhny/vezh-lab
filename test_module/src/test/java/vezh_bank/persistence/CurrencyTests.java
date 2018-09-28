@@ -1,7 +1,6 @@
 package vezh_bank.persistence;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -11,9 +10,13 @@ import vezh_bank.persistence.providers.currency.CurrencySearchArgumentsProvider;
 
 import java.util.List;
 
+@Epic("Persistence")
 @Story("Currency persistence")
+@Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/5", url = "https://github.com/vezhny/vezh-lab/issues/5")
+@Severity(SeverityLevel.BLOCKER)
 public class CurrencyTests extends PersistenceTest {
 
+    @Feature("Insert entity")
     @Description("Insert currency test")
     @Test
     public void insertCurrencyTest() {
@@ -26,6 +29,7 @@ public class CurrencyTests extends PersistenceTest {
         currencyAsserts.checkCurrency(currencyCode, currencyValue, currencyFromDb);
     }
 
+    @Feature("Update entity")
     @Description("Update currency test")
     @Test
     public void updateCurrencyTest() {
@@ -42,6 +46,7 @@ public class CurrencyTests extends PersistenceTest {
         currencyAsserts.checkCurrency(currencyCode, newCurrencyValue, currency);
     }
 
+    @Feature("Delete entity")
     @Description("Delete currency test")
     @Test
     public void deleteCurrencyTest() {
@@ -53,7 +58,8 @@ public class CurrencyTests extends PersistenceTest {
         currencyAsserts.checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
     }
 
-    @Description("SelectCurrency by value test")
+    @Feature("Select entity")
+    @Description("Select currency by value test")
     @Test
     public void getCurrencyByValueTest() {
         testUtils.logTestStart("SelectCurrency by value test");
@@ -65,6 +71,7 @@ public class CurrencyTests extends PersistenceTest {
         currencyAsserts.checkCurrency(currencyCode, currencyValue, currency);
     }
 
+    @Feature("Delete entity")
     @Description("Delete currency by code test")
     @Test
     public void deleteCurrencyByCodeTest() {
@@ -77,6 +84,7 @@ public class CurrencyTests extends PersistenceTest {
         currencyAsserts.checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
     }
 
+    @Feature("Delete entity")
     @Description("Delete currency by value test")
     @Test
     public void deleteCurrencyByValueTest() {
@@ -89,6 +97,8 @@ public class CurrencyTests extends PersistenceTest {
         currencyAsserts.checkCurrenciesCount(0, dataBaseService.getCurrencyDao().selectAll());
     }
 
+    @Severity(SeverityLevel.NORMAL)
+    @Feature("Sort entity")
     @Description("Currency sorting test")
     @Test
     public void currencySortingTest() {
@@ -106,6 +116,7 @@ public class CurrencyTests extends PersistenceTest {
         currencyAsserts.checkCurrency(currencyCode1, currencyValue1, currencies.get(1));
     }
 
+    @Feature("Select entity")
     @Description("Search currency by value test")
     @Test
     public void searchCurrencyByValueTest() {
@@ -121,6 +132,7 @@ public class CurrencyTests extends PersistenceTest {
         currencyAsserts.checkCurrenciesCount(2, currencies);
     }
 
+    @Feature("Select entity")
     @Description("Search currency where code: {0}, value: {1}")
     @ParameterizedTest
     @ArgumentsSource(CurrencySearchArgumentsProvider.class)
@@ -137,6 +149,7 @@ public class CurrencyTests extends PersistenceTest {
         currencyAsserts.checkCurrenciesCount(expectedCurrenciesCount, currencies);
     }
 
+    @Feature("Select entity")
     @Description("Currency count test")
     @Test
     public void currencyCountTest() {
@@ -147,6 +160,7 @@ public class CurrencyTests extends PersistenceTest {
         asserts.checkObject(1, numberOfCurrencies, "Number of currencies");
     }
 
+    @Feature("Select entity")
     @Description("Currency page test. Required page: {0}, rows on page: {1}, code: {2}, value: {3}")
     @ParameterizedTest
     @ArgumentsSource(CurrencySearchArgumentsProvider.CurrencyPageArgumentsProvider.class)
@@ -163,6 +177,7 @@ public class CurrencyTests extends PersistenceTest {
         currencyAsserts.checkCurrenciesCount(expectedCurrenciesCount, currencies);
     }
 
+    @Feature("Select entity")
     @Description("Search currencies count test. Code: {0}, value: {1}")
     @ParameterizedTest
     @ArgumentsSource(CurrencySearchArgumentsProvider.class)

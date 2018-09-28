@@ -87,7 +87,7 @@ public class UserController implements BaseController {
 
     /**
      * Required params: userId, updatingUserId, password, country, region, city, street, house, room, firstName, middleName,
-     * patronymic, contactNumber, cardsOnPage, currenciesOnPage, eventsOnPage, paymentsOnPage, transactionsOnPage,
+     * patronymic, birthDate, contactNumber, cardsOnPage, currenciesOnPage, eventsOnPage, paymentsOnPage, transactionsOnPage,
      * usersOnPage, userRequestsOnPage
      * @param params
      * @return

@@ -64,8 +64,8 @@ public class UserRequestValidator extends Validator {
             throw new BadRequestException(invalidParameter(paramName), valueCanNotBeANumber(param));
         }
         int number = stringToInt(param);
-        int minRowsCount = stringToInt(USER_ROWS_MIN_COUNT);
-        int maxRowsCount = stringToInt(USER_ROWS_MAX_COUNT);
+        int minRowsCount = stringToInt(properties.getProperty(USER_ROWS_MIN_COUNT));
+        int maxRowsCount = stringToInt(properties.getProperty(USER_ROWS_MAX_COUNT));
         if (number < minRowsCount || number > maxRowsCount) {
             throw new BadRequestException(invalidParameter(paramName),
                     valueShouldBeInRange(paramName, minRowsCount, maxRowsCount));

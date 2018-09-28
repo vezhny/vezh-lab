@@ -1,7 +1,6 @@
 package vezh_bank.assertions;
 
 import io.qameta.allure.Step;
-import org.junit.jupiter.api.Assertions;
 import org.springframework.mock.web.MockHttpServletResponse;
 import vezh_bank.constants.Headers;
 
@@ -10,6 +9,11 @@ public class HttpAsserts extends Asserts {
     @Step("Check response code")
     public void checkResponseCode(int expectedCode, int actualCode) {
         checkObject(expectedCode, actualCode, "Response code");
+    }
+
+    @Step("Check response code")
+    public void checkResponseCode(int expectedCode, MockHttpServletResponse response) {
+        checkResponseCode(expectedCode, response.getStatus());
     }
 
     @Step("Check current page")

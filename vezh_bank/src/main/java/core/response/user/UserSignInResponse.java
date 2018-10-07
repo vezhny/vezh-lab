@@ -41,19 +41,35 @@ public class UserSignInResponse implements VezhBankResponse {
             user = new UserDTO(entity, role);
 
             userBlocked(user);
+            comparePasswords(entity, requestParams.get(RequestParams.PASSWORD));
 
+            ResponseEntity responseEntity = new ResponseEntity(entity.getId(), HttpStatus.OK);
+            return responseEntity;
 
         } catch (ServerErrorException e) {
             return error(e, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (FailedAuthorizationException e) {
             return error(e);
         }
-        return null;
     }
 
     private void userBlocked(UserDTO user) throws FailedAuthorizationException {
         if (user.isBlocked()) {
             throw new FailedAuthorizationException(ExceptionMessages.USER_IS_BLOCKED, user.getLogin());
         }
+    }
+
+    private void comparePasswords(User entity, String password) throws FailedAuthorizationException {
+        if (!entity.getPassword().equals(password)) {
+            removeAttempt(entity);
+            throw new FailedAuthorizationException(ExceptionMessages.INVALID_LOGIN_OR_PASSWORD);
+        }
+    }
+
+    private void removeAttempt(User entity) {
+        if (entity.getAttemptsToSignIn() == 1) {
+            entity.setBlocked(true);
+        }
+        entity.setAttemptsToSignIn(entity.getAttemptsToSignIn() - 1);
     }
 }

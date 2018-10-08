@@ -1,22 +1,10 @@
 package vezh_bank.assertions;
 
-import core.dto.EventDTO;
-import core.dto.UserDTO;
-import core.dto.UserRoleDTO;
-import core.json.EventData;
-import core.json.UserConfig;
-import core.json.UserData;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.function.Executable;
-import org.springframework.mock.web.MockHttpServletResponse;
-import vezh_bank.constants.Headers;
-import vezh_bank.enums.*;
-import vezh_bank.persistence.entity.*;
 
-import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.List;
 
 public class Asserts {
 
@@ -53,5 +41,10 @@ public class Asserts {
     @Step("Check true. {1}")
     public void checkTrue(Boolean value, String message) {
         Assertions.assertTrue(value, message);
+    }
+
+    @Step("Check false. {1}")
+    public void checkFalse(Boolean value, String message) {
+        Assertions.assertFalse(value, message);
     }
 }

@@ -33,7 +33,7 @@ public class BlockUserResponse implements VezhBankResponse {
         try {
             userRequestValidator = new UserRequestValidator(serviceProvider.getDataBaseService(), requestParams);
             userRequestValidator.checkUserId(requestParams.get(RequestParams.USER_ID), UserAccess.ADMIN_ONLY);
-            userRequestValidator.checkUserId(requestParams.get(RequestParams.TARGET_ID), UserAccess.ANY);
+            userRequestValidator.checkUserId(requestParams.get(RequestParams.TARGET_ID), UserAccess.ANY, RequestParams.TARGET_ID);
         } catch (ServerErrorException e) {
             return error(e, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (BadRequestException e) {

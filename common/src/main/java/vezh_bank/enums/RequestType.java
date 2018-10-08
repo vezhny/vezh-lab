@@ -8,5 +8,6 @@ public enum RequestType {
     GET_USERS,
     IS_USER_UNIQUE,
     GET_EVENTS,
-    USER_SIGN_IN
+    USER_SIGN_IN,
+    BLOCK_USER,
 }

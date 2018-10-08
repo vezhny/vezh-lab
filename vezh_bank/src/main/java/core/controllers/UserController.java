@@ -129,4 +129,21 @@ public class UserController implements BaseController {
         logEndOperation(logger);
         return responseEntity;
     }
+
+    /**
+     * Required params: userId, targetId
+     * @param params
+     * @param targetId
+     * @return
+     */
+    @RequestMapping(value = "/{targetId}" + Urls.BLOCK, method = RequestMethod.PUT)
+    public ResponseEntity blockUser(@RequestParam Map<String, String> params,
+                                    @PathVariable("targetId") String targetId) {
+        logStartOperation(logger);
+        params.put(RequestParams.TARGET_ID, targetId);
+        RequestHandler requestHandler = new UserRequestHandler(params, serviceProvider, RequestType.BLOCK_USER);
+        ResponseEntity responseEntity = requestHandler.getResponse();
+        logEndOperation(logger);
+        return responseEntity;
+    }
 }

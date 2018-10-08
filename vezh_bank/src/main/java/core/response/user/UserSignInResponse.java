@@ -68,7 +68,7 @@ public class UserSignInResponse implements VezhBankResponse {
     private void removeAttempt(User entity) {
         if (entity.getAttemptsToSignIn() == 1) {
             logger.info("Blocking user");
-            entity.setBlocked(true);
+            serviceProvider.getUserService().blockUser(entity, serviceProvider.getEventService());
             entity.setAttemptsToSignIn(entity.getAttemptsToSignIn() - 1);
         } else if (entity.getAttemptsToSignIn() > 1) {
             logger.info("Removing attempt to sign in");

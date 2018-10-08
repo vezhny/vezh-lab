@@ -227,7 +227,6 @@ public class UserSignInTests extends ControllerTest {
             response = httpPost(Urls.USERS + Urls.SIGN_IN, params);
             httpAsserts.checkResponseCode(400, response);
             httpAsserts.checkExceptionMessage(ExceptionMessages.INVALID_LOGIN_OR_PASSWORD, response);
-            eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
         }
 
         response = httpPost(Urls.USERS + Urls.SIGN_IN, params);
@@ -237,7 +236,10 @@ public class UserSignInTests extends ControllerTest {
         asserts.checkNumber(0,
                 serviceProvider.getDataBaseService().getUserDao().getById(user.getId()).getAttemptsToSignIn(),
                 "Attempts to sign in");
-        eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
+        List<Event> events = serviceProvider.getDataBaseService().getEventDao().selectAll();
+        eventAsserts.checkNumberOfEvents(1, events.size());
+        eventAsserts.checkEvent(EventType.USER_BLOCKED, new EventData(EventDescriptions.userHasBeenBlocked(user.getLogin())),
+                events.get(0));
     }
 
     @Severity(SeverityLevel.CRITICAL)

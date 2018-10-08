@@ -4,7 +4,6 @@ import core.dto.UserDTO;
 import core.exceptions.FailedAuthorizationException;
 import core.response.VezhBankResponse;
 import core.services.ServiceProvider;
-import core.validators.UserRequestValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import vezh_bank.constants.DatePatterns;
@@ -23,7 +22,6 @@ public class UserSignInResponse implements VezhBankResponse {
     private Logger logger = Logger.getLogger(this.getClass());
     private ServiceProvider serviceProvider;
     private Map<String, String> requestParams;
-    private UserRequestValidator userRequestValidator;
 
     public UserSignInResponse(ServiceProvider serviceProvider, Map<String, String> requestParams) {
         this.serviceProvider = serviceProvider;

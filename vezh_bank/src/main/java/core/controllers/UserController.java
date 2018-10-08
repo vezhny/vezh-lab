@@ -1,14 +1,17 @@
 package core.controllers;
 
+import core.dto.UserDTO;
 import core.handlers.RequestHandler;
 import core.handlers.UserRequestHandler;
 import core.services.ServiceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import vezh_bank.constants.RequestParams;
 import vezh_bank.constants.Urls;
 import vezh_bank.enums.RequestType;
 import vezh_bank.util.Logger;
@@ -105,6 +108,23 @@ public class UserController implements BaseController {
     public ResponseEntity signIn(@RequestParam Map<String, String> params) {
         logStartOperation(logger);
         RequestHandler requestHandler = new UserRequestHandler(params, serviceProvider, RequestType.USER_SIGN_IN);
+        ResponseEntity responseEntity = requestHandler.getResponse();
+        logEndOperation(logger);
+        return responseEntity;
+    }
+
+    /**
+     * Required params: userId, targetId
+     * @param params
+     * @param targetId
+     * @return
+     */
+    @RequestMapping(value = "/{targetId}", method = RequestMethod.GET)
+    public ResponseEntity<UserDTO> getUser(@RequestParam Map<String, String> params,
+                                           @PathVariable("targetId") String targetId) {
+        logStartOperation(logger);
+        params.put(RequestParams.TARGET_ID, targetId);
+        RequestHandler requestHandler = new UserRequestHandler(params, serviceProvider, RequestType.GET_USER);
         ResponseEntity responseEntity = requestHandler.getResponse();
         logEndOperation(logger);
         return responseEntity;

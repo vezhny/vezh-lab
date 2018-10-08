@@ -28,6 +28,7 @@ public class RequestParams {
     public static final String ROLE = "role";
     public static final String ROOM = "room";
     public static final String STREET = "street";
+    public static final String TARGET_ID = "targetId";
     public static final String TRANSACTIONS_ON_PAGE = "transactionsOnPage";
     public static final String UPDATING_USER_ID = "updatingUserId";
     public static final String USER_ID = "userId";

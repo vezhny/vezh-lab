@@ -95,4 +95,18 @@ public class UserController implements BaseController {
         logEndOperation(logger);
         return responseEntity;
     }
+
+    /**
+     * Required params: login, password
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = Urls.SIGN_IN, method = RequestMethod.POST)
+    public ResponseEntity signIn(@RequestParam Map<String, String> params) {
+        logStartOperation(logger);
+        RequestHandler requestHandler = new UserRequestHandler(params, serviceProvider, RequestType.USER_SIGN_IN);
+        ResponseEntity responseEntity = requestHandler.getResponse();
+        logEndOperation(logger);
+        return responseEntity;
+    }
 }

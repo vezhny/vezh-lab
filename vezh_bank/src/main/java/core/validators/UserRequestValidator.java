@@ -120,6 +120,10 @@ public class UserRequestValidator extends Validator {
     }
 
     public void checkLogin(String login) throws BadRequestException {
+        checkLogin(login, true);
+    }
+
+    private void checkLogin(String login, boolean shouldBeUnique) throws BadRequestException {
         if (isNull(login)) {
             throw new BadRequestException(missingParameter(RequestParams.LOGIN));
         }
@@ -131,7 +135,7 @@ public class UserRequestValidator extends Validator {
                     valueDoesNotMatchToRegex(login, "\\w+"));
         }
 
-        if (!dataBaseService.getUserDao().isLoginUnique(login)) {
+        if (shouldBeUnique && !dataBaseService.getUserDao().isLoginUnique(login)) {
             throw new BadRequestException(userWithLoginAlreadyRegistered(login));
         }
     }

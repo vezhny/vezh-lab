@@ -401,4 +401,36 @@ public class UserTests extends PersistenceTest {
 
         asserts.checkObject(false, dataBaseService.getUserDao().isLoginUnique(login), "Login unique");
     }
+
+    @Feature("Select entity")
+    @Description("Select with login test")
+    @Test
+    public void selectWithLoginTest() {
+        testUtils.logTestStart("Select with login test");
+
+        String login = "Login";
+        List<UserRole> userRoles = dataBaseService.getRoleDao().selectAll();
+        User user = new User(login, "password", userRoles.get(0),
+                "User data 1", "Config", ATTEMPTS_TO_SIGN_IN);
+
+        createUser(user);
+
+        asserts.checkNotNull(dataBaseService.getUserDao().select(login), "User");
+    }
+
+    @Feature("Select entity")
+    @Description("Select with unknown login test")
+    @Test
+    public void selectWithUnknownLoginTest() {
+        testUtils.logTestStart("Select with unknown login test");
+
+        String login = "Login";
+        List<UserRole> userRoles = dataBaseService.getRoleDao().selectAll();
+        User user = new User(login, "password", userRoles.get(0),
+                "User data 1", "Config", ATTEMPTS_TO_SIGN_IN);
+
+        createUser(user);
+
+        asserts.checkNull(dataBaseService.getUserDao().select(login + "ert"), "User");
+    }
 }

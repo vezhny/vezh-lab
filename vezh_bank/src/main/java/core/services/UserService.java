@@ -56,4 +56,11 @@ public class UserService {
         eventService.addEvent(new EventDTO(EventType.USER_BLOCKED,
                 new EventData(EventDescriptions.userHasBeenBlocked(user.getLogin()))));
     }
+
+    public void unblockUser(User user, EventService eventService) {
+        user.setBlocked(false);
+        dataBaseService.getUserDao().update(user);
+        eventService.addEvent(new EventDTO(EventType.USER_UNBLOCKED,
+                new EventData(EventDescriptions.userHasBeenUnblocked(user.getLogin()))));
+    }
 }

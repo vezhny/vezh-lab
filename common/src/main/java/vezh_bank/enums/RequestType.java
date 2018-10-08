@@ -10,4 +10,5 @@ public enum RequestType {
     GET_EVENTS,
     USER_SIGN_IN,
     BLOCK_USER,
+    UNBLOCK_USER,
 }

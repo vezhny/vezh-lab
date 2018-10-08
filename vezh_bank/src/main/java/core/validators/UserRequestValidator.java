@@ -33,11 +33,10 @@ public class UserRequestValidator extends Validator {
         loadProperties();
     }
 
-    public void checkUserSignInParams() throws FailedAuthorizationException {
-        try {
-            checkLogin(requestParams.get(RequestParams.LOGIN), false);
-            checkPassword(requestParams.get(RequestParams.PASSWORD));
-        } catch (BadRequestException e) {
+    public void checkUserSignInParams() throws FailedAuthorizationException, BadRequestException {
+        checkLogin(requestParams.get(RequestParams.LOGIN), false);
+        checkPassword(requestParams.get(RequestParams.PASSWORD));
+        if (dataBaseService.getUserDao().select(requestParams.get(RequestParams.LOGIN)) == null) {
             throw new FailedAuthorizationException(INVALID_LOGIN_OR_PASSWORD);
         }
     }

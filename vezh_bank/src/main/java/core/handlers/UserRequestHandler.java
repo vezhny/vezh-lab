@@ -62,9 +62,11 @@ public class UserRequestHandler implements RequestHandler {
             }
             case GET_USER: {
                 vezhBankResponse = new GetUserResponse(serviceProvider, requestParams);
+                break;
             }
             case BLOCK_USER: {
                 vezhBankResponse = new BlockUserResponse(serviceProvider, requestParams);
+                break;
             }
         }
         ResponseEntity response = vezhBankResponse.build();

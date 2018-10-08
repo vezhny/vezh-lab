@@ -1,9 +1,13 @@
 package core.services;
 
+import core.dto.EventDTO;
 import core.dto.UserDTO;
+import core.json.EventData;
 import core.json.UserConfig;
 import core.json.UserData;
 import org.springframework.stereotype.Service;
+import vezh_bank.constants.EventDescriptions;
+import vezh_bank.enums.EventType;
 import vezh_bank.persistence.DataBaseService;
 import vezh_bank.persistence.entity.User;
 import vezh_bank.util.Encryptor;
@@ -44,5 +48,12 @@ public class UserService {
         user.setLastSignIn(lastSignIn);
         user.setBlocked(blocking);
         dataBaseService.getUserDao().update(user);
+    }
+
+    public void blockUser(User user, EventService eventService) {
+        user.setBlocked(true);
+        dataBaseService.getUserDao().update(user);
+        eventService.addEvent(new EventDTO(EventType.USER_BLOCKED,
+                new EventData(EventDescriptions.userHasBeenBlocked(user.getLogin()))));
     }
 }

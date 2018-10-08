@@ -1,5 +1,6 @@
 package vezh_bank.controller.user;
 
+import core.json.EventData;
 import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -7,20 +8,20 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import vezh_bank.constants.ExceptionMessages;
-import vezh_bank.constants.RequestParams;
-import vezh_bank.constants.Urls;
-import vezh_bank.constants.UserDefault;
+import vezh_bank.constants.*;
 import vezh_bank.controller.user.providers.signIn.InvalidLoginsArgumentsProvider;
 import vezh_bank.controller.user.providers.signIn.InvalidPasswordsArgumentsProvider;
+import vezh_bank.enums.EventType;
 import vezh_bank.enums.Role;
 import vezh_bank.extended_tests.ControllerTest;
+import vezh_bank.persistence.entity.Event;
 import vezh_bank.persistence.entity.User;
 import vezh_bank.persistence.entity.UserRole;
 import vezh_bank.util.Encryptor;
 import vezh_bank.util.TypeConverter;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 @Epic("User controller")
 @Story("User sign in")
@@ -38,6 +39,7 @@ public class UserSignInTests extends ControllerTest {
         int userId = testUtils.createUser(serviceProvider.getDataBaseService(), role);
         User user = serviceProvider.getDataBaseService().getUserDao().getById(userId);
         Encryptor encryptor = new Encryptor();
+        eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.set(RequestParams.LOGIN, user.getLogin());
@@ -51,6 +53,10 @@ public class UserSignInTests extends ControllerTest {
         asserts.checkNotNull(userFromResponse, "User entity");
         asserts.checkObject(user.getLogin(), userFromResponse.getLogin(), "User login");
         asserts.checkNotNull(userFromResponse.getLastSignIn(), "Last sign in date");
+        List<Event> events = serviceProvider.getDataBaseService().getEventDao().selectAll();
+        eventAsserts.checkNumberOfEvents(1, events.size());
+        eventAsserts.checkEvent(EventType.USER_SIGN_IN, new EventData(EventDescriptions.userSignedIn(user.getLogin())),
+                events.get(0));
     }
 
     @Severity(SeverityLevel.CRITICAL)
@@ -78,6 +84,7 @@ public class UserSignInTests extends ControllerTest {
         asserts.checkNumber(attemptsToSignIn,
                 serviceProvider.getDataBaseService().getUserDao().getById(user.getId()).getAttemptsToSignIn(),
                 "Attempts to sign in");
+        eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
     @Severity(SeverityLevel.MINOR)
@@ -103,6 +110,7 @@ public class UserSignInTests extends ControllerTest {
         asserts.checkNumber(attemptsToSignIn,
                 serviceProvider.getDataBaseService().getUserDao().getById(user.getId()).getAttemptsToSignIn(),
                 "Attempts to sign in");
+        eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
     @Severity(SeverityLevel.CRITICAL)
@@ -129,6 +137,7 @@ public class UserSignInTests extends ControllerTest {
         asserts.checkNumber(attemptsToSignIn - 1,
                 serviceProvider.getDataBaseService().getUserDao().getById(user.getId()).getAttemptsToSignIn(),
                 "Attempts to sign in");
+        eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
     @Severity(SeverityLevel.CRITICAL)
@@ -153,6 +162,7 @@ public class UserSignInTests extends ControllerTest {
         asserts.checkNumber(attemptsToSignIn - 1,
                 serviceProvider.getDataBaseService().getUserDao().getById(user.getId()).getAttemptsToSignIn(),
                 "Attempts to sign in");
+        eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 
     @Severity(SeverityLevel.MINOR)
@@ -167,6 +177,7 @@ public class UserSignInTests extends ControllerTest {
         User user = serviceProvider.getDataBaseService().getUserDao().getById(userId);
         int attemptsToSignIn = user.getAttemptsToSignIn();
         Encryptor encryptor = new Encryptor();
+        eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.set(RequestParams.LOGIN, user.getLogin());
@@ -179,6 +190,7 @@ public class UserSignInTests extends ControllerTest {
         asserts.checkNumber(attemptsToSignIn - 1,
                 serviceProvider.getDataBaseService().getUserDao().getById(user.getId()).getAttemptsToSignIn(),
                 "Attempts to sign in");
+        eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
 
         params.set(RequestParams.PASSWORD, encryptor.decrypt(user.getPassword()));
 
@@ -188,6 +200,10 @@ public class UserSignInTests extends ControllerTest {
         asserts.checkNumber(attemptsToSignIn,
                 serviceProvider.getDataBaseService().getUserDao().getById(user.getId()).getAttemptsToSignIn(),
                 "Attempts to sign in");
+        List<Event> events = serviceProvider.getDataBaseService().getEventDao().selectAll();
+        eventAsserts.checkNumberOfEvents(1, events.size());
+        eventAsserts.checkEvent(EventType.USER_SIGN_IN, new EventData(EventDescriptions.userSignedIn(user.getLogin())),
+                events.get(0));
     }
 
     @Severity(SeverityLevel.MINOR)
@@ -220,6 +236,10 @@ public class UserSignInTests extends ControllerTest {
         asserts.checkNumber(0,
                 serviceProvider.getDataBaseService().getUserDao().getById(user.getId()).getAttemptsToSignIn(),
                 "Attempts to sign in");
+        List<Event> events = serviceProvider.getDataBaseService().getEventDao().selectAll();
+        eventAsserts.checkNumberOfEvents(1, events.size());
+        eventAsserts.checkEvent(EventType.USER_BLOCKED, new EventData(EventDescriptions.userHasBeenBlocked(user.getLogin())),
+                events.get(0));
     }
 
     @Severity(SeverityLevel.CRITICAL)
@@ -244,5 +264,6 @@ public class UserSignInTests extends ControllerTest {
 
         httpAsserts.checkResponseCode(400, response);
         httpAsserts.checkExceptionMessage(ExceptionMessages.USER_IS_BLOCKED, response);
+        eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
     }
 }

@@ -1,15 +1,15 @@
 package core.response.user;
 
+import core.dto.EventDTO;
 import core.dto.UserDTO;
 import core.exceptions.FailedAuthorizationException;
+import core.json.EventData;
 import core.response.VezhBankResponse;
 import core.services.ServiceProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import vezh_bank.constants.DatePatterns;
-import vezh_bank.constants.ExceptionMessages;
-import vezh_bank.constants.RequestParams;
-import vezh_bank.constants.UserDefault;
+import vezh_bank.constants.*;
+import vezh_bank.enums.EventType;
 import vezh_bank.persistence.entity.User;
 import vezh_bank.persistence.entity.UserRole;
 import vezh_bank.util.Logger;
@@ -38,7 +38,6 @@ public class UserSignInResponse implements VezhBankResponse {
 
             userBlocked(user);
             comparePasswords(user, requestParams.get(RequestParams.PASSWORD));
-
 
             ResponseEntity responseEntity = new ResponseEntity(user.getId(), HttpStatus.OK);
             return responseEntity;
@@ -69,7 +68,7 @@ public class UserSignInResponse implements VezhBankResponse {
     private void removeAttempt(User entity) {
         if (entity.getAttemptsToSignIn() == 1) {
             logger.info("Blocking user");
-            entity.setBlocked(true);
+            serviceProvider.getUserService().blockUser(entity, serviceProvider.getEventService());
             entity.setAttemptsToSignIn(entity.getAttemptsToSignIn() - 1);
         } else if (entity.getAttemptsToSignIn() > 1) {
             logger.info("Removing attempt to sign in");
@@ -93,5 +92,11 @@ public class UserSignInResponse implements VezhBankResponse {
         user.setLastSignIn(new SimpleDateFormat(DatePatterns.DEFAULT_DATE_PATTERN).format(new Date()));
         serviceProvider.getUserService().updateUser(user.getEntity(), user.getPassword(),
                 user.getData(), user.getConfig(), user.getAttemptsToSignIn(), user.getLastSignIn(), user.isBlocked());
+        addEvent(user.getLogin());
+    }
+
+    private void addEvent(String login) {
+        EventDTO eventDTO = new EventDTO(EventType.USER_SIGN_IN, new EventData(EventDescriptions.userSignedIn(login)));
+        serviceProvider.getEventService().addEvent(eventDTO);
     }
 }

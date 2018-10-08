@@ -60,6 +60,9 @@ public class UserRequestHandler implements RequestHandler {
                 vezhBankResponse = new UserSignInResponse(serviceProvider, requestParams);
                 break;
             }
+            case GET_USER: {
+                vezhBankResponse = new GetUserResponse(serviceProvider, requestParams);
+            }
         }
         ResponseEntity response = vezhBankResponse.build();
         logger.info(response.toString());

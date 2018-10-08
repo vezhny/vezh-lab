@@ -47,11 +47,21 @@ public class UserRequestValidator extends Validator {
         checkPassword(requestParams.get(RequestParams.PASSWORD));
         checkUserData();
         checkUserConfig();
-        User updater = dataBaseService.getUserDao().getById(stringToInt(requestParams.get(RequestParams.USER_ID)));
-        User victim = dataBaseService.getUserDao().getById(stringToInt(requestParams.get(RequestParams.UPDATING_USER_ID)));
-        if (!updater.getRole().equals(Role.ADMIN.toString()) && updater.getId() != victim.getId()) {
-            throw new BadRequestException(ACCESS_DENIED, userTriedToDoOperationWithAccess(updater.getLogin(),
-                    updater.getRole(), UserAccess.ADMIN_ONLY));
+        checkAdminAndOwnerAccess(requestParams.get(RequestParams.USER_ID), requestParams.get(RequestParams.UPDATING_USER_ID));
+    }
+
+    public void checkGetUserParams() throws BadRequestException {
+        checkUserId(requestParams.get(RequestParams.USER_ID), UserAccess.ANY);
+        checkUserId(requestParams.get(RequestParams.TARGET_ID), UserAccess.ANY, RequestParams.TARGET_ID);
+        checkAdminAndOwnerAccess(requestParams.get(RequestParams.USER_ID), requestParams.get(RequestParams.TARGET_ID));
+    }
+
+    private void checkAdminAndOwnerAccess(String userId, String targetId) throws BadRequestException {
+        User operator = dataBaseService.getUserDao().getById(stringToInt(userId));
+        User victim = dataBaseService.getUserDao().getById(stringToInt(targetId));
+        if (!operator.getRole().equals(Role.ADMIN.toString()) && operator.getId() != victim.getId()) {
+            throw new BadRequestException(ACCESS_DENIED, userTriedToDoOperationWithAccess(operator.getLogin(),
+                    operator.getRole(), UserAccess.ADMIN_ONLY));
         }
     }
 

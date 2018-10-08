@@ -5,11 +5,8 @@ import vezh_bank.enums.UserAccess;
 import static java.lang.String.format;
 
 public class ExceptionMessages {
-    public static final String USER_ID_MUST_PRESENT = "User ID must present";
     public static final String VALUE_CAN_NOT_BE_A_NUMBER = "Value \"%s\" can't be a number";
     public static final String USER_DOES_NOT_EXIST = "User with ID \"%s\" doesn't exist";
-    public static final String THIS_OPERATION_IS_NOT_AVAILABLE_FOR_CLIENTS = "This operation is not allowed for clients";
-    public static final String MISSING_REQUEST_TYPE_PARAMETER = "Missing request type parameter";
     public static final String MISSING_PARAMETER = "Missing parameter \"%s\"";
     public static final String CAN_NOT_READ_PROPERTIES = "Can't read property file";
     public static final String INVALID_PARAMETER = "Invalid parameter: \"%s\"";
@@ -17,6 +14,8 @@ public class ExceptionMessages {
     public static final String PARAMETER_IS_NULL = "Parameter \"%s\" is null";
     public static final String ROLE_IS_UNKNOWN = "Role \"%s\" is unknown";
     public static final String VALUE_SHOULD_HAVE_LENGTH = "Value \"%s\" should have length [%s, %s], " +
+            "but actual length is \"%s\"";
+    public static final String VALUE_SHOULD_HAVE_LENGTH_NO_RANGE = "Value \"%s\" should have length \"s\", " +
             "but actual length is \"%s\"";
     public static final String VALUE_DOES_NOT_MATCH_TO_REGEX = "Value \"%s\" doesn't match regex \"%s\"";
     public static final String DATE_HAS_INVALID_PATTERN = "Date \"%s\" has invalid pattern";
@@ -30,6 +29,7 @@ public class ExceptionMessages {
     public static final String INVALID_LOGIN_OR_PASSWORD = "Invalid login or password";
     public static final String USER_IS_BLOCKED = "User is blocked";
     public static final String USER_WITH_LOGIN_IS_BLOCKED = "User \"%s\" is blocked";
+    public static final String CURRENCY_WITH_ALREADY_EXISTS = "Currency with %s \"%s\" is already exists";
 
     public static String valueCanNotBeANumber(String value) {
         return format(VALUE_CAN_NOT_BE_A_NUMBER, value);
@@ -63,6 +63,10 @@ public class ExceptionMessages {
         return format(VALUE_SHOULD_HAVE_LENGTH, paramName, minLength, maxLength, actualLength);
     }
 
+    public static String valueShouldHaveLength(String paramName, int expectedLength, int actualLength) {
+        return format(VALUE_SHOULD_HAVE_LENGTH_NO_RANGE, paramName, expectedLength, actualLength);
+    }
+
     public static String valueDoesNotMatchToRegex(String value, String regex) {
         return format(VALUE_DOES_NOT_MATCH_TO_REGEX, value, regex);
     }
@@ -89,5 +93,9 @@ public class ExceptionMessages {
 
     public static String userIsBlocked(String login) {
         return format(USER_WITH_LOGIN_IS_BLOCKED, login);
+    }
+
+    public static String currencyWithCodeIsAlreadyExists(String code) {
+        return format(CURRENCY_WITH_ALREADY_EXISTS, "code", code);
     }
 }

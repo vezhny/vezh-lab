@@ -7,6 +7,7 @@ public class RequestParams {
     public static final String CITY = "city";
     public static final String CONTACT_NUMBER = "contactNumber";
     public static final String COUNTRY = "country";
+    public static final String CURRENCY_CODE = "currencyCode";
     public static final String CURRENCIES_ON_PAGE = "currenciesOnPage";
     public static final String DELETING_USER_ID = "deletingUserId";
     public static final String EMAIL = "email";

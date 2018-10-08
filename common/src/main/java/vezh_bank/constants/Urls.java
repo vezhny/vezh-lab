@@ -7,4 +7,5 @@ public class Urls {
     public static final String SIGN_IN = "/signIn";
     public static final String BLOCK = "/block";
     public static final String UNBLOCK = "/unblock";
+    public static final String CURRENCIES = "/currencies";
 }

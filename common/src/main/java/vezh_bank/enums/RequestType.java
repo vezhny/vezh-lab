@@ -11,4 +11,5 @@ public enum RequestType {
     USER_SIGN_IN,
     BLOCK_USER,
     UNBLOCK_USER,
+    ADD_CURRENCY,
 }

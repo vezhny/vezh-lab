@@ -68,6 +68,10 @@ public class UserRequestHandler implements RequestHandler {
                 vezhBankResponse = new BlockUserResponse(serviceProvider, requestParams);
                 break;
             }
+            case UNBLOCK_USER: {
+                vezhBankResponse = new UnblockUserResponse(serviceProvider, requestParams);
+                break;
+            }
         }
         ResponseEntity response = vezhBankResponse.build();
         logger.info(response.toString());

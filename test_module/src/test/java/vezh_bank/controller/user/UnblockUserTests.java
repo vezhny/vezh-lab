@@ -22,12 +22,12 @@ import vezh_bank.persistence.entity.User;
 import java.util.List;
 
 @Epic("User controller")
-@Story("Block user")
-@Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/32", url = "https://github.com/vezhny/vezh-lab/issues/32")
-public class BlockUserTests extends ControllerTest {
+@Story("Unblock user")
+@Link(name = "Issue", value = "https://vezh-lab.atlassian.net/browse/VB-2", url = "https://vezh-lab.atlassian.net/browse/VB-2")
+public class UnblockUserTests extends ControllerTest {
 
     @Severity(SeverityLevel.BLOCKER)
-    @Feature("Block user")
+    @Feature("Unblock user")
     @Description("Block user success test")
     @Test
     public void blockUserSuccess() {
@@ -37,32 +37,35 @@ public class BlockUserTests extends ControllerTest {
         int adminId = testUtils.createUser(serviceProvider.getDataBaseService(),
                 serviceProvider.getDataBaseService().getRoleDao().get(Role.ADMIN.toString()));
         User user = serviceProvider.getDataBaseService().getUserDao().getById(clientId);
+        user.setBlocked(true);
+        serviceProvider.getDataBaseService().getUserDao().update(user);
+        user = serviceProvider.getDataBaseService().getUserDao().getById(clientId);
 
         eventAsserts.checkNumberOfEvents(0, serviceProvider.getDataBaseService().getEventDao().selectCount());
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.set(RequestParams.USER_ID, String.valueOf(adminId));
 
-        MockHttpServletResponse response = httpPut(Urls.USERS + "/" + String.valueOf(clientId) + Urls.BLOCK, params);
+        MockHttpServletResponse response = httpPut(Urls.USERS + "/" + String.valueOf(clientId) + Urls.UNBLOCK, params);
 
         httpAsserts.checkResponseCode(200, response);
 
-        asserts.checkTrue(serviceProvider.getDataBaseService().getUserDao().getById(user.getId()).isBlocked(),
+        asserts.checkFalse(serviceProvider.getDataBaseService().getUserDao().getById(user.getId()).isBlocked(),
                 "User block");
 
         List<Event> events = serviceProvider.getDataBaseService().getEventDao().selectAll();
         eventAsserts.checkNumberOfEvents(1, events.size());
-        eventAsserts.checkEvent(EventType.USER_BLOCKED, new EventData(EventDescriptions.userHasBeenBlocked(user.getLogin())),
+        eventAsserts.checkEvent(EventType.USER_UNBLOCKED, new EventData(EventDescriptions.userHasBeenUnblocked(user.getLogin())),
                 events.get(0));
     }
 
     @Severity(SeverityLevel.MINOR)
     @Feature("User access validation")
-    @Description("Block user without access test")
+    @Description("Unblock user without access test")
     @ArgumentsSource(RolesArgumentsProvider.class)
     @ParameterizedTest
     public void blockWithoutAccess(Role role) {
-        testUtils.logTestStart("Block user without access test");
+        testUtils.logTestStart("Unblock user without access test");
 
         int clientId = testUtils.createClient(serviceProvider.getDataBaseService());
         int adminId = testUtils.createUser(serviceProvider.getDataBaseService(),
@@ -74,7 +77,7 @@ public class BlockUserTests extends ControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.set(RequestParams.USER_ID, String.valueOf(adminId));
 
-        MockHttpServletResponse response = httpPut(Urls.USERS + "/" + String.valueOf(clientId) + Urls.BLOCK, params);
+        MockHttpServletResponse response = httpPut(Urls.USERS + "/" + String.valueOf(clientId) + Urls.UNBLOCK, params);
 
         httpAsserts.checkResponseCode(400, response);
         httpAsserts.checkExceptionMessage(ExceptionMessages.ACCESS_DENIED, response);
@@ -99,7 +102,7 @@ public class BlockUserTests extends ControllerTest {
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
-        MockHttpServletResponse response = httpPut(Urls.USERS + "/" + String.valueOf(targetId) + Urls.BLOCK, params);
+        MockHttpServletResponse response = httpPut(Urls.USERS + "/" + String.valueOf(targetId) + Urls.UNBLOCK, params);
 
         httpAsserts.checkResponseCode(400, response);
         httpAsserts.checkExceptionMessage(ExceptionMessages.missingParameter(RequestParams.USER_ID), response);
@@ -120,7 +123,7 @@ public class BlockUserTests extends ControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.set(RequestParams.USER_ID, "");
 
-        MockHttpServletResponse response = httpPut(Urls.USERS + "/" + String.valueOf(targetId) + Urls.BLOCK, params);
+        MockHttpServletResponse response = httpPut(Urls.USERS + "/" + String.valueOf(targetId) + Urls.UNBLOCK, params);
 
         httpAsserts.checkResponseCode(400, response);
         httpAsserts.checkExceptionMessage(ExceptionMessages.invalidParameter(RequestParams.USER_ID), response);
@@ -141,7 +144,7 @@ public class BlockUserTests extends ControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.set(RequestParams.USER_ID, "a");
 
-        MockHttpServletResponse response = httpPut(Urls.USERS + "/" + String.valueOf(targetId) + Urls.BLOCK, params);
+        MockHttpServletResponse response = httpPut(Urls.USERS + "/" + String.valueOf(targetId) + Urls.UNBLOCK, params);
 
         httpAsserts.checkResponseCode(400, response);
         httpAsserts.checkExceptionMessage(ExceptionMessages.invalidParameter(RequestParams.USER_ID), response);
@@ -162,7 +165,7 @@ public class BlockUserTests extends ControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.set(RequestParams.USER_ID, String.valueOf(userId));
 
-        MockHttpServletResponse response = httpPut(Urls.USERS + "/a" + String.valueOf(targetId) + Urls.BLOCK, params);
+        MockHttpServletResponse response = httpPut(Urls.USERS + "/a" + String.valueOf(targetId) + Urls.UNBLOCK, params);
 
         httpAsserts.checkResponseCode(400, response);
         httpAsserts.checkExceptionMessage(ExceptionMessages.invalidParameter(RequestParams.TARGET_ID), response);
@@ -183,7 +186,7 @@ public class BlockUserTests extends ControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.set(RequestParams.USER_ID, "666");
 
-        MockHttpServletResponse response = httpPut(Urls.USERS + "/" + String.valueOf(targetId) + Urls.BLOCK, params);
+        MockHttpServletResponse response = httpPut(Urls.USERS + "/" + String.valueOf(targetId) + Urls.UNBLOCK, params);
 
         httpAsserts.checkResponseCode(400, response);
         httpAsserts.checkExceptionMessage(ExceptionMessages.userDoesNotExist("666"), response);
@@ -204,7 +207,7 @@ public class BlockUserTests extends ControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.set(RequestParams.USER_ID, String.valueOf(userId));
 
-        MockHttpServletResponse response = httpPut(Urls.USERS + "/666" + Urls.BLOCK, params);
+        MockHttpServletResponse response = httpPut(Urls.USERS + "/666" + Urls.UNBLOCK, params);
 
         httpAsserts.checkResponseCode(400, response);
         httpAsserts.checkExceptionMessage(ExceptionMessages.userDoesNotExist("666"), response);

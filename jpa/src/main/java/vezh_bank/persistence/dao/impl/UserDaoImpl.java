@@ -165,7 +165,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User select(String login) { // TODO: test
+    public User select(String login) {
         logger.info("Select user with login: " + login);
         User user;
         try {

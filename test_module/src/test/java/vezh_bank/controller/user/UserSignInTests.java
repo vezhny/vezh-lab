@@ -1,6 +1,5 @@
 package vezh_bank.controller.user;
 
-import core.dto.UserDTO;
 import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -49,7 +48,9 @@ public class UserSignInTests extends ControllerTest {
         httpAsserts.checkResponseCode(200, response);
         User userFromResponse = serviceProvider.getDataBaseService().getUserDao()
                 .getById(TypeConverter.stringToInt(response.getContentAsString(), -1));
-        userAsserts.checkUser(new UserDTO(user, role), userFromResponse);
+        asserts.checkNotNull(userFromResponse, "User entity");
+        asserts.checkObject(user.getLogin(), userFromResponse.getLogin(), "User login");
+        asserts.checkNotNull(userFromResponse.getLastSignIn(), "Last sign in date");
     }
 
     @Severity(SeverityLevel.CRITICAL)

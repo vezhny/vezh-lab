@@ -1,7 +1,6 @@
 package core.validators;
 
 import core.exceptions.BadRequestException;
-import core.exceptions.FailedAuthorizationException;
 import core.exceptions.ServerErrorException;
 import vezh_bank.constants.DatePatterns;
 import vezh_bank.constants.RequestParams;
@@ -31,14 +30,6 @@ public class UserRequestValidator extends Validator {
     public UserRequestValidator(DataBaseService dataBaseService) throws ServerErrorException {
         this.dataBaseService = dataBaseService;
         loadProperties();
-    }
-
-    public void checkUserSignInParams() throws FailedAuthorizationException, BadRequestException {
-        checkLogin(requestParams.get(RequestParams.LOGIN), false);
-        checkPassword(requestParams.get(RequestParams.PASSWORD));
-        if (dataBaseService.getUserDao().select(requestParams.get(RequestParams.LOGIN)) == null) {
-            throw new FailedAuthorizationException(INVALID_LOGIN_OR_PASSWORD);
-        }
     }
 
     public void checkUpdateUserParams() throws BadRequestException {

@@ -19,6 +19,8 @@ public class EventDTO implements BaseDTO<Event> {
     @Expose
     private String date;
 
+    private transient Event event;
+
     public EventDTO(EventType type, EventData eventData) {
         this.type = type;
         this.eventData = eventData;
@@ -29,11 +31,11 @@ public class EventDTO implements BaseDTO<Event> {
         this.date = event.getDate();
         this.eventData = new Gson().fromJson(event.getData(), EventData.class);
         this.type = EventType.valueOf(event.getType());
+        this.event = event;
     }
 
     @Override
     public Event getEntity() {
-        Event event = new Event(type, eventData.toString());
         return event;
     }
 

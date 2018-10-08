@@ -45,7 +45,7 @@ public class EventDaoImpl implements EventDao {
             logger.info(event);
             return event;
         } catch (NoResultException e) {
-            logger.info("Event with ID " + id + " not found");
+            logger.info("Event with ID \"" + id + "\" not found");
             return null;
         }
     }

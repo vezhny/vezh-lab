@@ -7,6 +7,8 @@ public enum EventType {
     USER_SIGN_UP,
     USER_DELETE,
     USER_UPDATE,
+    USER_BLOCKED,
+    USER_UNBLOCKED,
 
     // CARDS
     NEW_CARD,

@@ -13,6 +13,9 @@ public class ServiceProvider {
     @Autowired
     private EventService eventService;
 
+    @Autowired
+    private UserService userService;
+
     public ServiceProvider() {
         eventService = new EventService(dataBaseService);
     }
@@ -23,5 +26,9 @@ public class ServiceProvider {
 
     public EventService getEventService() {
         return eventService;
+    }
+
+    public UserService getUserService() {
+        return userService;
     }
 }

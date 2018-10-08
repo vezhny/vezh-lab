@@ -1,8 +1,15 @@
 package vezh_bank;
 
 
+import core.dto.UserDTO;
+import core.json.UserAddress;
+import core.json.UserConfig;
+import core.json.UserData;
+import core.services.ServiceProvider;
 import io.qameta.allure.Step;
 import vezh_bank.persistence.DataBaseService;
+import vezh_bank.persistence.entity.Card;
+import vezh_bank.persistence.entity.Currency;
 import vezh_bank.persistence.entity.User;
 import vezh_bank.persistence.entity.UserRole;
 import vezh_bank.util.Logger;
@@ -35,10 +42,39 @@ public class TestUtils {
     }
 
     @Step("Create user. Role: {1}")
-    private int createUser(DataBaseService dataBaseService, UserRole role) {
-        User user = new User("Test generated", "password", role,
-                "Test generated", "No config yet", 3);
+    public int createUser(DataBaseService dataBaseService, UserRole role) {
+        logger.info("Creating " + role.getName());
+        UserAddress address = new UserAddress("", "", "", "", "", "", "");
+        UserData userData = new UserData("Test", "Test", "Test",
+                "10.10.1000", address, "Test", "");
+        String login = String.valueOf(System.currentTimeMillis());
+        User user = new User(login, "password", role,
+                userData.toString(), new UserConfig().toString(), 3);
         dataBaseService.getUserDao().insert(user);
-        return dataBaseService.getUserDao().selectAll().get(0).getId();
+        return dataBaseService.getUserDao().select(login, role.getName(), null, null).get(0).getId();
+    }
+
+    @Step("Create user: {0}")
+    public User createUser(UserDTO userDTO, ServiceProvider serviceProvider) {
+        logger.info("Creating: " + userDTO.toString());
+        serviceProvider.getUserService().addUser(userDTO);
+        return serviceProvider.getDataBaseService().getUserDao().select(userDTO.getLogin(), userDTO.getRole().getName(),
+                null, null).get(0);
+    }
+
+    @Step("Create card. Holder: {1}. Currency: {2}")
+    public int createCard(DataBaseService dataBaseService, User user, Currency currency) {
+        logger.info("Creating card with holder: " + user.toString());
+
+        Card card = new Card(String.valueOf(System.currentTimeMillis()), user, 123, "1025", currency);
+        dataBaseService.getCardDao().insert(card);
+        return dataBaseService.getCardDao().select(user.getId()).get(0).getId();
+    }
+
+    @Step("Create currency. Code: {1}. Value: {2}")
+    public int createCurrency(DataBaseService dataBaseService, int code, String value) {
+        Currency currency = new Currency(code, value);
+        dataBaseService.getCurrencyDao().insert(currency);
+        return code;
     }
 }

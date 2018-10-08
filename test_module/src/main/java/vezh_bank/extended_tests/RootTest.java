@@ -5,7 +5,6 @@ import core.config.VezhBankConfiguration;
 import core.services.ServiceProvider;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import vezh_bank.TestUtils;
+import vezh_bank.assertions.*;
 import vezh_bank.constants.MavenProfiles;
 import vezh_bank.util.Logger;
 
@@ -31,6 +31,17 @@ public class RootTest {
     protected MockMvc mockMvc;
     protected Gson gson;
 
+    protected Asserts asserts;
+    protected CardAsserts cardAsserts;
+    protected CurrencyAsserts currencyAsserts;
+    protected EventAsserts eventAsserts;
+    protected HttpAsserts httpAsserts;
+    protected PaymentAsserts paymentAsserts;
+    protected RoleAsserts roleAsserts;
+    protected TransactionAsserts transactionAsserts;
+    protected UserAsserts userAsserts;
+    protected UserRequestAsserts userRequestAsserts;
+
     @Autowired
     protected WebApplicationContext webApplicationContext;
 
@@ -43,6 +54,17 @@ public class RootTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         testUtils = new TestUtils(logger);
         gson = new Gson();
+
+        asserts = new Asserts();
+        cardAsserts = new CardAsserts();
+        currencyAsserts = new CurrencyAsserts();
+        eventAsserts = new EventAsserts();
+        httpAsserts = new HttpAsserts();
+        paymentAsserts = new PaymentAsserts();
+        roleAsserts = new RoleAsserts();
+        transactionAsserts = new TransactionAsserts();
+        userAsserts = new UserAsserts();
+        userRequestAsserts = new UserRequestAsserts();
     }
 
     @Step("Clear database")
@@ -56,14 +78,5 @@ public class RootTest {
         serviceProvider.getDataBaseService().getUserDao().deleteAll();
         serviceProvider.getDataBaseService().getUserRequestDao().deleteAll();
         serviceProvider.getDataBaseService().getCardDao().deleteAll();
-    }
-
-    @Step("Check number of events. Expected {0}. Actual {1}")
-    protected void checkNumberOfEvents(int expected, int actual) {
-        checkNumber(expected, actual, "Number of events");
-    }
-
-    private void checkNumber(int expected, int actual, String message) {
-        Assertions.assertEquals(expected, actual, message);
     }
 }

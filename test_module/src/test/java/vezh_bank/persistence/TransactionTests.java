@@ -1,9 +1,6 @@
 package vezh_bank.persistence;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Link;
-import org.junit.jupiter.api.Assertions;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -16,10 +13,13 @@ import vezh_bank.persistence.providers.transaction.SelectTransactionArgumentsPro
 
 import java.util.List;
 
-@Feature("Transaction persistence")
-@Link("https://github.com/vezhny/vezh-lab/issues/5")
+@Epic("Persistence")
+@Story("Transaction persistence")
+@Link(name = "Issue", value = "https://github.com/vezhny/vezh-lab/issues/5", url = "https://github.com/vezhny/vezh-lab/issues/5")
+@Severity(SeverityLevel.BLOCKER)
 public class TransactionTests extends PersistenceTest {
 
+    @Feature("Insert entity")
     @Description("Insert transaction test")
     @Test
     public void insertTrxTest() {
@@ -30,10 +30,11 @@ public class TransactionTests extends PersistenceTest {
         createTransaction(new Transaction(transactionType, trxData, transactionStatus));
 
         List<Transaction> transactions = dataBaseService.getTransactionDao().selectAll();
-        checkTransactionCount(1, transactions);
-        checkTransaction(transactionType, trxData, transactionStatus, transactions.get(0));
+        transactionAsserts.checkTransactionCount(1, transactions);
+        transactionAsserts.checkTransaction(transactionType, trxData, transactionStatus, transactions.get(0));
     }
 
+    @Feature("Select entity")
     @Description("Select by ID test")
     @Test
     public void selectByIdTest() {
@@ -45,9 +46,10 @@ public class TransactionTests extends PersistenceTest {
 
         Transaction transaction = dataBaseService.getTransactionDao().selectAll().get(0);
         transaction = dataBaseService.getTransactionDao().getById(transaction.getId());
-        checkTransaction(transactionType, trxData, transactionStatus, transaction);
+        transactionAsserts.checkTransaction(transactionType, trxData, transactionStatus, transaction);
     }
 
+    @Feature("Select entity")
     @Description("Select with params test. Type: {0}, data: {2}, status: {3}")
     @ParameterizedTest
     @ArgumentsSource(SelectTransactionArgumentsProvider.class)
@@ -73,9 +75,10 @@ public class TransactionTests extends PersistenceTest {
         createTransaction(transaction8);
 
         List<Transaction> transactions = dataBaseService.getTransactionDao().select(type, dateTime, data, status);
-        checkTransactionCount(expectedTransactionsCount, transactions);
+        transactionAsserts.checkTransactionCount(expectedTransactionsCount, transactions);
     }
 
+    @Feature("Select entity")
     @Description("Select with params test. Required page: {0}, rows on page: {1}, type: {2}, data: {4}, status: {5}")
     @ParameterizedTest
     @ArgumentsSource(SelectTransactionPagesArgumentsProvider.class)
@@ -103,9 +106,10 @@ public class TransactionTests extends PersistenceTest {
 
         List<Transaction> transactions = dataBaseService.getTransactionDao().select(requiredPage, rowsOnPage,
                 type, dateTime, data, status);
-        checkTransactionCount(expectedTransactionsCount, transactions);
+        transactionAsserts.checkTransactionCount(expectedTransactionsCount, transactions);
     }
 
+    @Feature("Select entity")
     @Description("Select count test")
     @Test
     public void selectCountTest() {
@@ -123,10 +127,11 @@ public class TransactionTests extends PersistenceTest {
         createTransaction(transaction4);
         createTransaction(transaction5);
 
-        Assertions.assertEquals(5, dataBaseService.getTransactionDao().selectCount(),
+        asserts.checkObject(5, dataBaseService.getTransactionDao().selectCount(),
                 "Number of transactions");
     }
 
+    @Feature("Select entity")
     @Description("Select count with params test. Type: {0}, data: {2}, status: {3}")
     @ParameterizedTest
     @ArgumentsSource(SelectTransactionArgumentsProvider.class)
@@ -152,6 +157,6 @@ public class TransactionTests extends PersistenceTest {
         createTransaction(transaction8);
 
         int transactions = dataBaseService.getTransactionDao().selectCount(type, dateTime, data, status);
-        Assertions.assertEquals(expectedTransactionsCount, transactions, "number of transactions");
+        asserts.checkObject(expectedTransactionsCount, transactions, "number of transactions");
     }
 }

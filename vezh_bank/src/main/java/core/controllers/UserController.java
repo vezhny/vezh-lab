@@ -113,6 +113,12 @@ public class UserController implements BaseController {
         return responseEntity;
     }
 
+    /**
+     * Required params: userId, targetId
+     * @param params
+     * @param targetId
+     * @return
+     */
     @RequestMapping(value = "/{targetId}", method = RequestMethod.GET)
     public ResponseEntity<UserDTO> getUser(@RequestParam Map<String, String> params,
                                            @PathVariable("targetId") String targetId) {

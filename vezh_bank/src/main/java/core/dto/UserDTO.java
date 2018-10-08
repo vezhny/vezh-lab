@@ -44,11 +44,9 @@ public class UserDTO implements BaseDTO<User> {
     @Expose
     private UserData data;
 
-    @Expose
-    private List<CardDTO> cards;
+    private transient List<CardDTO> cards;
 
-    @Expose
-    private List<UserRequestDTO> userRequests;
+    private transient List<UserRequestDTO> userRequests;
 
     private transient User user;
 
